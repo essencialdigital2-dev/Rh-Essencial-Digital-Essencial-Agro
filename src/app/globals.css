@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+  background: #f9f5ef;
+  color: #1f2937;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all;
+  }
+  .btn-primary {
+    @apply bg-oliva text-white hover:bg-oliva-dark;
+  }
+  .btn-outline {
+    @apply border border-oliva text-oliva hover:bg-oliva hover:text-white;
+  }
+  .btn-gold {
+    @apply bg-dourado text-white hover:bg-dourado-light;
+  }
+  .btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5;
+  }
+  .input {
+    @apply w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-oliva/30 focus:border-oliva;
+  }
+  .label {
+    @apply block text-xs font-medium text-gray-600 mb-1;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .table-row {
+    @apply border-b border-gray-100 hover:bg-bege/50 transition-colors;
+  }
+}
