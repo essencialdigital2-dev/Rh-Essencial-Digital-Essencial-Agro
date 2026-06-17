@@ -171,6 +171,8 @@ tr:hover td{background:#fafafa}
     </div>
     <nav id="sidenav">
       <a onclick="nav('dashboard')" id="n-dashboard"><span class="ic">📊</span>Dashboard</a>
+      <a onclick="nav('agro')" id="n-agro"><span class="ic">🌾</span>Essencial Agro</a>
+      <a onclick="nav('mente')" id="n-mente"><span class="ic">🧠</span>Essencial Mente</a>
       <a onclick="nav('empresas')" id="n-empresas"><span class="ic">🏢</span>Empresas</a>
       <a onclick="nav('colaboradores')" id="n-colaboradores"><span class="ic">👥</span>Colaboradores</a>
       <a onclick="nav('formularios')" id="n-formularios"><span class="ic">📋</span>Formulários</a>
@@ -180,7 +182,6 @@ tr:hover td{background:#fafafa}
       <a onclick="nav('relatorios')" id="n-relatorios"><span class="ic">📄</span>Relatórios</a>
       <a onclick="nav('assistente')" id="n-assistente"><span class="ic">🤖</span>Assistente IA</a>
       <a onclick="nav('financeiro')" id="n-financeiro"><span class="ic">💰</span>Financeiro</a>
-      <a onclick="nav('agro')" id="n-agro"><span class="ic">🌾</span>Essencial Agro</a>
       <a onclick="nav('respostas')" id="n-respostas"><span class="ic">📥</span>Respostas</a>
       <a onclick="nav('prospeccao')" id="n-prospeccao"><span class="ic">🚀</span>Prospecção B2B</a>
       <a onclick="nav('av360')" id="n-av360"><span class="ic">🔄</span>Avaliação 360°</a>
@@ -861,7 +862,7 @@ function nav(p){
   const T={dashboard:'Dashboard',empresas:'Empresas',colaboradores:'Colaboradores',
     formularios:'Formulários Diagnósticos',leads:'Leads & Funil',gerador:'Gerador de Leads IA',
     relatorios:'Relatórios',site:'Meu Site Público',assistente:'Assistente de IA',financeiro:'Financeiro',
-    agro:'Essencial Agro',respostas:'Respostas',prospeccao:'Prospecção B2B',
+    agro:'Essencial Agro',mente:'Essencial Mente',respostas:'Respostas',prospeccao:'Prospecção B2B',
     av360:'Avaliação 360°',status:'Status de Processos',agenda:'Agenda',
     proposta:'Propostas Comerciais',planoacao:'Plano de Ação',templates:'Templates',
     alertas:'Central de Alertas',swot:'Análise SWOT',pdi:'PDI & Feedback',
@@ -6882,6 +6883,319 @@ function gerarRelAbsenteismo(){
   const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
   ov.innerHTML='<div style="padding:10px 16px;background:#78350f;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Relatório de Absenteísmo</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe style="flex:1;border:none;width:100%;height:100%" src="'+url+'"></iframe>';
   document.body.appendChild(ov);setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+
+// ── ESSENCIAL MENTE ───────────────────────────────────────────────────────────
+let MTAB='hoje';
+function mTab(t){MTAB=t;nav('mente');}
+
+const MIND_IND=[
+  {k:'burnout',  l:'Burnout',    c:'#ef4444'},
+  {k:'estresse', l:'Estresse',   c:'#f59e0b'},
+  {k:'regulacao',l:'Regulação',  c:'#6366f1'},
+  {k:'proposito',l:'Propósito',  c:'#10b981'},
+  {k:'relacional',l:'Relacional',c:'#8b5cf6'},
+  {k:'equilibrio',l:'Equilíbrio',c:'#0ea5e9'},
+];
+const MIND_Q=[
+  {txt:'Sinto-me esgotado(a) ao final do dia de trabalho',ind:'burnout',inv:false},
+  {txt:'Tenho dificuldade em me desconectar do trabalho',ind:'estresse',inv:false},
+  {txt:'Consigo identificar e nomear minhas emoções',ind:'regulacao',inv:true},
+  {txt:'Sinto que meu trabalho tem propósito e significado',ind:'proposito',inv:true},
+  {txt:'Tenho bons relacionamentos no ambiente de trabalho',ind:'relacional',inv:true},
+  {txt:'Consigo equilibrar vida pessoal e profissional',ind:'equilibrio',inv:true},
+  {txt:'Me sinto sobrecarregado(a) com as demandas do trabalho',ind:'burnout',inv:false},
+  {txt:'Fico ansioso(a) com prazos e cobranças',ind:'estresse',inv:false},
+  {txt:'Consigo gerenciar minhas reações emocionais',ind:'regulacao',inv:true},
+  {txt:'Me sinto motivado(a) para ir trabalhar',ind:'proposito',inv:true},
+  {txt:'Me sinto apoiado(a) pela minha liderança',ind:'relacional',inv:true},
+  {txt:'Cuido da minha saúde física e mental regularmente',ind:'equilibrio',inv:true},
+];
+const MIND_TRILHAS={
+  burnout:['Pausas ativas: 5 min a cada 90 min','Definir horário de encerramento do trabalho','Lista de gratidão noturna (3 itens)','Exercício físico leve por 20 min','Desconexão digital 1h antes de dormir','Conversa com alguém de confiança','Revisão de limites e prioridades'],
+  estresse:['Respiração 4-7-8 ao acordar','Organizar top-3 prioridades do dia','Caminhada de 10 min no almoço','Journaling: o que me estressou hoje?','Técnica Pomodoro (25+5 min)','Música relaxante no trabalho','Avaliação do que está no meu controle'],
+  regulacao:['Identificar uma emoção ao dia','Prática de mindfulness 5 min','Body scan antes de dormir','Roda das emoções: onde estou?','Expressão criativa (desenho, escrita)','Exercício de respiração consciente','Diário emocional: causa e reação'],
+  proposito:['Escrever o "por quê" do seu trabalho','Listar 3 conquistas da semana','Conexão com valores pessoais','Ajudar um colega sem esperar retorno','Aprender algo novo por 15 min','Visualização de metas de longo prazo','Carta ao seu eu futuro'],
+  relacional:['Agradecer alguém do time hoje','Feedback positivo para um colega','Conversa de check-in com gestor','Almoço ou pausa com colega','Praticar escuta ativa numa reunião','Resolver um conflito pendente','Celebrar uma conquista coletiva'],
+  equilibrio:['Definir horário de início e fim do trabalho','Refeição sem tela ao meio-dia','30 min de atividade física','Hobby ou lazer por 20 min','Planejamento semanal (domingo)','Avaliação da roda da vida','Dormir 7-8h com rotina de descanso'],
+};
+
+PAGES.mente=()=>{
+  if(!S.mente_diag)S.mente_diag=null;
+  if(!S.mente_pulso)S.mente_pulso=[];
+  if(!S.mente_diario)S.mente_diario=[];
+  if(!S.mente_habitos)S.mente_habitos={};
+  if(!S.mente_trilha_dia)S.mente_trilha_dia=0;
+  if(!S.mente_plano21)S.mente_plano21=null;
+
+  const hoje=new Date().toISOString().slice(0,10);
+  const diag=S.mente_diag;
+  const scores=diag?diag.scores:{burnout:0,estresse:0,regulacao:0,proposito:0,relacional:0,equilibrio:0};
+
+  // radar SVG
+  const radarSVG=(sc,size=220)=>{
+    const cx=size/2,cy=size/2,r=size*0.38;
+    const pts=MIND_IND.map((ind,i)=>{
+      const ang=(Math.PI*2*i/6)-Math.PI/2;
+      const v=(sc[ind.k]||0)/100;
+      return {x:cx+r*v*Math.cos(ang),y:cy+r*v*Math.sin(ang),lx:cx+(r+22)*Math.cos(ang),ly:cy+(r+22)*Math.sin(ang),c:ind.c,l:ind.l,v:Math.round((sc[ind.k]||0))};
+    });
+    const poly=pts.map(p=>p.x+','+p.y).join(' ');
+    const grid=[0.33,0.66,1].map(f=>{
+      const gpts=MIND_IND.map((_,i)=>{const a=(Math.PI*2*i/6)-Math.PI/2;return (cx+r*f*Math.cos(a))+','+(cy+r*f*Math.sin(a));}).join(' ');
+      return '<polygon points="'+gpts+'" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1"/>';
+    }).join('');
+    const axes=MIND_IND.map((_,i)=>{const a=(Math.PI*2*i/6)-Math.PI/2;return '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+r*Math.cos(a))+'" y2="'+(cy+r*Math.sin(a))+'" stroke="rgba(255,255,255,.15)" stroke-width="1"/>';}).join('');
+    const labels=pts.map(p=>'<text x="'+p.lx+'" y="'+(p.ly+4)+'" fill="'+p.c+'" font-size="10" text-anchor="middle" font-weight="600">'+p.l+'</text>').join('');
+    const dots=pts.map(p=>'<circle cx="'+p.x+'" cy="'+p.y+'" r="4" fill="'+p.c+'"/>').join('');
+    return '<svg viewBox="0 0 '+size+' '+size+'" width="'+size+'" height="'+size+'" xmlns="http://www.w3.org/2000/svg">'+grid+axes+'<polygon points="'+poly+'" fill="rgba(99,102,241,.25)" stroke="#6366f1" stroke-width="2"/>'+dots+labels+'</svg>';
+  };
+
+  // calcular scores do diagnóstico
+  const calcScores=(resps)=>{
+    const acc={burnout:[],estresse:[],regulacao:[],proposito:[],relacional:[],equilibrio:[]};
+    MIND_Q.forEach((q,i)=>{
+      const v=parseInt(resps[i]||3);
+      const norm=q.inv?v:6-v; // 1-5, maior=melhor saúde
+      acc[q.ind].push(norm);
+    });
+    const sc={};
+    MIND_IND.forEach(ind=>{const arr=acc[ind.k];sc[ind.k]=Math.round((arr.reduce((s,v)=>s+v,0)/arr.length/5)*100);});
+    return sc;
+  };
+
+  const scoreGlobal=diag?Math.round(Object.values(diag.scores).reduce((s,v)=>s+v,0)/6):null;
+  const corGlobal=scoreGlobal>=75?'#10b981':scoreGlobal>=50?'#f59e0b':'#ef4444';
+  const labelGlobal=scoreGlobal>=75?'Saudável':'Atenção necessária';
+
+  // aba HOJE
+  const abaHoje=()=>`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:16px;padding:24px;color:#fff;text-align:center">
+      ${scoreGlobal!==null?`
+        <div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Saúde Emocional</div>
+        <div style="font-size:48px;font-weight:900;color:${corGlobal}">${scoreGlobal}%</div>
+        <div style="font-size:12px;color:${corGlobal};margin-top:4px">${labelGlobal}</div>
+        <div style="font-size:11px;opacity:.5;margin-top:8px">Diagnóstico: ${diag.data||'—'}</div>
+      `:`
+        <div style="font-size:13px;opacity:.7;margin-bottom:12px">Ainda sem diagnóstico</div>
+        <button class="btn btn-primary" onclick="mTab('radar')" style="font-size:12px">Iniciar Diagnóstico</button>
+      `}
+    </div>
+    <div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:16px;padding:24px;color:#fff;text-align:center">
+      <div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">PulsoMente Hoje</div>
+      ${(()=>{const p=S.mente_pulso.find(x=>x.data===hoje);return p?`<div style="font-size:36px;font-weight:900">${['😰','😔','😐','😊','🚀'][p.v-1]||'😐'}</div><div style="font-size:12px;opacity:.7;margin-top:4px">Registrado às ${p.hora||''}</div>`:
+      `<div style="font-size:13px;opacity:.7;margin-bottom:12px">Como está agora?</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${[1,2,3,4,5].map(v=>`<button onclick="regPulso(${v})" style="font-size:22px;background:rgba(255,255,255,.1);border:none;border-radius:8px;padding:6px 10px;cursor:pointer">${['😰','😔','😐','😊','🚀'][v-1]}</button>`).join('')}</div>`;})()}
+    </div>
+  </div>
+  ${diag?`
+  <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px">
+    <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:14px">Indicadores de Saúde Emocional</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      ${MIND_IND.map(ind=>{const v=diag.scores[ind.k]||0;return`<div style="background:#0f172a;border-radius:10px;padding:12px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:#94a3b8">${ind.l}</span><span style="font-size:12px;font-weight:700;color:${ind.c}">${v}%</span></div><div style="height:6px;background:#1e293b;border-radius:3px"><div style="height:100%;width:${v}%;background:${ind.c};border-radius:3px;transition:width .5s"></div></div></div>`;}).join('')}
+    </div>
+  </div>`:''}
+  <div style="background:#1e293b;border-radius:16px;padding:20px">
+    <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:12px">Acesso Rápido</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      ${[['radar','📊 Diagnóstico'],['pulso','📈 Histórico PulsoMente'],['trilha','🗓 Trilha 21 Dias'],['diario','📔 Diário'],['habitos','✅ Hábitos']].map(([t,l])=>`<button onclick="mTab('${t}')" style="background:#0f172a;color:#94a3b8;border:1px solid #334155;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:12px">${l}</button>`).join('')}
+    </div>
+  </div>`;
+
+  // aba RADAR / DIAGNÓSTICO
+  const abaRadar=()=>{
+    if(!S._mdiag_resps)S._mdiag_resps={};
+    const done=Object.keys(S._mdiag_resps).length>=MIND_Q.length;
+    return`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px;text-align:center">
+          <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Radar de Saúde Emocional</div>
+          ${radarSVG(done?calcScores(S._mdiag_resps):scores)}
+        </div>
+        ${done?`<button onclick="salvarDiagMente()" style="width:100%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer">Salvar Diagnóstico e Gerar Plano 21 Dias</button>`:''}
+      </div>
+      <div style="background:#1e293b;border-radius:16px;padding:20px;overflow-y:auto;max-height:480px">
+        <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:16px">Questionário (${Object.keys(S._mdiag_resps||{}).length}/${MIND_Q.length})</h3>
+        ${MIND_Q.map((q,i)=>`
+        <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #0f172a">
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:8px">${i+1}. ${q.txt}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${['Nunca','Raramente','Às vezes','Frequentemente','Sempre'].map((l,v)=>`<button onclick="S._mdiag_resps['${i}']=${v+1};nav('mente')" style="flex:1;min-width:60px;padding:5px 4px;font-size:10px;border-radius:6px;cursor:pointer;border:1px solid ${(S._mdiag_resps||{})[i]===(v+1)?'#6366f1':'#334155'};background:${(S._mdiag_resps||{})[i]===(v+1)?'#4f46e5':'#0f172a'};color:${(S._mdiag_resps||{})[i]===(v+1)?'#fff':'#94a3b8'}">${l}</button>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  };
+
+  // aba PULSO
+  const abaPulso=()=>{
+    const hist=S.mente_pulso.slice(-14);
+    const emojis=['😰','😔','😐','😊','🚀'];
+    const media=hist.length?Math.round(hist.reduce((s,p)=>s+p.v,0)/hist.length*10)/10:0;
+    return`
+    <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3 style="color:#e2e8f0;font-size:14px">PulsoMente — Últimos 14 dias</h3>
+        <span style="font-size:12px;color:#64748b">Média: ${media>0?emojis[Math.round(media)-1]+' '+media:'—'}</span>
+      </div>
+      ${hist.length===0?'<div style="text-align:center;color:#64748b;padding:32px">Nenhum registro ainda. Registre seu humor diariamente na aba Hoje.</div>':
+      `<div style="display:flex;align-items:flex-end;gap:6px;height:80px">
+        ${hist.map(p=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:14px">${emojis[p.v-1]||'😐'}</div>
+          <div style="width:100%;background:#4f46e5;border-radius:4px 4px 0 0" style="height:${p.v*16}px"></div>
+          <div style="font-size:9px;color:#475569">${p.data.slice(5)}</div>
+        </div>`).join('')}
+      </div>`}
+    </div>
+    <div style="background:#1e293b;border-radius:16px;padding:20px">
+      <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:12px">Registrar Humor Agora</h3>
+      <div style="display:flex;gap:12px;justify-content:center">
+        ${[1,2,3,4,5].map(v=>`<button onclick="regPulso(${v})" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:${S.mente_pulso.find(p=>p.data===hoje)?.v===v?'#4f46e5':'#0f172a'};border:2px solid ${S.mente_pulso.find(p=>p.data===hoje)?.v===v?'#6366f1':'#1e293b'};border-radius:12px;padding:12px 16px;cursor:pointer;color:#fff;font-size:11px"><span style="font-size:28px">${emojis[v-1]}</span>${['Exausto','Baixo','Ok','Bem','Ótimo'][v-1]}</button>`).join('')}
+      </div>
+    </div>`;
+  };
+
+  // aba TRILHA 21 DIAS
+  const abaTrilha=()=>{
+    const plano=S.mente_plano21;
+    if(!plano)return`<div style="background:#1e293b;border-radius:16px;padding:40px;text-align:center"><div style="font-size:48px;margin-bottom:16px">🗓</div><h3 style="color:#e2e8f0;margin-bottom:8px">Plano 21 Dias com IA</h3><p style="color:#64748b;margin-bottom:20px">Faça o diagnóstico primeiro para gerar seu plano personalizado de 21 dias.</p><button onclick="mTab('radar')" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:14px;font-weight:700;cursor:pointer">Ir para Diagnóstico</button></div>`;
+    const diaAtual=S.mente_trilha_dia||1;
+    const ind=plano.ordem[Math.floor((diaAtual-1)/3)%6];
+    const exercIdx=(diaAtual-1)%7;
+    const exercicio=MIND_TRILHAS[ind]?.[exercIdx]||'Reflexão livre do dia';
+    const indObj=MIND_IND.find(x=>x.k===ind);
+    return`
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:16px;padding:24px;margin-bottom:16px;color:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1px">Trilha 21 Dias</div><h2 style="font-size:22px;font-weight:800;margin-top:4px">Dia ${diaAtual} de 21</h2></div>
+        <div style="text-align:right"><div style="font-size:11px;opacity:.6">Foco de hoje</div><div style="font-size:14px;font-weight:700;color:${indObj?.c||'#6366f1'}">${indObj?.l||ind}</div></div>
+      </div>
+      <div style="background:rgba(0,0,0,.3);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:11px;opacity:.6;margin-bottom:8px">Exercício do Dia</div>
+        <div style="font-size:15px;font-weight:600">${exercicio}</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="avancarTrilha()" style="flex:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer">Concluir Dia ${diaAtual}</button>
+        ${diaAtual>1?`<button onclick="S.mente_trilha_dia=Math.max(1,(S.mente_trilha_dia||1)-1);saveS();nav('mente')" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:10px;padding:12px 16px;cursor:pointer">←</button>`:''}
+      </div>
+    </div>
+    <div style="background:#1e293b;border-radius:16px;padding:20px">
+      <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:12px">Progresso</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${Array.from({length:21},(_,i)=>`<div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:${i<diaAtual-1?'#10b981':i===diaAtual-1?'#4f46e5':'#0f172a'};color:${i<=diaAtual-1?'#fff':'#475569'};border:1px solid ${i===diaAtual-1?'#6366f1':'transparent'}">${i+1}</div>`).join('')}
+      </div>
+    </div>`;
+  };
+
+  // aba DIÁRIO
+  const abaDiario=()=>`
+    <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px">
+      <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:12px">Novo Registro</h3>
+      <textarea id="mente-diario-txt" rows="5" placeholder="Como você está se sentindo hoje? O que aconteceu? O que aprendeu sobre si mesmo(a)?" style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:10px;padding:12px;font-size:13px;resize:vertical"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <select id="mente-diario-humor" style="background:#0f172a;color:#94a3b8;border:1px solid #334155;border-radius:8px;padding:8px;font-size:12px">
+          <option value="5">🚀 Ótimo</option><option value="4">😊 Bem</option><option value="3" selected>😐 Ok</option><option value="2">😔 Baixo</option><option value="1">😰 Exausto</option>
+        </select>
+        <button onclick="salvarDiario()" style="flex:1;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer">Salvar</button>
+      </div>
+    </div>
+    <div style="background:#1e293b;border-radius:16px;padding:20px">
+      <h3 style="color:#e2e8f0;font-size:14px;margin-bottom:12px">Registros Anteriores</h3>
+      ${S.mente_diario.length===0?'<div style="color:#64748b;text-align:center;padding:20px">Nenhum registro ainda.</div>':
+        S.mente_diario.slice().reverse().slice(0,10).map(d=>`<div style="padding:12px 0;border-bottom:1px solid #0f172a"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11px;color:#475569">${d.data}</span><span>${['','😰','😔','😐','😊','🚀'][d.humor]||'😐'}</span></div><div style="font-size:13px;color:#94a3b8">${d.txt.slice(0,200)}${d.txt.length>200?'...':''}</div></div>`).join('')}
+    </div>`;
+
+  // aba HÁBITOS
+  const abaHabitos=()=>{
+    const key='mente_hab_'+hoje;
+    if(!S.mente_habitos[key])S.mente_habitos[key]=[];
+    const HABS=['Beber 2L de água','Exercício físico','Meditação ou respiração','Sem tela 1h antes de dormir','Gratidão (3 itens)','Leitura ou aprendizado','Conexão social positiva','Sono 7-8h'];
+    const checked=S.mente_habitos[key];
+    const pct=Math.round(checked.length/HABS.length*100);
+    return`
+    <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <h3 style="color:#e2e8f0;font-size:14px">Hábitos de Hoje</h3>
+        <span style="font-size:20px;font-weight:800;color:#10b981">${pct}%</span>
+      </div>
+      <div style="height:8px;background:#0f172a;border-radius:4px;margin-bottom:16px"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#4f46e5,#10b981);border-radius:4px;transition:width .4s"></div></div>
+      ${HABS.map((h,i)=>`<label style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;cursor:pointer;background:${checked.includes(i)?'rgba(16,185,129,.1)':'#0f172a'};margin-bottom:8px;border:1px solid ${checked.includes(i)?'#10b981':'transparent'}">
+        <input type="checkbox" ${checked.includes(i)?'checked':''} onchange="toggleHabMente(${i})" style="width:18px;height:18px;accent-color:#10b981">
+        <span style="font-size:13px;color:${checked.includes(i)?'#10b981':'#94a3b8'};${checked.includes(i)?'text-decoration:line-through':''}">${h}</span>
+      </label>`).join('')}
+    </div>`;
+  };
+
+  const tabs={hoje:abaHoje,radar:abaRadar,pulso:abaPulso,trilha:abaTrilha,diario:abaDiario,habitos:abaHabitos};
+  const tabLabels=[['hoje','Hoje'],['radar','Diagnóstico'],['pulso','PulsoMente'],['trilha','Trilha 21d'],['diario','Diário'],['habitos','Hábitos']];
+
+  return`
+  <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);min-height:100%;padding:0;margin:-20px;border-radius:12px;overflow:hidden">
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);padding:24px 28px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px">RH Essencial Digital</div>
+        <h2 style="color:#fff;font-size:22px;font-weight:800;margin:0">Essencial Mente</h2>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:2px">Saúde Emocional Corporativa</div>
+      </div>
+      ${scoreGlobal!==null?`<div style="text-align:right"><div style="font-size:32px;font-weight:900;color:${corGlobal}">${scoreGlobal}%</div><div style="font-size:11px;color:${corGlobal}">${labelGlobal}</div></div>`:''}
+    </div>
+    <div style="display:flex;gap:0;overflow-x:auto;background:#0f172a;padding:0 20px">
+      ${tabLabels.map(([k,l])=>`<button onclick="mTab('${k}')" style="padding:12px 18px;font-size:12px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid ${MTAB===k?'#6366f1':'transparent'};background:transparent;color:${MTAB===k?'#818cf8':'#64748b'}">${l}</button>`).join('')}
+    </div>
+    <div style="padding:20px">
+      ${(tabs[MTAB]||abaHoje)()}
+    </div>
+  </div>`;
+};
+
+function regPulso(v){
+  if(!S.mente_pulso)S.mente_pulso=[];
+  const hoje=new Date().toISOString().slice(0,10);
+  const hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  S.mente_pulso=S.mente_pulso.filter(p=>p.data!==hoje);
+  S.mente_pulso.push({data:hoje,hora,v});
+  saveS();nav('mente');toast('PulsoMente registrado!');
+}
+
+function salvarDiagMente(){
+  if(!S._mdiag_resps||Object.keys(S._mdiag_resps).length<MIND_Q.length)return toast('Responda todas as perguntas primeiro');
+  const scores=calcScores(S._mdiag_resps);
+  const hoje=new Date().toISOString().slice(0,10);
+  const pior=Object.entries(scores).sort((a,b)=>a[1]-b[1]);
+  const ordem=pior.map(x=>x[0]);
+  S.mente_diag={scores,data:hoje};
+  S.mente_plano21={ordem,gerado:hoje};
+  S.mente_trilha_dia=1;
+  S._mdiag_resps={};
+  saveS();MTAB='hoje';nav('mente');
+  toast('Diagnóstico salvo! Plano 21 dias gerado.');
+}
+
+function salvarDiario(){
+  const txt=document.getElementById('mente-diario-txt')?.value.trim();
+  if(!txt)return toast('Escreva algo antes de salvar');
+  if(!S.mente_diario)S.mente_diario=[];
+  const humor=parseInt(document.getElementById('mente-diario-humor')?.value||3);
+  S.mente_diario.push({data:new Date().toISOString().slice(0,10),hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),txt,humor});
+  saveS();nav('mente');toast('Diário salvo!');
+}
+
+function toggleHabMente(i){
+  const key='mente_hab_'+new Date().toISOString().slice(0,10);
+  if(!S.mente_habitos)S.mente_habitos={};
+  if(!S.mente_habitos[key])S.mente_habitos[key]=[];
+  const arr=S.mente_habitos[key];
+  const idx=arr.indexOf(i);
+  if(idx>=0)arr.splice(idx,1);else arr.push(i);
+  saveS();nav('mente');
+}
+
+function avancarTrilha(){
+  const atual=S.mente_trilha_dia||1;
+  if(atual>=21){toast('Parabéns! Você completou a Trilha 21 Dias!');return;}
+  S.mente_trilha_dia=atual+1;
+  saveS();nav('mente');toast('Dia '+atual+' concluído!');
 }
 
 // ── PAINEL ADMIN ──────────────────────────────────────────────────────────────
