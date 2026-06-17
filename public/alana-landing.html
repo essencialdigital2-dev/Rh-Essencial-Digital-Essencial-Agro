@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alana Carvalho · Consultora de RH & Saúde Emocional</title>
 <meta name="description" content="Consultora especializada em Gestão de Pessoas, Saúde Emocional Corporativa e Diagnósticos Organizacionais. Fundadora do ecossistema Essencial Digital.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -53,8 +55,16 @@ h1{font-size:clamp(40px,5vw,66px);font-weight:900;line-height:1.02;letter-spacin
 /* FOTO / CARD ALANA */
 .alana-card{background:linear-gradient(135deg,rgba(30,41,59,.9),rgba(15,23,42,.95));border:1px solid rgba(255,255,255,.07);border-radius:28px;padding:32px;position:relative;overflow:hidden}
 .alana-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(78,92,45,.3),transparent);pointer-events:none}
-.alana-photo{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(135deg,rgba(78,92,45,.25),rgba(99,102,241,.15));display:flex;align-items:center;justify-content:center;font-size:96px;margin-bottom:20px;position:relative;overflow:hidden}
-.alana-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(15,23,42,.6))}
+.alana-photo{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(135deg,rgba(78,92,45,.18),rgba(99,102,241,.12));display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;overflow:hidden}
+.alana-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(15,23,42,.5))}
+.ac-signature{font-family:'Dancing Script',cursive;font-size:100px;font-weight:700;background:linear-gradient(135deg,#c5d896,#a3b67a,#6b7c3a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;letter-spacing:-6px;position:relative;z-index:1;filter:drop-shadow(0 2px 18px rgba(163,182,122,.45))}
+.prod-card.p-teams{grid-column:1/-1;background:linear-gradient(135deg,rgba(236,72,153,.07),rgba(139,92,246,.07),rgba(15,23,42,.6));border-color:rgba(236,72,153,.18);display:flex;align-items:center;gap:36px}
+.prod-card.p-teams:hover{border-color:rgba(236,72,153,.4)}.prod-card.p-teams .prod-link{color:#f472b6}
+.prod-card.p-teams .prod-icon{font-size:52px;margin-bottom:0;flex-shrink:0}
+.prod-card.p-teams .teams-body{flex:1}
+.prod-card.p-teams h3{font-size:24px}
+.lancamento-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(139,92,246,.2));border:1px solid rgba(236,72,153,.3);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:800;color:#f472b6;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.lancamento-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:#f472b6;animation:pulse 1.5s infinite}
 .alana-name{font-size:18px;font-weight:800;margin-bottom:4px}
 .alana-title{font-size:12px;color:var(--olive3);font-weight:600;margin-bottom:16px}
 .alana-chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -202,7 +212,7 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
     </div>
     <div class="fu fu2" style="position:relative">
       <div class="alana-card">
-        <div class="alana-photo">👩‍💼</div>
+        <div class="alana-photo"><div class="ac-signature">AC</div></div>
         <div class="alana-name">Alana Carvalho</div>
         <div class="alana-title">Consultora de RH · Fundadora Essencial Digital</div>
         <div class="alana-chips">
@@ -212,11 +222,12 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
           <span class="chip gold">Essencial Agro</span>
           <span class="chip indigo">Essencial Mente</span>
           <span class="chip green">Fé & Propósito</span>
+          <span class="chip" style="background:rgba(236,72,153,.12);color:#f472b6;border:1px solid rgba(236,72,153,.25)">Essencial Teams</span>
         </div>
       </div>
       <div class="float-badge">
         <span style="font-size:20px">🌱</span>
-        <div class="txt">Ecossistema Essencial<br><span style="font-weight:400;opacity:.85">4 plataformas · 1 propósito</span></div>
+        <div class="txt">Ecossistema Essencial<br><span style="font-weight:400;opacity:.85">5 plataformas · 1 propósito</span></div>
       </div>
     </div>
   </div>
@@ -326,6 +337,15 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
         <p>Gestão de pessoas para o agronegócio. Diagnósticos, clima organizacional e desenvolvimento adaptados à realidade rural.</p>
         <div class="prod-link" style="color:#fbbf24">Conhecer o produto <span>→</span></div>
       </a>
+      <div class="prod-card p-teams fu fu1" style="cursor:default">
+        <div class="prod-icon">👥</div>
+        <div class="teams-body">
+          <div class="lancamento-pill">Em breve · Lançamento</div>
+          <h3>Essencial Teams</h3>
+          <p style="font-size:14px;color:var(--subtle);line-height:1.7;margin-bottom:16px;max-width:620px">Plataforma de desenvolvimento coletivo para times de alta performance. Diagnósticos de equipe, mapeamento de papéis, trilhas de coesão e acompanhamento de resultados — tudo pensado para quem lidera pessoas.</p>
+          <div class="prod-link" style="color:#f472b6;font-size:13px">Entrar na lista de espera <span>→</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -344,6 +364,7 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
       <div class="serv fu fu1"><div class="ic">🔄</div><h4>Avaliação 360°</h4><p>Feedback estruturado de múltiplas fontes para líderes e colaboradores com plano de desenvolvimento.</p></div>
       <div class="serv fu fu2"><div class="ic">🎯</div><h4>Recrutamento & Seleção</h4><p>Processo seletivo com avaliação comportamental DISC e alinhamento cultural desde a contratação.</p></div>
       <div class="serv fu fu3"><div class="ic">🌾</div><h4>RH para Agronegócio</h4><p>Consultoria especializada para cooperativas e agropecuárias, com diagnósticos adaptados à realidade rural.</p></div>
+      <div class="serv fu fu1" style="grid-column:1/-1;background:linear-gradient(135deg,rgba(79,70,229,.08),var(--bg2));border-color:rgba(99,102,241,.15)"><div class="ic">🎯</div><h4>Mentoria em RH & Gestão de Pessoas</h4><p>Acompanhamento individual para profissionais de RH, gestores e empreendedores que querem estruturar processos, desenvolver liderança e construir times mais saudáveis e produtivos. Sessões online, personalizadas e orientadas a resultados.</p></div>
     </div>
   </div>
 </section>
