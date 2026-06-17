@@ -354,15 +354,13 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
   resize(); setTimeout(resize, 100);
   window.addEventListener('resize', resize);
 
+  const VEL = .008;
   const modulos = [
-    {label:'📋', nome:'Diagnóstico', cor:'#a3b67a', vel:.009, ang:Math.PI*0/8},
-    {label:'👥', nome:'CRM',         cor:'#93c5fd', vel:.008, ang:Math.PI*1/8},
-    {label:'🎯', nome:'R&S',         cor:'#fdba74', vel:.010, ang:Math.PI*2/8},
-    {label:'🔄', nome:'360°',        cor:'#c084fc', vel:.007, ang:Math.PI*3/8},
-    {label:'📝', nome:'Contratos',   cor:'#6ee7b7', vel:.009, ang:Math.PI*4/8},
-    {label:'💰', nome:'Financeiro',  cor:'#fcd34d', vel:.008, ang:Math.PI*5/8},
-    {label:'🧠', nome:'NR-1',        cor:'#f472b6', vel:.010, ang:Math.PI*6/8},
-    {label:'📊', nome:'Relatórios',  cor:'#67e8f9', vel:.007, ang:Math.PI*7/8},
+    {label:'🔍', nome:'Diagnóstico',  cor:'#a3b67a', vel:VEL, ang:Math.PI*0/5*2},
+    {label:'🧩', nome:'DISC',         cor:'#93c5fd', vel:VEL, ang:Math.PI*2/5*2},
+    {label:'🧠', nome:'NR-1',         cor:'#f472b6', vel:VEL, ang:Math.PI*4/5*2},
+    {label:'🎯', nome:'Mentoria',     cor:'#fdba74', vel:VEL, ang:Math.PI*6/5*2},
+    {label:'👥', nome:'Gestão RH',    cor:'#6ee7b7', vel:VEL, ang:Math.PI*8/5*2},
   ];
 
   // partículas
