@@ -2,14 +2,18 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <script>
-// Force correct viewport in Instagram/Facebook WebView (ignores viewport meta, defaults to 980px)
+// Instagram/Facebook WebView ignores viewport meta — detect via UA and force correct viewport
 (function(){
-  var sw = screen.width;
-  if(sw > 0 && sw < 768){
-    var mv = document.querySelector('meta[name=viewport]');
-    if(mv) mv.setAttribute('content','width='+sw+',initial-scale=1.0,maximum-scale=5.0');
+  var ua = navigator.userAgent||'';
+  if(/Instagram|FBAN|FBAV|FB_IAB/.test(ua)){
+    var old=document.querySelector('meta[name=viewport]');
+    if(old) old.parentNode.removeChild(old);
+    var m=document.createElement('meta');
+    m.name='viewport';
+    m.content='width=device-width,initial-scale=1.0,maximum-scale=5.0';
+    document.head.insertBefore(m,document.head.firstChild);
   }
 })();
 </script>
@@ -33,7 +37,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 16px;display:fl
 .nav-name{font-size:15px;font-weight:800;letter-spacing:-.3px}
 .nav-name span{color:var(--olive3)}
 .nav-links{display:flex;align-items:center;gap:24px}
-.nav-links a:not(.btn-wpp){display:none;color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
+.nav-links a:not(.btn-wpp){display:none!important;color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
 .nav-links a:not(.btn-wpp):hover{color:var(--text)}
 .btn-wpp{background:#25d366;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s,transform .2s}
 .btn-wpp:hover{opacity:.9;transform:translateY(-1px)}
@@ -175,7 +179,7 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
 /* RESPONSIVE — desktop overrides (mobile-first) */
 @media(min-width:1024px){
   nav{padding:16px 48px}
-  .nav-links a:not(.btn-wpp){display:inline-flex}
+  .nav-links a:not(.btn-wpp){display:inline-flex!important}
   .hero{padding:110px 48px 80px}
   .hero-inner{display:grid;grid-template-columns:1fr 420px;gap:72px;max-width:1100px}
   .hero-inner>div:last-child{margin-top:0;max-width:none}
