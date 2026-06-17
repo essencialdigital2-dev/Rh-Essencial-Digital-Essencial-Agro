@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RH Essencial Digital · Plataforma de Gestão de Pessoas B2B</title>
+<meta name="description" content="Plataforma completa de gestão de pessoas para empresas. Diagnósticos, CRM, financeiro, contratos, avaliação 360° e muito mais. Solicite uma demonstração.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030712;--bg2:#0a0f1e;--bg3:#0f172a;--bg4:#1e293b;
+  --green:#22c55e;--green2:#16a34a;--green3:#4ade80;
+  --olive:#4e5c2d;--olive2:#6b7c3a;--olive3:#a3b67a;
+  --blue:#3b82f6;--indigo:#4f46e5;
+  --text:#f1f5f9;--muted:#64748b;--subtle:#94a3b8;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(3,7,18,.9);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--olive),var(--olive2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-name{font-size:14px;font-weight:800;letter-spacing:-.3px}
+.nav-name span{color:var(--olive3)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a:not(.btn-demo){display:none;color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
+.btn-demo{background:linear-gradient(135deg,var(--olive),var(--olive2));color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:80px 16px 48px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.3}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(78,92,45,.5),transparent);top:-150px;right:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(34,197,94,.2),transparent);bottom:-80px;left:-60px}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(79,70,229,.15),transparent);top:40%;left:30%}
+.hero-inner{max-width:100%;margin:0 auto;width:100%;display:block;position:relative;z-index:1;overflow:hidden}
+.hero-inner>div{width:100%;box-sizing:border-box}
+.hero-inner>div:last-child{margin-top:48px;max-width:400px;margin-left:auto;margin-right:auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(78,92,45,.12);border:1px solid rgba(163,182,122,.25);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--olive3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px;flex-wrap:wrap}
+.hero-badge .dot{width:6px;height:6px;background:var(--green3);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+h1{font-size:clamp(32px,8vw,62px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:12px}
+h1 span{background:linear-gradient(135deg,var(--olive3),var(--green3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(15px,3vw,18px);color:var(--subtle);line-height:1.7;margin-bottom:32px;max-width:560px;overflow-wrap:break-word}
+.hero-sub strong{color:var(--olive3)}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-main{background:linear-gradient(135deg,var(--olive),var(--olive2));color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(78,92,45,.4)}
+.btn-sec{background:rgba(255,255,255,.05);color:var(--text);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat{text-align:left}
+.stat-num{font-size:22px;font-weight:900;color:var(--olive3)}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* CANVAS CARD */
+.rh-card{background:linear-gradient(135deg,rgba(15,23,42,.95),rgba(10,15,30,.98));border:1px solid rgba(78,92,45,.2);border-radius:28px;padding:28px;position:relative;overflow:hidden}
+.rh-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(78,92,45,.25),transparent);pointer-events:none}
+.rh-canvas-wrap{width:100%;aspect-ratio:1;border-radius:20px;background:#05080f;margin-bottom:20px;overflow:hidden}
+#rh-orb{display:block;width:100%;height:100%}
+.rh-card-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.rh-card-sub{font-size:12px;color:var(--olive3);font-weight:600;margin-bottom:14px}
+.rh-modules-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mchip{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;background:rgba(78,92,45,.15);color:var(--olive3);border:1px solid rgba(78,92,45,.25)}
+
+/* SEÇÃO */
+section{padding:64px 16px}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-tag{display:inline-block;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;background:rgba(78,92,45,.15);color:var(--olive3);border:1px solid rgba(78,92,45,.25)}
+.sec-title{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.15;margin-bottom:12px;letter-spacing:-.5px}
+.sec-sub{font-size:15px;color:var(--subtle);line-height:1.7;max-width:560px}
+
+/* MÓDULOS */
+.modulos-section{background:var(--bg2)}
+.modulos-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:40px}
+.mod-card{background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;display:flex;align-items:flex-start;gap:14px;transition:border-color .3s,transform .3s}
+.mod-card:hover{border-color:rgba(78,92,45,.35);transform:translateY(-2px)}
+.mod-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(78,92,45,.25),rgba(78,92,45,.1));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.mod-body h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.mod-body p{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* PARA QUEM */
+.quem-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:40px}
+.quem-card{border-radius:20px;padding:28px;border:1px solid rgba(255,255,255,.06);background:var(--bg3);position:relative;overflow:hidden}
+.quem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--olive),var(--olive2))}
+.quem-size{font-size:11px;font-weight:700;color:var(--olive3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.quem-card h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.quem-card p{font-size:13px;color:var(--subtle);line-height:1.7}
+.quem-list{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.quem-list li{font-size:12px;color:var(--subtle);display:flex;align-items:center;gap:8px}
+.quem-list li::before{content:'✓';color:var(--green3);font-weight:700;flex-shrink:0}
+
+/* DIFERENCIAIS */
+.dif-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:40px}
+.dif{background:var(--bg2);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:22px}
+.dif .ic{font-size:28px;margin-bottom:10px}
+.dif h4{font-size:14px;font-weight:700;margin-bottom:6px}
+.dif p{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* DEMO CTA */
+.demo-section{background:linear-gradient(135deg,rgba(78,92,45,.12),rgba(34,197,94,.06));border-top:1px solid rgba(78,92,45,.15);border-bottom:1px solid rgba(78,92,45,.15)}
+.demo-inner{max-width:700px;margin:0 auto;text-align:center;padding:72px 16px}
+.demo-inner h2{font-size:clamp(26px,4vw,40px);font-weight:900;line-height:1.15;margin-bottom:14px;letter-spacing:-.5px}
+.demo-inner p{font-size:15px;color:var(--subtle);margin-bottom:36px;line-height:1.7}
+.demo-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.demo-trust{margin-top:20px;font-size:12px;color:var(--muted);display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+
+/* FOOTER */
+footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
+.foot-inner{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.foot-left strong{font-size:14px;font-weight:800}
+.foot-left p{font-size:12px;color:var(--muted);margin-top:4px}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.foot-links a{font-size:12px;color:var(--muted);text-decoration:none}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .7s ease both}
+.fu1{animation-delay:.1s}.fu2{animation-delay:.2s}.fu3{animation-delay:.3s}.fu4{animation-delay:.4s}
+
+/* DESKTOP */
+@media(min-width:1024px){
+  nav{padding:16px 48px}
+  .nav-links a:not(.btn-demo){display:inline-flex}
+  .hero{padding:110px 48px 80px}
+  .hero-inner{display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:center;max-width:1100px}
+  .hero-inner>div:last-child{margin-top:0;max-width:none}
+  section{padding:88px 48px}
+  .modulos-grid{grid-template-columns:repeat(2,1fr)}
+  .quem-grid{grid-template-columns:repeat(3,1fr)}
+  .dif-grid{grid-template-columns:repeat(4,1fr)}
+  .foot-inner{flex-direction:row;justify-content:space-between;text-align:left;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🌿</div>
+    <div class="nav-name">RH <span>Essencial Digital</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="#modulos">Módulos</a>
+    <a href="#para-quem">Para quem</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="https://wa.me/5561985272681?text=Olá! Quero conhecer o RH Essencial Digital para minha empresa." class="btn-demo" target="_blank">📋 Solicitar Demo</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
+  <div class="hero-inner" style="display:block;width:100%;max-width:100%;overflow:hidden">
+    <div class="fu" style="width:100%;max-width:100%;overflow:hidden">
+      <div class="hero-badge"><span class="dot"></span>Plataforma B2B · Gestão de Pessoas</div>
+      <h1>Gestão de RH<br><span>completa</span> para<br>sua empresa</h1>
+      <p class="hero-sub">Diagnósticos, CRM, contratos, financeiro, avaliação 360° e muito mais — tudo em <strong>uma única plataforma</strong> adaptada ao tamanho e realidade da sua empresa.</p>
+      <div class="hero-ctas">
+        <a href="https://wa.me/5561985272681?text=Olá! Quero conhecer o RH Essencial Digital para minha empresa." class="btn-main" target="_blank">📋 Solicitar demonstração</a>
+        <a href="#modulos" class="btn-sec">Ver módulos →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">35+</div><div class="stat-label">Módulos integrados</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Personalizado para sua empresa</div></div>
+        <div class="stat"><div class="stat-num">B2B</div><div class="stat-label">Pequenas, médias e grandes</div></div>
+      </div>
+    </div>
+    <div class="fu fu2" style="width:100%;max-width:400px;margin:48px auto 0;display:block">
+      <div class="rh-card">
+        <div class="rh-canvas-wrap">
+          <canvas id="rh-orb"></canvas>
+        </div>
+        <div class="rh-card-title">RH Essencial Digital</div>
+        <div class="rh-card-sub">Plataforma completa de gestão de pessoas</div>
+        <div class="rh-modules-chips">
+          <span class="mchip">Diagnóstico</span>
+          <span class="mchip">CRM</span>
+          <span class="mchip">Financeiro</span>
+          <span class="mchip">Contratos</span>
+          <span class="mchip">Avaliação 360°</span>
+          <span class="mchip">Recrutamento</span>
+          <span class="mchip">Relatórios</span>
+          <span class="mchip">NR-1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="modulos-section" id="modulos">
+  <div class="sec-inner">
+    <div class="sec-tag">Módulos</div>
+    <h2 class="sec-title">35+ módulos para cada<br>etapa do RH</h2>
+    <p class="sec-sub">Do recrutamento à saúde mental — sua equipe de RH tem tudo em um só lugar, sem precisar de múltiplas ferramentas.</p>
+    <div class="modulos-grid">
+      <div class="mod-card fu fu1">
+        <div class="mod-icon">🔍</div>
+        <div class="mod-body"><h4>Diagnóstico Organizacional</h4><p>Mapeie clima, cultura e gaps da sua empresa com formulários inteligentes e relatórios automáticos.</p></div>
+      </div>
+      <div class="mod-card fu fu2">
+        <div class="mod-icon">👥</div>
+        <div class="mod-body"><h4>CRM de Colaboradores</h4><p>Histórico completo de cada funcionário: documentos, avaliações, conversas e plano de desenvolvimento.</p></div>
+      </div>
+      <div class="mod-card fu fu1">
+        <div class="mod-icon">🎯</div>
+        <div class="mod-body"><h4>Recrutamento & Seleção</h4><p>Pipeline de vagas, triagem com perfil DISC, entrevistas e onboarding estruturado.</p></div>
+      </div>
+      <div class="mod-card fu fu2">
+        <div class="mod-icon">🔄</div>
+        <div class="mod-body"><h4>Avaliação 360°</h4><p>Feedback de múltiplas fontes com relatórios por competência e plano de ação individual.</p></div>
+      </div>
+      <div class="mod-card fu fu1">
+        <div class="mod-icon">📝</div>
+        <div class="mod-body"><h4>Contratos & Documentos</h4><p>Geração, envio e armazenamento de contratos, propostas e documentos com assinatura digital.</p></div>
+      </div>
+      <div class="mod-card fu fu2">
+        <div class="mod-icon">💰</div>
+        <div class="mod-body"><h4>Financeiro & Faturamento</h4><p>Controle de honorários, propostas comerciais, cobranças e relatórios financeiros integrados.</p></div>
+      </div>
+      <div class="mod-card fu fu1">
+        <div class="mod-icon">🧠</div>
+        <div class="mod-body"><h4>Saúde Mental & NR-1</h4><p>Check-ins de bem-estar, gestão de riscos psicossociais e conformidade com a NR-1.</p></div>
+      </div>
+      <div class="mod-card fu fu2">
+        <div class="mod-icon">📊</div>
+        <div class="mod-body"><h4>Relatórios & Analytics</h4><p>Dashboards em tempo real com indicadores de RH, turnover, absenteísmo e engajamento.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<section id="para-quem">
+  <div class="sec-inner">
+    <div class="sec-tag">Para quem</div>
+    <h2 class="sec-title">Para empresas de todos<br>os tamanhos</h2>
+    <p class="sec-sub">A plataforma se adapta à estrutura e maturidade de RH da sua organização.</p>
+    <div class="quem-grid">
+      <div class="quem-card fu fu1">
+        <div class="quem-size">Pequenas empresas · até 50 pessoas</div>
+        <h3>Estruture do zero</h3>
+        <p>Para quem ainda não tem RH formalizado e precisa organizar processos básicos com eficiência.</p>
+        <ul class="quem-list">
+          <li>Contratos e documentação</li>
+          <li>Onboarding e integração</li>
+          <li>Avaliação de desempenho simples</li>
+          <li>Clima organizacional</li>
+        </ul>
+      </div>
+      <div class="quem-card fu fu2">
+        <div class="quem-size">Médias empresas · 50 a 500 pessoas</div>
+        <h3>Escale com controle</h3>
+        <p>Para empresas em crescimento que precisam de processos robustos e visibilidade sobre as pessoas.</p>
+        <ul class="quem-list">
+          <li>Recrutamento estruturado</li>
+          <li>Avaliação 360° e PDI</li>
+          <li>Relatórios e indicadores</li>
+          <li>NR-1 e saúde mental</li>
+        </ul>
+      </div>
+      <div class="quem-card fu fu3">
+        <div class="quem-size">Grandes empresas · 500+ pessoas</div>
+        <h3>Centralize tudo</h3>
+        <p>Para RHs que precisam integrar múltiplos processos, times e unidades em uma única plataforma.</p>
+        <ul class="quem-list">
+          <li>Múltiplos módulos simultâneos</li>
+          <li>Relatórios consolidados</li>
+          <li>Gestão por unidade/filial</li>
+          <li>Integração com sistemas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais" style="background:var(--bg2)">
+  <div class="sec-inner">
+    <div class="sec-tag">Diferenciais</div>
+    <h2 class="sec-title">Por que o RH Essencial Digital?</h2>
+    <div class="dif-grid">
+      <div class="dif fu fu1">
+        <div class="ic">🎯</div>
+        <h4>Focado em resultado</h4>
+        <p>Cada módulo foi desenhado para gerar impacto real nas pessoas e nos resultados da empresa.</p>
+      </div>
+      <div class="dif fu fu2">
+        <div class="ic">⚡</div>
+        <h4>Implementação rápida</h4>
+        <p>Onboarding assistido — sua empresa começa a usar em dias, não meses.</p>
+      </div>
+      <div class="dif fu fu3">
+        <div class="ic">🔒</div>
+        <h4>Segurança e LGPD</h4>
+        <p>Dados dos colaboradores protegidos com conformidade total à Lei Geral de Proteção de Dados.</p>
+      </div>
+      <div class="dif fu fu4">
+        <div class="ic">🤝</div>
+        <h4>Suporte especializado</h4>
+        <p>Time de especialistas em RH e Psicologia Organizacional para apoiar sua implementação.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA DEMO -->
+<section class="demo-section">
+  <div class="demo-inner">
+    <div class="sec-tag" style="margin-bottom:20px">Demonstração gratuita</div>
+    <h2>Pronto para transformar o RH<br>da sua empresa?</h2>
+    <p>Agende uma demonstração gratuita e veja como o RH Essencial Digital pode se adaptar à realidade da sua organização.</p>
+    <div class="demo-btns">
+      <a href="https://wa.me/5561985272681?text=Olá! Quero agendar uma demonstração do RH Essencial Digital para minha empresa." class="btn-main" target="_blank">💬 Falar no WhatsApp</a>
+      <a href="mailto:essencialdigital2@gmail.com?subject=Demonstração RH Essencial Digital" class="btn-sec">✉️ Enviar e-mail</a>
+    </div>
+    <div class="demo-trust">
+      <span>✓ Sem compromisso</span>
+      <span>✓ Demo personalizada</span>
+      <span>✓ Resposta em até 24h</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-left">
+      <strong>RH Essencial Digital</strong>
+      <p>Plataforma de gestão de pessoas · Essencial Digital<br>essencialdigital2@gmail.com · (61) 98527-2681</p>
+    </div>
+    <div class="foot-links">
+      <a href="https://rhessencialdigital.com.br/alana" target="_blank">Hub · Alana Carvalho</a>
+      <a href="https://essencialestudo.com.br" target="_blank">Essencial Estudo</a>
+      <a href="https://instagram.com/alanacarvalho.me" target="_blank">@alanacarvalho.me</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── ANIMAÇÃO ÓRBITA RH ──
+(function(){
+  const cv = document.getElementById('rh-orb');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+
+  function resize(){
+    const s = Math.max(cv.parentElement.clientWidth || 300, 180);
+    cv.width = s; cv.height = s;
+  }
+  resize(); setTimeout(resize, 100);
+  window.addEventListener('resize', resize);
+
+  const modulos = [
+    {label:'📋', nome:'Diagnóstico', cor:'#a3b67a', vel:.009, ang:Math.PI*0/8},
+    {label:'👥', nome:'CRM',         cor:'#93c5fd', vel:.008, ang:Math.PI*1/8},
+    {label:'🎯', nome:'R&S',         cor:'#fdba74', vel:.010, ang:Math.PI*2/8},
+    {label:'🔄', nome:'360°',        cor:'#c084fc', vel:.007, ang:Math.PI*3/8},
+    {label:'📝', nome:'Contratos',   cor:'#6ee7b7', vel:.009, ang:Math.PI*4/8},
+    {label:'💰', nome:'Financeiro',  cor:'#fcd34d', vel:.008, ang:Math.PI*5/8},
+    {label:'🧠', nome:'NR-1',        cor:'#f472b6', vel:.010, ang:Math.PI*6/8},
+    {label:'📊', nome:'Relatórios',  cor:'#67e8f9', vel:.007, ang:Math.PI*7/8},
+  ];
+
+  // partículas
+  const parts = Array.from({length:40}, mkP);
+  function mkP(){
+    const W=cv.width, H=cv.height;
+    const a=Math.random()*Math.PI*2, d=10+Math.random()*50;
+    return {x:W/2+Math.cos(a)*d, y:H/2+Math.sin(a)*d, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, r:Math.random()*1.5, op:Math.random(), cor:['#a3b67a','#6ee7b7','#93c5fd','#fcd34d','#c084fc'][Math.floor(Math.random()*5)], vida:0, max:90+Math.random()*80};
+  }
+
+  let t = 0;
+  function draw(){
+    const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
+    const pr = W<280?11:W<360?14:17;
+    const hr = W<280?17:W<360?21:28;
+    const nameOff = W<280?15:W<360?19:24;
+    const raio = Math.min(W*0.36, W/2-hr-8);
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#05080f'; ctx.fillRect(0,0,W,H);
+
+    // glow central
+    const grd = ctx.createRadialGradient(cx,cy,0,cx,cy,W*0.22);
+    grd.addColorStop(0,'rgba(78,92,45,.22)');
+    grd.addColorStop(1,'transparent');
+    ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
+
+    // partículas
+    for(let i=0;i<parts.length;i++){
+      const p=parts[i];
+      p.vida++; p.x+=p.vx; p.y+=p.vy;
+      const f=p.vida<20?p.vida/20:p.vida>p.max-20?(p.max-p.vida)/20:1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.cor+Math.floor(f*150).toString(16).padStart(2,'0');
+      ctx.fill();
+      if(p.vida>=p.max) parts[i]=mkP();
+    }
+
+    // anel de órbita
+    ctx.beginPath(); ctx.arc(cx,cy,raio,0,Math.PI*2);
+    ctx.strokeStyle='rgba(163,182,122,.1)'; ctx.lineWidth=1;
+    ctx.setLineDash([4,10]); ctx.stroke(); ctx.setLineDash([]);
+
+    // posições
+    const pos = modulos.map(m => { m.ang+=m.vel; return {x:cx+Math.cos(m.ang)*raio, y:cy+Math.sin(m.ang)*raio, ...m}; });
+
+    // linhas de conexão
+    pos.forEach((p,i) => {
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
+      ctx.strokeStyle=`rgba(163,182,122,${.04+.03*Math.sin(t*.002+i)})`;
+      ctx.lineWidth=.5; ctx.stroke();
+    });
+
+    // planetas
+    pos.forEach(p => {
+      // halo
+      const hg = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,hr);
+      hg.addColorStop(0, p.cor+'33'); hg.addColorStop(1,'transparent');
+      ctx.fillStyle=hg; ctx.beginPath(); ctx.arc(p.x,p.y,hr,0,Math.PI*2); ctx.fill();
+      // círculo
+      ctx.beginPath(); ctx.arc(p.x,p.y,pr,0,Math.PI*2);
+      ctx.strokeStyle=p.cor; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.fillStyle='rgba(5,8,15,.8)'; ctx.fill();
+      // emoji
+      ctx.font=`${pr*0.9}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(p.label, p.x, p.y);
+      // nome
+      ctx.font=`bold ${pr*0.58}px Inter,system-ui,sans-serif`;
+      ctx.fillStyle=p.cor+'cc'; ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillText(p.nome, p.x, p.y+nameOff);
+    });
+
+    // logo central "RH"
+    const pulse = 1 + Math.sin(t*.04)*.04;
+    const R = W*0.1*pulse;
+    // glow
+    const cg = ctx.createRadialGradient(cx,cy,0,cx,cy,R*2);
+    cg.addColorStop(0,'rgba(78,92,45,.5)'); cg.addColorStop(1,'transparent');
+    ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,R*2,0,Math.PI*2); ctx.fill();
+    // círculo
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+    const lg = ctx.createLinearGradient(cx-R,cy-R,cx+R,cy+R);
+    lg.addColorStop(0,'#4e5c2d'); lg.addColorStop(1,'#a3b67a');
+    ctx.fillStyle=lg; ctx.fill();
+    ctx.strokeStyle='rgba(163,182,122,.6)'; ctx.lineWidth=1.5; ctx.stroke();
+    // texto RH
+    ctx.font=`900 ${R*0.65}px Inter,system-ui,sans-serif`;
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('RH', cx, cy);
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
