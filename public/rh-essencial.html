@@ -179,7 +179,7 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
         <div class="rh-modules-chips">
           <span class="mchip">Diagnóstico</span>
           <span class="mchip">Avaliação 360°</span>
-          <span class="mchip">Recrutamento</span>
+          <span class="mchip">Recrutamento & Seleção</span>
           <span class="mchip">Relatórios</span>
           <span class="mchip">NR-1</span>
         </div>
@@ -362,8 +362,8 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
     const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
     const pr = W<280?12:W<360?14:16;
     const hr = W<280?18:W<360?21:26;
-    const nameOff = hr + 10;
-    const raio = Math.min(W*0.34, W/2-hr-20);
+    const raio = Math.min(W*0.30, W/2-hr-30);
+    const nameOff = Math.min(hr+14, W/2-raio-8);
 
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle='#05080f'; ctx.fillRect(0,0,W,H);
