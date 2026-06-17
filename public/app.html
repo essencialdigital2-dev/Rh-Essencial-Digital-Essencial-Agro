@@ -910,7 +910,8 @@ function doLogin(){
   $('login-pg').classList.add('hidden');
   $('app').classList.remove('hidden');
   try{$('td').textContent=new Date().toLocaleDateString('pt-BR');}catch(e){}
-  nav('dashboard');
+  const _urlPage=new URLSearchParams(window.location.search).get('mente')?'mente':'dashboard';
+  nav(_urlPage);
   // Tentar sincronizar do Supabase ao logar
   setTimeout(async()=>{
     const el=document.getElementById('sync-status');
