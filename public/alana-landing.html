@@ -57,11 +57,18 @@ h1{font-size:clamp(40px,5vw,66px);font-weight:900;line-height:1.02;letter-spacin
 .alana-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(78,92,45,.3),transparent);pointer-events:none}
 .alana-photo{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(135deg,rgba(78,92,45,.18),rgba(99,102,241,.12));display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;overflow:hidden}
 .alana-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(15,23,42,.5))}
-.e-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;flex-direction:column;gap:0}
-.e-main{font-family:'Dancing Script',cursive;font-size:120px;font-weight:700;background:linear-gradient(160deg,#dff0a8,#a3b67a,#5a7030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:2;filter:drop-shadow(0 4px 28px rgba(163,182,122,.55));line-height:.95;animation:ePulse 3s ease-in-out infinite}
-.e-dig-behind{position:absolute;font-size:13px;font-weight:900;letter-spacing:0px;text-transform:uppercase;font-family:'Segoe UI',system-ui,sans-serif;z-index:1;opacity:0;color:rgba(163,182,122,.35);animation:digReveal 1.4s cubic-bezier(.22,1,.36,1) 0.6s forwards;white-space:nowrap;top:50%;transform:translateY(-50%)}
-@keyframes digReveal{0%{opacity:0;letter-spacing:28px}60%{opacity:1}100%{opacity:1;letter-spacing:10px}}
-@keyframes ePulse{0%,100%{filter:drop-shadow(0 4px 28px rgba(163,182,122,.55))}50%{filter:drop-shadow(0 4px 40px rgba(163,182,122,.8))}}
+.e-logo-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.e-svg{width:82%;height:82%}
+.e-bar{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke-width:9}
+.e-v{stroke-dasharray:114;stroke-dashoffset:114;animation:drawBar .6s ease forwards .1s}
+.e-t{stroke-dasharray:78;stroke-dashoffset:78;animation:drawBar .42s ease forwards .7s}
+.e-m{stroke-dasharray:60;stroke-dashoffset:60;animation:drawBar .34s ease forwards 1.12s}
+.e-b{stroke-dasharray:78;stroke-dashoffset:78;animation:drawBar .42s ease forwards 1.46s}
+@keyframes drawBar{to{stroke-dashoffset:0}}
+.e-glow{animation:eGlowPulse 3s ease-in-out 2s infinite}
+@keyframes eGlowPulse{0%,100%{opacity:1}50%{opacity:.7}}
+.e-dig{font-size:15px;font-weight:900;font-family:'Segoe UI',system-ui;text-transform:uppercase;letter-spacing:10px;fill:rgba(163,182,122,.0);filter:blur(6px);animation:digReveal 1s ease forwards 1.9s}
+@keyframes digReveal{0%{fill:rgba(163,182,122,0);filter:blur(10px);letter-spacing:22px}100%{fill:rgba(163,182,122,.6);filter:blur(0);letter-spacing:10px}}
 .prod-card.p-teams{grid-column:1/-1;background:linear-gradient(135deg,rgba(236,72,153,.07),rgba(139,92,246,.07),rgba(15,23,42,.6));border-color:rgba(236,72,153,.18);display:flex;align-items:center;gap:36px}
 .prod-card.p-teams:hover{border-color:rgba(236,72,153,.4)}.prod-card.p-teams .prod-link{color:#f472b6}
 .prod-card.p-teams .prod-icon{font-size:52px;margin-bottom:0;flex-shrink:0}
@@ -218,8 +225,28 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
       <div class="alana-card">
         <div class="alana-photo">
           <div class="e-logo-wrap">
-            <span class="e-dig-behind">digital</span>
-            <span class="e-main">E</span>
+            <svg class="e-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="eGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#dff0a8"/>
+                  <stop offset="55%" stop-color="#a3b67a"/>
+                  <stop offset="100%" stop-color="#5a7030"/>
+                </linearGradient>
+                <filter id="eGlow">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <!-- "digital" se formando atrás -->
+              <text class="e-dig" x="80" y="90" text-anchor="middle">digital</text>
+              <!-- E de traço se desenhando -->
+              <g class="e-glow" filter="url(#eGlow)">
+                <line class="e-bar e-v" x1="44" y1="24" x2="44" y2="138" stroke="url(#eGrad)"/>
+                <line class="e-bar e-t" x1="44" y1="24" x2="122" y2="24" stroke="url(#eGrad)"/>
+                <line class="e-bar e-m" x1="44" y1="81" x2="104" y2="81" stroke="url(#eGrad)"/>
+                <line class="e-bar e-b" x1="44" y1="138" x2="122" y2="138" stroke="url(#eGrad)"/>
+              </g>
+            </svg>
           </div>
         </div>
         <div class="alana-name">Alana Carvalho</div>
