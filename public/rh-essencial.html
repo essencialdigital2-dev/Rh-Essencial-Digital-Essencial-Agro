@@ -415,9 +415,11 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
       ctx.font=`${pr*0.9}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(p.label, p.x, p.y);
       // nome
-      ctx.font=`bold ${pr*0.58}px Inter,system-ui,sans-serif`;
-      ctx.fillStyle=p.cor+'cc'; ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.font=`bold 9px Inter,system-ui,sans-serif`;
+      ctx.fillStyle=p.cor; ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.shadowColor=p.cor; ctx.shadowBlur=4;
       ctx.fillText(p.nome, p.x, p.y+nameOff);
+      ctx.shadowBlur=0;
     });
 
     // ── NÚCLEO CENTRAL ──
