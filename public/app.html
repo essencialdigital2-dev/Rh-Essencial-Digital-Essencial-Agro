@@ -7319,9 +7319,11 @@ PAGES.admin=()=>{
         <div class="fg"><label class="lbl">Data de Competência</label><input id="nf-data" type="date"/></div>
         <div class="fg"><label class="lbl">Código do Servico (CNAE)</label><input id="nf-cnae" value="7020-4/00" placeholder="7020-4/00"/></div>
         <div class="fg"><label class="lbl">ISS (%)</label><input id="nf-iss" value="2" placeholder="2 a 5%"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">E-mail do Tomador (para envio)</label><input id="nf-email" type="email" placeholder="contato@empresa.com.br"/></div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-primary" onclick="gerarDocNFSe()">Gerar Documento de Apoio</button>
+        <button class="btn btn-outline" onclick="enviarEmailNFSe()" style="color:#4f46e5;border-color:#4f46e5">✉️ Enviar por E-mail</button>
         <a href="https://www.nfse.gov.br/EmissorNacional/" target="_blank" class="btn btn-gold">Emissor Nacional NFS-e</a>
         <a href="https://www8.receita.fazenda.gov.br/SimplesNacional/" target="_blank" class="btn btn-outline">Portal MEI</a>
       </div>
@@ -7507,6 +7509,46 @@ function gerarDocNFSe(){
   const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
   ov.innerHTML='<div style="padding:10px 16px;background:#4e5c2d;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Documento NFS-e · '+tomador+'</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe srcdoc="" style="flex:1;border:none;width:100%;height:100%"></iframe>';
   document.body.appendChild(ov);ov.querySelector('iframe').srcdoc=html;
+}
+
+function enviarEmailNFSe(){
+  const tomador=document.getElementById('nf-tomador')?.value.trim();
+  const valor=parseFloat(document.getElementById('nf-valor')?.value||0);
+  const servico=document.getElementById('nf-servico')?.value.trim();
+  const email=document.getElementById('nf-email')?.value.trim();
+  if(!tomador||!valor||!servico)return toast('Preencha tomador, servico e valor');
+  const iss=parseFloat(document.getElementById('nf-iss')?.value||2)/100;
+  const vlrIss=valor*iss;const vlrLiq=valor-vlrIss;
+  const dataInput=document.getElementById('nf-data')?.value||new Date().toISOString().slice(0,10);
+  const data=new Date(dataInput+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+  const cnpj=document.getElementById('nf-cnpj')?.value.trim();
+  const cnae=document.getElementById('nf-cnae')?.value.trim()||'7020-4/00';
+  const fmt=n=>n.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  const assunto=encodeURIComponent('Documento de Apoio NFS-e — '+servico+' · R$ '+fmt(valor));
+  const corpo=encodeURIComponent(
+    'Prezado(a) '+tomador+',\n\n'+
+    'Segue abaixo o documento de apoio referente à prestação de serviço:\n\n'+
+    '──────────────────────────────\n'+
+    'DOCUMENTO DE APOIO — NFS-e\n'+
+    '──────────────────────────────\n'+
+    'Prestador:          Alana Carvalho · RH Essencial Digital\n'+
+    'Tomador:            '+tomador+(cnpj?' ('+cnpj+')':'')+'\n'+
+    'Descrição:          '+servico+'\n'+
+    'CNAE:               '+cnae+'\n'+
+    'Data de Competência: '+data+'\n'+
+    'ISS ('+((iss*100).toFixed(0))+'%):         R$ '+fmt(vlrIss)+'\n'+
+    'Valor Bruto:        R$ '+fmt(valor)+'\n'+
+    'Valor Líquido:      R$ '+fmt(vlrLiq)+'\n'+
+    '──────────────────────────────\n\n'+
+    'Observação: A nota fiscal oficial deve ser emitida no Portal do Emissor Nacional NFS-e (nfse.gov.br/EmissorNacional) ou no site da sua prefeitura.\n\n'+
+    'Atenciosamente,\n'+
+    'Alana Carvalho\n'+
+    'RH Essencial Digital\n'+
+    'essencialdigital2@gmail.com'
+  );
+  const dest=encodeURIComponent(email||'');
+  window.location.href='mailto:'+dest+'?subject='+assunto+'&body='+corpo;
+  toast('Abrindo cliente de e-mail...');
 }
 
 function valorPorExtenso(v){
