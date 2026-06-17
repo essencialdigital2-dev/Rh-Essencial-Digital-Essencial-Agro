@@ -363,7 +363,7 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
     const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
     const pr = W<280?11:W<360?14:17;
     const hr = W<280?17:W<360?21:28;
-    const nameOff = W<280?15:W<360?19:24;
+    const nameOff = W<280?20:W<360?24:30;
     const raio = Math.min(W*0.36, W/2-hr-8);
 
     ctx.clearRect(0,0,W,H);
