@@ -6887,8 +6887,8 @@ function gerarRelAbsenteismo(){
 }
 
 // ── ESSENCIAL MENTE ───────────────────────────────────────────────────────────
-let MTAB='hoje';
-function mTab(t){MTAB=t;nav('mente');}
+let MENTE_TAB='hoje';
+function mTab(t){MENTE_TAB=t;nav('mente');}
 
 const MIND_IND=[
   {k:'burnout',  l:'Burnout',    c:'#ef4444'},
@@ -6921,6 +6921,18 @@ const MIND_TRILHAS={
   equilibrio:['Definir horário de início e fim do trabalho','Refeição sem tela ao meio-dia','30 min de atividade física','Hobby ou lazer por 20 min','Planejamento semanal (domingo)','Avaliação da roda da vida','Dormir 7-8h com rotina de descanso'],
 };
 
+function calcScores(resps){
+  const acc={burnout:[],estresse:[],regulacao:[],proposito:[],relacional:[],equilibrio:[]};
+  MIND_Q.forEach((q,i)=>{
+    const v=parseInt(resps[i]||3);
+    const norm=q.inv?v:6-v;
+    acc[q.ind].push(norm);
+  });
+  const sc={};
+  MIND_IND.forEach(ind=>{const arr=acc[ind.k];sc[ind.k]=Math.round((arr.reduce((s,v)=>s+v,0)/arr.length/5)*100);});
+  return sc;
+}
+
 PAGES.mente=()=>{
   if(!S.mente_diag)S.mente_diag=null;
   if(!S.mente_pulso)S.mente_pulso=[];
@@ -6950,19 +6962,6 @@ PAGES.mente=()=>{
     const labels=pts.map(p=>'<text x="'+p.lx+'" y="'+(p.ly+4)+'" fill="'+p.c+'" font-size="10" text-anchor="middle" font-weight="600">'+p.l+'</text>').join('');
     const dots=pts.map(p=>'<circle cx="'+p.x+'" cy="'+p.y+'" r="4" fill="'+p.c+'"/>').join('');
     return '<svg viewBox="0 0 '+size+' '+size+'" width="'+size+'" height="'+size+'" xmlns="http://www.w3.org/2000/svg">'+grid+axes+'<polygon points="'+poly+'" fill="rgba(99,102,241,.25)" stroke="#6366f1" stroke-width="2"/>'+dots+labels+'</svg>';
-  };
-
-  // calcular scores do diagnóstico
-  const calcScores=(resps)=>{
-    const acc={burnout:[],estresse:[],regulacao:[],proposito:[],relacional:[],equilibrio:[]};
-    MIND_Q.forEach((q,i)=>{
-      const v=parseInt(resps[i]||3);
-      const norm=q.inv?v:6-v; // 1-5, maior=melhor saúde
-      acc[q.ind].push(norm);
-    });
-    const sc={};
-    MIND_IND.forEach(ind=>{const arr=acc[ind.k];sc[ind.k]=Math.round((arr.reduce((s,v)=>s+v,0)/arr.length/5)*100);});
-    return sc;
   };
 
   const scoreGlobal=diag?Math.round(Object.values(diag.scores).reduce((s,v)=>s+v,0)/6):null;
@@ -7142,10 +7141,10 @@ PAGES.mente=()=>{
       ${scoreGlobal!==null?`<div style="text-align:right"><div style="font-size:32px;font-weight:900;color:${corGlobal}">${scoreGlobal}%</div><div style="font-size:11px;color:${corGlobal}">${labelGlobal}</div></div>`:''}
     </div>
     <div style="display:flex;gap:0;overflow-x:auto;background:#0f172a;padding:0 20px">
-      ${tabLabels.map(([k,l])=>`<button onclick="mTab('${k}')" style="padding:12px 18px;font-size:12px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid ${MTAB===k?'#6366f1':'transparent'};background:transparent;color:${MTAB===k?'#818cf8':'#64748b'}">${l}</button>`).join('')}
+      ${tabLabels.map(([k,l])=>`<button onclick="mTab('${k}')" style="padding:12px 18px;font-size:12px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid ${MENTE_TAB===k?'#6366f1':'transparent'};background:transparent;color:${MENTE_TAB===k?'#818cf8':'#64748b'}">${l}</button>`).join('')}
     </div>
     <div style="padding:20px">
-      ${(tabs[MTAB]||abaHoje)()}
+      ${(tabs[MENTE_TAB]||abaHoje)()}
     </div>
   </div>`;
 };
@@ -7169,7 +7168,7 @@ function salvarDiagMente(){
   S.mente_plano21={ordem,gerado:hoje};
   S.mente_trilha_dia=1;
   S._mdiag_resps={};
-  saveS();MTAB='hoje';nav('mente');
+  saveS();MENTE_TAB='hoje';nav('mente');
   toast('Diagnóstico salvo! Plano 21 dias gerado.');
 }
 
