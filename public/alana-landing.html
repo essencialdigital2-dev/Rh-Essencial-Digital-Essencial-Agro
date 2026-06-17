@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+// Force correct viewport in Instagram/Facebook WebView (ignores viewport meta, defaults to 980px)
+(function(){
+  var sw = screen.width;
+  if(sw > 0 && sw < 768){
+    var mv = document.querySelector('meta[name=viewport]');
+    if(mv) mv.setAttribute('content','width='+sw+',initial-scale=1.0,maximum-scale=5.0');
+  }
+})();
+</script>
 <title>Alana Carvalho · Consultora de RH & Saúde Emocional</title>
 <meta name="description" content="Consultora especializada em Gestão de Pessoas, Saúde Emocional Corporativa e Diagnósticos Organizacionais. Fundadora do ecossistema Essencial Digital.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
