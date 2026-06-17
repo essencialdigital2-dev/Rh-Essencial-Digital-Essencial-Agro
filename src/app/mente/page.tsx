@@ -463,7 +463,7 @@ export default function EssencialMente() {
         <div className="max-w-2xl mx-auto px-4 py-8">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-white/60 mb-1">RH Essencial Digital</p>
+              <a href="/" className="text-xs font-bold uppercase tracking-widest text-white/60 hover:text-white/90 transition-all">← RH Essencial Digital</a>
               <h1 className="text-2xl font-black">🧠 Essencial Mente</h1>
               <p className="text-white/70 text-sm mt-1">{saudacao} · {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
             </div>
