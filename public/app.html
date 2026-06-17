@@ -207,6 +207,7 @@ tr:hover td{background:#fafafa}
       <a onclick="nav('renovacao')" id="n-renovacao"><span class="ic">🔄</span>Renovações</a>
       <a onclick="nav('encerramento')" id="n-encerramento"><span class="ic">📦</span>Encerramento</a>
       <a onclick="nav('site')" id="n-site"><span class="ic">🌐</span>Meu Site</a>
+      <a onclick="nav('ecossistema')" id="n-ecossistema"><span class="ic">🌌</span>Ecossistema</a>
       <a onclick="nav('admin')" id="n-admin"><span class="ic">⚙️</span>Painel Admin</a>
     </nav>
     <div class="pin-bot">
@@ -861,7 +862,7 @@ function nav(p){
   const el=$('n-'+p);if(el)el.classList.add('active');
   const T={dashboard:'Dashboard',empresas:'Empresas',colaboradores:'Colaboradores',
     formularios:'Formulários Diagnósticos',leads:'Leads & Funil',gerador:'Gerador de Leads IA',
-    relatorios:'Relatórios',site:'Meu Site Público',assistente:'Assistente de IA',financeiro:'Financeiro',
+    relatorios:'Relatórios',site:'Meu Site Público',ecossistema:'Ecossistema Essencial Digital',assistente:'Assistente de IA',financeiro:'Financeiro',
     agro:'Essencial Agro',mente:'Essencial Mente',respostas:'Respostas',prospeccao:'Prospecção B2B',
     av360:'Avaliação 360°',status:'Status de Processos',agenda:'Agenda',
     proposta:'Propostas Comerciais',planoacao:'Plano de Ação',templates:'Templates',
@@ -5327,6 +5328,30 @@ PAGES.site=()=>{
     </div>
   </div>`;
 };
+
+PAGES.ecossistema=()=>`
+  <div class="section" style="margin-bottom:12px">
+    <div class="sec-head">
+      <h3>🌌 Ecossistema Essencial Digital</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="window.open('https://essencial-digital.vercel.app','_blank')">🔗 Abrir em tela cheia</button>
+        <button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('https://essencial-digital.vercel.app').then(()=>toast('URL copiada!'))">📋 Copiar link</button>
+      </div>
+    </div>
+    <div class="sec-body" style="padding:0">
+      <div style="border:1px solid var(--gray-light);border-radius:10px;overflow:hidden">
+        <div style="background:var(--gray-light);padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:12px">
+          <span style="display:flex;gap:4px">
+            <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block"></span>
+          </span>
+          <span style="color:var(--gray);flex:1">essencial-digital.vercel.app</span>
+        </div>
+        <iframe style="width:100%;height:620px;border:none;background:#08080f" src="https://essencial-digital.vercel.app" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
+      </div>
+    </div>
+  </div>`;
 
 // QR CODE
 function mostrarQR(formId,colId){
