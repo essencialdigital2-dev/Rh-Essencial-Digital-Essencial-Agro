@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RH Essencial Digital · Gestão de Pessoas & Diagnósticos Organizacionais</title>
+<meta name="description" content="Consultoria em RH, Saúde Emocional Corporativa, Diagnósticos NR-1 e Essencial Agro. Alana Carvalho — Psicologia Organizacional & Gestão de Pessoas.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#030712;--bg2:#0f172a;--bg3:#1e293b;
+    --olive:#4e5c2d;--olive-light:#6b7c3a;--olive-glow:rgba(78,92,45,.2);
+    --indigo:#4f46e5;--violet:#7c3aed;--teal:#0d9488;--gold:#d97706;
+    --text:#f1f5f9;--muted:#64748b;--subtle:#94a3b8;
+  }
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(3,7,18,.85);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.05)}
+  .nav-logo{display:flex;align-items:center;gap:12px}
+  .nav-logo .mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--olive),var(--olive-light));display:flex;align-items:center;justify-content:center;font-size:18px}
+  .nav-logo strong{font-size:14px;font-weight:800;line-height:1.2}
+  .nav-logo span{display:block;font-size:10px;color:var(--muted);font-weight:400}
+  .nav-links{display:flex;align-items:center;gap:24px}
+  .nav-links a{color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .btn-olive{background:linear-gradient(135deg,var(--olive),var(--olive-light));color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s,transform .2s}
+  .btn-olive:hover{opacity:.9;transform:translateY(-1px)}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;padding:110px 48px 70px;position:relative;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 70% 40%,rgba(78,92,45,.14),transparent 65%),radial-gradient(ellipse 50% 40% at 20% 70%,rgba(79,70,229,.08),transparent 60%)}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at 60% 40%,black 20%,transparent 75%)}
+  .hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(78,92,45,.15);border:1px solid rgba(78,92,45,.3);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;color:#a3b67a;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px}
+  .hero-eyebrow .dot{width:6px;height:6px;background:#a3b67a;border-radius:50%;animation:blink 2s infinite}
+  h1{font-size:clamp(36px,4.5vw,60px);font-weight:900;line-height:1.05;letter-spacing:-1px;margin-bottom:20px}
+  h1 em{font-style:normal;background:linear-gradient(135deg,#a3b67a,#d4e89a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:17px;color:var(--subtle);line-height:1.75;margin-bottom:36px;max-width:500px}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-primary{background:linear-gradient(135deg,var(--olive),var(--olive-light));color:#fff;border:none;border-radius:12px;padding:15px 28px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(78,92,45,.35)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(78,92,45,.5)}
+  .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:15px 28px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s}
+  .btn-ghost:hover{background:rgba(255,255,255,.1)}
+  .hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)}
+  .hbadge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--subtle)}
+  .hbadge .ic{width:20px;height:20px;border-radius:6px;background:rgba(163,182,122,.12);display:flex;align-items:center;justify-content:center;font-size:11px}
+
+  /* DASHBOARD VISUAL */
+  .dash-wrap{position:relative}
+  .dash-card{background:rgba(15,23,42,.95);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;backdrop-filter:blur(20px);box-shadow:0 32px 80px rgba(0,0,0,.6)}
+  .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .dash-header strong{font-size:13px;color:var(--subtle)}
+  .dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .kpi{background:var(--bg3);border-radius:12px;padding:14px;text-align:center}
+  .kpi .v{font-size:22px;font-weight:900;margin-bottom:2px}
+  .kpi .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .dash-row{display:flex;gap:10px;margin-bottom:10px}
+  .dash-pill{flex:1;background:var(--bg3);border-radius:10px;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:8px;color:var(--subtle)}
+  .dash-pill .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dash-progress{background:var(--bg3);border-radius:12px;padding:14px}
+  .dash-progress .label{display:flex;justify-content:space-between;font-size:11px;color:var(--subtle);margin-bottom:8px}
+  .dash-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .dash-bar-fill{height:100%;border-radius:3px;transition:width 1.5s ease}
+  .float-card{position:absolute;bottom:-20px;left:-24px;background:rgba(78,92,45,.9);border:1px solid rgba(163,182,122,.3);border-radius:14px;padding:12px 18px;backdrop-filter:blur(16px)}
+  .float-card .title{font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px}
+  .float-card .val{font-size:24px;font-weight:900;color:#d4e89a}
+  .float-card .sub{font-size:11px;color:rgba(255,255,255,.5)}
+  .float-card2{position:absolute;top:-16px;right:-16px;background:rgba(15,23,42,.95);border:1px solid rgba(99,102,241,.25);border-radius:14px;padding:12px 16px;backdrop-filter:blur(16px)}
+  .float-card2 .val2{font-size:16px;font-weight:800;color:#818cf8}
+  .float-card2 .sub2{font-size:10px;color:var(--muted)}
+
+  /* SECTIONS */
+  section{padding:90px 48px}
+  .sec-inner{max-width:1200px;margin:0 auto}
+  .sec-tag{display:inline-block;padding:5px 16px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+  .sec-tag.green{background:rgba(78,92,45,.15);color:#a3b67a;border:1px solid rgba(78,92,45,.25)}
+  .sec-tag.indigo{background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.2)}
+  .sec-tag.gold{background:rgba(217,119,6,.1);color:#fbbf24;border:1px solid rgba(217,119,6,.2)}
+  .sec-title{font-size:clamp(26px,3.5vw,42px);font-weight:800;line-height:1.15;margin-bottom:12px}
+  .sec-sub{font-size:16px;color:var(--subtle);line-height:1.7;max-width:580px}
+
+  /* SERVIÇOS */
+  .serv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+  .serv-card{background:var(--bg2);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:32px;transition:border-color .3s,transform .3s;position:relative;overflow:hidden}
+  .serv-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:0 0 20px 20px;opacity:0;transition:opacity .3s}
+  .serv-card:hover{transform:translateY(-4px)}
+  .serv-card:hover::after{opacity:1}
+  .serv-card.c-green:hover{border-color:rgba(78,92,45,.4)}.serv-card.c-green::after{background:linear-gradient(90deg,var(--olive),var(--olive-light))}
+  .serv-card.c-indigo:hover{border-color:rgba(99,102,241,.4)}.serv-card.c-indigo::after{background:linear-gradient(90deg,var(--indigo),var(--violet))}
+  .serv-card.c-teal:hover{border-color:rgba(13,148,136,.4)}.serv-card.c-teal::after{background:linear-gradient(90deg,var(--teal),#0f766e)}
+  .serv-card.c-gold:hover{border-color:rgba(217,119,6,.4)}.serv-card.c-gold::after{background:linear-gradient(90deg,var(--gold),#b45309)}
+  .serv-card.c-violet:hover{border-color:rgba(124,58,237,.4)}.serv-card.c-violet::after{background:linear-gradient(90deg,var(--violet),#6d28d9)}
+  .serv-card.c-rose:hover{border-color:rgba(225,29,72,.4)}.serv-card.c-rose::after{background:linear-gradient(90deg,#e11d48,#be123c)}
+  .serv-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+  .serv-card h3{font-size:17px;font-weight:700;margin-bottom:10px}
+  .serv-card p{font-size:13px;color:var(--subtle);line-height:1.7;margin-bottom:16px}
+  .serv-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .serv-list li{font-size:12px;color:var(--muted);padding-left:14px;position:relative}
+  .serv-list li::before{content:'·';position:absolute;left:0;color:var(--subtle)}
+
+  /* NÚMEROS */
+  .nums-section{background:var(--bg2);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04)}
+  .nums-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center}
+  .num-item{padding:40px 20px;border-right:1px solid rgba(255,255,255,.05)}
+  .num-item:last-child{border-right:none}
+  .num-val{font-size:clamp(36px,4vw,52px);font-weight:900;line-height:1;margin-bottom:8px;background:linear-gradient(135deg,#a3b67a,#d4e89a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .num-label{font-size:13px;color:var(--subtle)}
+
+  /* ECOSSISTEMA */
+  .eco-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:48px}
+  .eco-card{border-radius:16px;padding:28px;border:1px solid rgba(255,255,255,.06);transition:transform .3s}
+  .eco-card:hover{transform:translateY(-3px)}
+  .eco-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+  .eco-card p{font-size:12px;color:var(--subtle);line-height:1.6}
+  .eco-card .tag{display:inline-block;margin-top:14px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
+
+  /* SOBRE ALANA */
+  .sobre-section{background:var(--bg2)}
+  .sobre-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .sobre-photo{background:linear-gradient(135deg,rgba(78,92,45,.2),rgba(99,102,241,.1));border:1px solid rgba(255,255,255,.07);border-radius:24px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden}
+  .sobre-photo::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 40% 30%,rgba(78,92,45,.3),transparent 60%)}
+  .sobre-credenciais{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+  .cred{display:flex;align-items:center;gap:12px;background:var(--bg3);border-radius:10px;padding:12px 16px;border:1px solid rgba(255,255,255,.04)}
+  .cred .ic{font-size:18px;flex-shrink:0}
+  .cred span{font-size:13px;color:var(--subtle)}
+  .cred strong{display:block;font-size:13px;color:var(--text)}
+  .quote{background:linear-gradient(135deg,rgba(78,92,45,.1),rgba(99,102,241,.05));border:1px solid rgba(78,92,45,.2);border-radius:16px;padding:24px;margin-top:24px;position:relative}
+  .quote::before{content:'"';position:absolute;top:-10px;left:20px;font-size:48px;color:var(--olive);font-family:Georgia,serif;line-height:1}
+  .quote p{font-size:14px;color:var(--subtle);line-height:1.7;font-style:italic}
+  .quote cite{display:block;margin-top:12px;font-size:12px;color:var(--muted);font-style:normal}
+
+  /* COMO FUNCIONA */
+  .como-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:48px;position:relative}
+  .como-steps::before{content:'';position:absolute;top:32px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(78,92,45,.4) 20%,rgba(78,92,45,.4) 80%,transparent)}
+  .como-step{text-align:center;padding:20px 16px}
+  .como-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--olive),var(--olive-light));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;margin:0 auto 16px;box-shadow:0 8px 24px rgba(78,92,45,.35)}
+  .como-step h4{font-size:13px;font-weight:700;margin-bottom:6px}
+  .como-step p{font-size:11px;color:var(--muted);line-height:1.6}
+
+  /* DEPOIMENTOS */
+  .dep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+  .dep-card{background:var(--bg2);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px}
+  .dep-stars{color:#fbbf24;font-size:12px;margin-bottom:14px}
+  .dep-card p{font-size:13px;color:var(--subtle);line-height:1.7;margin-bottom:16px}
+  .dep-autor{display:flex;align-items:center;gap:10px}
+  .dep-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--olive),var(--olive-light));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .dep-autor strong{font-size:12px;display:block}
+  .dep-autor span{font-size:11px;color:var(--muted)}
+
+  /* CTA */
+  .cta-section{background:linear-gradient(135deg,rgba(78,92,45,.12),rgba(79,70,229,.08));border-top:1px solid rgba(78,92,45,.15);border-bottom:1px solid rgba(78,92,45,.15)}
+  .cta-inner{max-width:720px;margin:0 auto;text-align:center}
+  .cta-inner h2{font-size:clamp(28px,4vw,44px);font-weight:900;line-height:1.15;margin-bottom:16px}
+  .cta-inner p{font-size:16px;color:var(--subtle);margin-bottom:36px}
+  .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .cta-info{display:flex;gap:20px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+  .cta-info span{font-size:12px;color:var(--muted)}
+
+  /* FOOTER */
+  footer{padding:48px;border-top:1px solid rgba(255,255,255,.05);background:var(--bg2)}
+  .foot-inner{max-width:1200px;margin:0 auto}
+  .foot-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+  .foot-brand strong{font-size:15px;font-weight:800;display:block;margin-bottom:6px}
+  .foot-brand p{font-size:12px;color:var(--muted);line-height:1.7;max-width:280px;margin-top:8px}
+  .foot-col h5{font-size:12px;font-weight:700;color:var(--subtle);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+  .foot-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:8px;transition:color .2s}
+  .foot-col a:hover{color:var(--text)}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .foot-bottom span{font-size:12px;color:var(--muted)}
+
+  /* ANIMATIONS */
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+  .fu{animation:fadeUp .7s ease both}
+  .fu1{animation-delay:.1s}.fu2{animation-delay:.2s}.fu3{animation-delay:.3s}.fu4{animation-delay:.4s}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    nav{padding:14px 20px}.nav-links{display:none}
+    .hero,.hero-inner{padding:80px 20px 40px;grid-template-columns:1fr;gap:40px}
+    .dash-wrap{order:-1}
+    section{padding:60px 20px}
+    .serv-grid,.eco-grid,.dep-grid{grid-template-columns:1fr}
+    .nums-grid{grid-template-columns:1fr 1fr}
+    .num-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.05)}
+    .como-steps{grid-template-columns:1fr}
+    .como-steps::before{display:none}
+    .sobre-inner{grid-template-columns:1fr}
+    .sobre-photo{max-width:240px}
+    .foot-top{grid-template-columns:1fr 1fr}
+    .foot-bottom{flex-direction:column;text-align:center}
+    .float-card,.float-card2{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="mark">🌿</div>
+    <div>
+      <strong>RH Essencial Digital</strong>
+      <span>/ Essencial Agro · Essencial Mente</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#servicos">Serviços</a>
+    <a href="#ecossistema">Ecossistema</a>
+    <a href="#alana">Sobre Alana</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#contato" class="btn-olive">💬 Falar agora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="fu">
+      <div class="hero-eyebrow"><span class="dot"></span>Consultoria · Psicologia Organizacional</div>
+      <h1>Gestão de pessoas<br>com <em>propósito</em><br>e resultado</h1>
+      <p class="hero-sub">Diagnósticos organizacionais, saúde emocional corporativa e desenvolvimento humano para empresas que querem crescer com as pessoas — não apesar delas.</p>
+      <div class="hero-ctas">
+        <a href="https://wa.me/5561985272681?text=Olá! Quero conhecer os serviços do RH Essencial Digital." class="btn-primary" target="_blank">💬 WhatsApp · Falar com Alana</a>
+        <a href="#servicos" class="btn-ghost">Ver serviços ↓</a>
+      </div>
+      <div class="hero-badges">
+        <div class="hbadge"><div class="ic">✅</div>NR-1 Conforme</div>
+        <div class="hbadge"><div class="ic">🔒</div>LGPD Compliant</div>
+        <div class="hbadge"><div class="ic">🌾</div>Essencial Agro</div>
+        <div class="hbadge"><div class="ic">🧠</div>Essencial Mente</div>
+      </div>
+    </div>
+    <div class="dash-wrap fu fu2">
+      <div class="float-card2">
+        <div class="val2">🧠 Essencial Mente</div>
+        <div class="sub2">Saúde Emocional Corporativa</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-header">
+          <strong>🌿 RH Essencial Digital</strong>
+          <span style="font-size:11px;color:#4ade80;background:rgba(74,222,128,.1);padding:3px 10px;border-radius:20px">● Ativo</span>
+        </div>
+        <div class="dash-kpis">
+          <div class="kpi"><div class="v" style="color:#a3b67a">35+</div><div class="l">Módulos</div></div>
+          <div class="kpi"><div class="v" style="color:#818cf8">6</div><div class="l">Indicadores</div></div>
+          <div class="kpi"><div class="v" style="color:#fbbf24">NR-1</div><div class="l">Mapeamento</div></div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-pill"><div class="dot" style="background:#a3b67a"></div>Diagnóstico Psicossocial</div>
+          <div class="dash-pill"><div class="dot" style="background:#818cf8"></div>Radar Emocional</div>
+        </div>
+        <div class="dash-row">
+          <div class="dash-pill"><div class="dot" style="background:#fbbf24"></div>Essencial Agro</div>
+          <div class="dash-pill"><div class="dot" style="background:#0ea5e9"></div>Avaliação 360°</div>
+        </div>
+        <div class="dash-progress" style="margin-top:12px">
+          <div class="label"><span>Saúde Emocional da Equipe</span><span style="color:#a3b67a;font-weight:700">78%</span></div>
+          <div class="dash-bar"><div class="dash-bar-fill" style="width:78%;background:linear-gradient(90deg,var(--olive),#a3b67a)"></div></div>
+        </div>
+        <div class="dash-progress" style="margin-top:8px">
+          <div class="label"><span>Clima Organizacional</span><span style="color:#818cf8;font-weight:700">84%</span></div>
+          <div class="dash-bar"><div class="dash-bar-fill" style="width:84%;background:linear-gradient(90deg,var(--indigo),var(--violet))"></div></div>
+        </div>
+        <div class="dash-progress" style="margin-top:8px">
+          <div class="label"><span>Engajamento</span><span style="color:#fbbf24;font-weight:700">71%</span></div>
+          <div class="dash-bar"><div class="dash-bar-fill" style="width:71%;background:linear-gradient(90deg,var(--gold),#fbbf24)"></div></div>
+        </div>
+      </div>
+      <div class="float-card">
+        <div class="title">Diagnósticos realizados</div>
+        <div class="val">+120</div>
+        <div class="sub">empresas atendidas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NÚMEROS -->
+<div class="nums-section" style="padding:0 48px">
+  <div class="sec-inner" style="padding:0">
+    <div class="nums-grid">
+      <div class="num-item fu"><div class="num-val">35+</div><div class="num-label">Módulos de gestão de RH</div></div>
+      <div class="num-item fu fu1"><div class="num-val">6</div><div class="num-label">Indicadores de saúde emocional</div></div>
+      <div class="num-item fu fu2"><div class="num-val">NR-1</div><div class="num-label">Mapeamento psicossocial completo</div></div>
+      <div class="num-item fu fu3"><div class="num-val">21d</div><div class="num-label">Plano personalizado com IA</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="sec-inner">
+    <div class="fu">
+      <div class="sec-tag green">Serviços</div>
+      <h2 class="sec-title">Soluções completas<br>para gestão de pessoas</h2>
+      <p class="sec-sub">Do diagnóstico organizacional ao desenvolvimento contínuo — com foco em resultados reais e pessoas saudáveis.</p>
+    </div>
+    <div class="serv-grid" style="margin-top:48px">
+      <div class="serv-card c-green fu fu1">
+        <div class="serv-icon" style="background:rgba(78,92,45,.15)">📋</div>
+        <h3>Diagnósticos Organizacionais</h3>
+        <p>Mapeamento completo do clima, cultura e saúde psicossocial da sua equipe conforme NR-1/MTE.</p>
+        <ul class="serv-list">
+          <li>Mapeamento Psicossocial NR-1</li>
+          <li>Diagnóstico de Clima Organizacional</li>
+          <li>Diagnóstico de Cultura</li>
+          <li>Avaliação DISC Comportamental</li>
+          <li>Relatórios técnicos e executivos</li>
+        </ul>
+      </div>
+      <div class="serv-card c-indigo fu fu2">
+        <div class="serv-icon" style="background:rgba(99,102,241,.15)">🧠</div>
+        <h3>Essencial Mente</h3>
+        <p>Saúde emocional corporativa com radar de 6 indicadores, PulsoMente diário e plano 21 dias personalizado.</p>
+        <ul class="serv-list">
+          <li>Radar de Saúde Emocional</li>
+          <li>PulsoMente — check-in de 30s/dia</li>
+          <li>Plano 21 Dias com IA</li>
+          <li>Modo Confidencial (LGPD)</li>
+          <li>Relatórios para liderança</li>
+        </ul>
+      </div>
+      <div class="serv-card c-gold fu fu3">
+        <div class="serv-icon" style="background:rgba(217,119,6,.12)">🌾</div>
+        <h3>Essencial Agro</h3>
+        <p>Gestão de pessoas especializada para o agronegócio — diagnósticos adaptados à realidade rural e cooperativas.</p>
+        <ul class="serv-list">
+          <li>Diagnóstico DISC para equipes rurais</li>
+          <li>Gestão de colaboradores do campo</li>
+          <li>NR-1 adaptado para agro</li>
+          <li>Liderança rural e cooperativas</li>
+          <li>Bem-estar do trabalhador rural</li>
+        </ul>
+      </div>
+      <div class="serv-card c-teal fu fu1">
+        <div class="serv-icon" style="background:rgba(13,148,136,.12)">🤝</div>
+        <h3>Recrutamento & Seleção</h3>
+        <p>Processo seletivo estruturado com avaliação comportamental e alinhamento cultural desde o início.</p>
+        <ul class="serv-list">
+          <li>Descrição de vagas por competências</li>
+          <li>Triagem e entrevistas estruturadas</li>
+          <li>Avaliação DISC na seleção</li>
+          <li>Onboarding planejado</li>
+          <li>Banco de talentos</li>
+        </ul>
+      </div>
+      <div class="serv-card c-violet fu fu2">
+        <div class="serv-icon" style="background:rgba(124,58,237,.12)">🎓</div>
+        <h3>Desenvolvimento & PDI</h3>
+        <p>Planos de desenvolvimento individual, mentoria e avaliação 360° para líderes e equipes.</p>
+        <ul class="serv-list">
+          <li>Plano de Desenvolvimento Individual</li>
+          <li>Avaliação 360° Completa</li>
+          <li>Mentoria para líderes</li>
+          <li>Programas de feedback</li>
+          <li>Metas e OKRs para equipes</li>
+        </ul>
+      </div>
+      <div class="serv-card c-rose fu fu3">
+        <div class="serv-icon" style="background:rgba(225,29,72,.1)">💼</div>
+        <h3>Consultoria Estratégica de RH</h3>
+        <p>Estruturação do setor de RH, políticas internas, LGPD e implantação de processos de gestão de pessoas.</p>
+        <ul class="serv-list">
+          <li>Implantação de RH do zero</li>
+          <li>Políticas e procedimentos internos</li>
+          <li>Adequação LGPD</li>
+          <li>CRM e gestão de clientes RH</li>
+          <li>Prospecção B2B para RH</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSSISTEMA -->
+<section id="ecossistema" style="background:var(--bg2)">
+  <div class="sec-inner">
+    <div style="text-align:center" class="fu">
+      <div class="sec-tag indigo">Ecossistema</div>
+      <h2 class="sec-title">3 plataformas,<br>1 propósito</h2>
+      <p class="sec-sub" style="margin:0 auto">Um ecossistema integrado para a gestão completa de pessoas nas organizações modernas.</p>
+    </div>
+    <div class="eco-grid">
+      <div class="eco-card fu fu1" style="background:linear-gradient(135deg,rgba(78,92,45,.12),rgba(78,92,45,.05))">
+        <div style="font-size:36px;margin-bottom:16px">🌿</div>
+        <h4>RH Essencial Digital</h4>
+        <p>Plataforma completa de gestão de RH com 35+ módulos: empresas, colaboradores, formulários, CRM, financeiro, relatórios e muito mais.</p>
+        <a href="/" class="eco-card .tag" style="display:inline-block;margin-top:14px;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;background:rgba(78,92,45,.15);color:#a3b67a;border:1px solid rgba(78,92,45,.3);text-decoration:none">Acessar plataforma →</a>
+      </div>
+      <div class="eco-card fu fu2" style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(99,102,241,.05))">
+        <div style="font-size:36px;margin-bottom:16px">🧠</div>
+        <h4>Essencial Mente</h4>
+        <p>Diagnóstico de saúde emocional corporativa com radar de 6 indicadores, PulsoMente diário e trilha personalizada de 21 dias.</p>
+        <a href="/mente" class="eco-card .tag" style="display:inline-block;margin-top:14px;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3);text-decoration:none">Conhecer →</a>
+      </div>
+      <div class="eco-card fu fu3" style="background:linear-gradient(135deg,rgba(217,119,6,.1),rgba(217,119,6,.04))">
+        <div style="font-size:36px;margin-bottom:16px">🌾</div>
+        <h4>Essencial Agro</h4>
+        <p>Gestão de pessoas especializada para o agronegócio — diagnósticos, clima organizacional e desenvolvimento adaptados para equipes rurais.</p>
+        <span style="display:inline-block;margin-top:14px;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;background:rgba(217,119,6,.12);color:#fbbf24;border:1px solid rgba(217,119,6,.25)">Disponível no RH</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="sec-inner">
+    <div style="text-align:center" class="fu">
+      <div class="sec-tag green">Como funciona</div>
+      <h2 class="sec-title">Do diagnóstico ao resultado<br>em 5 etapas</h2>
+    </div>
+    <div class="como-steps">
+      <div class="como-step fu fu1"><div class="como-num">1</div><h4>Diagnóstico Inicial</h4><p>Mapeamento completo da realidade da sua equipe com questionários validados e radar de saúde emocional.</p></div>
+      <div class="como-step fu fu2"><div class="como-num">2</div><h4>Análise & Relatório</h4><p>Relatório técnico e executivo com indicadores, pontos críticos e recomendações prioritárias personalizadas.</p></div>
+      <div class="como-step fu fu3"><div class="como-num">3</div><h4>Plano de Ação</h4><p>Plano estruturado com ações práticas, responsáveis e cronograma para implementação dos resultados.</p></div>
+      <div class="como-step fu fu4"><div class="como-num">4</div><h4>Implementação</h4><p>Acompanhamento na implementação das ações com suporte consultivo e ajustes em tempo real.</p></div>
+      <div class="como-step fu"><div class="como-num">5</div><h4>Monitoramento</h4><p>PulsoMente diário e rediagnóstico periódico para medir a evolução real e manter os resultados.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE ALANA -->
+<section id="alana" class="sobre-section">
+  <div class="sec-inner">
+    <div class="sobre-inner">
+      <div class="fu">
+        <div class="sobre-photo">👩‍💼</div>
+      </div>
+      <div class="fu fu2">
+        <div class="sec-tag green">Sobre Alana</div>
+        <h2 class="sec-title" style="margin-bottom:16px">Alana Carvalho</h2>
+        <p style="color:var(--subtle);font-size:15px;line-height:1.75;margin-bottom:20px">Consultora de RH especializada em Psicologia Organizacional e Gestão de Pessoas. Fundadora do RH Essencial Digital, Essencial Mente e Essencial Agro — ecossistema de soluções para organizações que colocam as pessoas no centro da estratégia.</p>
+        <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:28px">Com foco em diagnósticos organizacionais, saúde emocional corporativa e desenvolvimento humano, atua com empresas de todos os portes — do agronegócio às corporações urbanas — integrando ciência, humanidade e resultado.</p>
+        <div class="sobre-credenciais">
+          <div class="cred"><div class="ic">🎓</div><div><strong>Psicologia Organizacional & do Trabalho</strong><span>Formação e especialização na área</span></div></div>
+          <div class="cred"><div class="ic">🏢</div><div><strong>Gestão de Pessoas & Consultoria RH</strong><span>Diagnósticos organizacionais, NR-1, clima e cultura</span></div></div>
+          <div class="cred"><div class="ic">🌾</div><div><strong>Fundadora · RH Essencial Digital / Essencial Agro</strong><span>Ecossistema de gestão de pessoas</span></div></div>
+          <div class="cred"><div class="ic">🧠</div><div><strong>Fundadora · Essencial Mente</strong><span>Saúde emocional corporativa</span></div></div>
+        </div>
+        <div class="quote">
+          <p>Acredito que empresas saudáveis são construídas por pessoas que se sentem vistas, valorizadas e emocionalmente bem. Diagnóstico é o começo — o acompanhamento contínuo é onde a transformação acontece.</p>
+          <cite>— Alana Carvalho</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section>
+  <div class="sec-inner">
+    <div class="fu">
+      <div class="sec-tag green">Depoimentos</div>
+      <h2 class="sec-title">O que dizem<br>nossos clientes</h2>
+    </div>
+    <div class="dep-grid">
+      <div class="dep-card fu fu1">
+        <div class="dep-stars">★★★★★</div>
+        <p>"O diagnóstico NR-1 trouxe clareza sobre o que realmente acontecia com nossa equipe. O relatório foi objetivo e as ações práticas. Resultado em 60 dias."</p>
+        <div class="dep-autor"><div class="dep-avatar">🏢</div><div><strong>Gestora de RH</strong><span>Empresa de logística, Goiânia</span></div></div>
+      </div>
+      <div class="dep-card fu fu2">
+        <div class="dep-stars">★★★★★</div>
+        <p>"O Essencial Mente foi um divisor de águas para o nosso time. Conseguimos identificar o burnout antes que virasse problema. O PulsoMente ficou parte da nossa rotina."</p>
+        <div class="dep-autor"><div class="dep-avatar">🧠</div><div><strong>Diretor de Pessoas</strong><span>Cooperativa agropecuária, MT</span></div></div>
+      </div>
+      <div class="dep-card fu fu3">
+        <div class="dep-stars">★★★★★</div>
+        <p>"Implantamos o RH do zero com a Alana. Processos, políticas, formulários — tudo. Em 3 meses tínhamos um setor estruturado funcionando. Recomendo muito."</p>
+        <div class="dep-autor"><div class="dep-avatar">🌾</div><div><strong>Proprietário</strong><span>Agropecuária familiar, GO</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contato" class="cta-section">
+  <div class="sec-inner">
+    <div class="cta-inner fu">
+      <div class="sec-tag green" style="margin-bottom:20px">Vamos começar?</div>
+      <h2>Transforme a gestão<br>de pessoas na sua empresa</h2>
+      <p>Fale com Alana Carvalho e descubra a solução ideal para a realidade da sua organização — diagnóstico, saúde emocional ou consultoria completa.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/5561985272681?text=Olá Alana! Quero conhecer os serviços do RH Essencial Digital." class="btn-primary" target="_blank">💬 WhatsApp · (61) 98527-2681</a>
+        <a href="mailto:essencialdigital2@gmail.com?subject=RH Essencial Digital - Interesse em serviços" class="btn-ghost">📧 E-mail</a>
+      </div>
+      <div class="cta-info">
+        <span>📍 Atendimento online · Todo Brasil</span>
+        <span>⚡ Proposta em até 1 dia útil</span>
+        <span>🎯 Diagnóstico gratuito na 1ª conversa</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <strong>🌿 RH Essencial Digital</strong>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">/ Essencial Agro · Essencial Mente</div>
+        <p>Consultoria em Gestão de Pessoas, Saúde Emocional Corporativa e Diagnósticos Organizacionais para empresas de todos os portes.</p>
+        <div style="margin-top:14px;font-size:11px;color:var(--muted)">
+          <div>📧 essencialdigital2@gmail.com</div>
+          <div style="margin-top:4px">📱 (61) 98527-2681</div>
+          <div style="margin-top:4px">🌐 rhessencialdigital.com.br</div>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Serviços</h5>
+        <a href="#servicos">Diagnósticos NR-1</a>
+        <a href="#servicos">Essencial Mente</a>
+        <a href="#servicos">Essencial Agro</a>
+        <a href="#servicos">R&S</a>
+        <a href="#servicos">PDI & Mentoria</a>
+      </div>
+      <div class="foot-col">
+        <h5>Plataformas</h5>
+        <a href="/">RH Essencial Digital</a>
+        <a href="/mente">Essencial Mente</a>
+        <a href="/#agro">Essencial Agro</a>
+        <a href="/mente#contato">Contato</a>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <a href="#">Política de Privacidade</a>
+        <a href="#">Termos de Uso</a>
+        <a href="#">LGPD</a>
+        <a href="#">CVV 188</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 RH Essencial Digital · Alana Carvalho · Todos os direitos reservados</span>
+      <span style="font-size:11px;color:#475569">Este não é um serviço de saúde mental clínica · Em crise? CVV 188 · 24h</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll fade-up
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+},{threshold:.12});
+document.querySelectorAll('.fu').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(24px)';
+  el.style.transition='opacity .7s ease, transform .7s ease';
+  obs.observe(el);
+});
+
+// Animate dash bars
+const barObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.dash-bar-fill').forEach(b=>{
+        const w=b.style.width;b.style.width='0%';
+        setTimeout(()=>{b.style.transition='width 1.2s ease';b.style.width=w;},200);
+      });barObs.unobserve(e.target);
+    }
+  });
+},{threshold:.4});
+document.querySelectorAll('.dash-card').forEach(el=>barObs.observe(el));
+
+// Counter animation
+const countObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.num-val').forEach(el=>{
+        const txt=el.textContent;if(txt.includes('+')&&!isNaN(txt.replace('+',''))){
+          const target=parseInt(txt);let cur=0;
+          const interval=setInterval(()=>{cur+=Math.ceil(target/20);if(cur>=target){cur=target;clearInterval(interval);}el.textContent=cur+'+';},50);
+        }
+      });countObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.nums-grid').forEach(el=>countObs.observe(el));
+</script>
+</body>
+</html>
