@@ -19,23 +19,23 @@ html{scroll-behavior:smooth}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(3,7,18,.85);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.05);transition:all .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(3,7,18,.85);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.05);transition:all .3s}
 .nav-name{font-size:15px;font-weight:800;letter-spacing:-.3px}
 .nav-name span{color:var(--olive3)}
 .nav-links{display:flex;align-items:center;gap:24px}
-.nav-links a{color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--text)}
+.nav-links a:not(.btn-wpp){display:none;color:var(--subtle);font-size:13px;text-decoration:none;transition:color .2s}
+.nav-links a:not(.btn-wpp):hover{color:var(--text)}
 .btn-wpp{background:#25d366;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s,transform .2s}
 .btn-wpp:hover{opacity:.9;transform:translateY(-1px)}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;padding:110px 48px 80px;position:relative;overflow:hidden}
+.hero{min-height:100vh;display:flex;align-items:center;padding:80px 16px 48px;position:relative;overflow:hidden}
 .hero-orbs{position:absolute;inset:0;pointer-events:none}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
 .orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(78,92,45,.5),transparent);top:-100px;right:-80px}
 .orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(79,70,229,.3),transparent);bottom:-80px;left:-60px}
 .orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(124,58,237,.2),transparent);top:40%;right:30%}
-.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;position:relative;z-index:1}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr;gap:40px;align-items:center;position:relative;z-index:1}
 .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(78,92,45,.12);border:1px solid rgba(163,182,122,.2);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--olive3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
 .hero-tag .pulse{width:6px;height:6px;background:var(--olive3);border-radius:50%;animation:pulse 2s infinite}
 h1{font-size:clamp(40px,5vw,66px);font-weight:900;line-height:1.02;letter-spacing:-2px;margin-bottom:8px}
@@ -160,21 +160,29 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
 .fu{animation:fadeUp .75s ease both}
 .fu1{animation-delay:.1s}.fu2{animation-delay:.2s}.fu3{animation-delay:.3s}.fu4{animation-delay:.4s}
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:14px 16px}
-  .nav-links a:not(.btn-wpp){display:none}
-  .hero{padding:80px 16px 48px;overflow:hidden}
-  .hero-inner{padding:0;grid-template-columns:1fr;gap:40px;max-width:100%}
-  .hero-tag{white-space:normal;flex-wrap:wrap;font-size:10px;letter-spacing:.8px;max-width:100%}
+/* RESPONSIVE — desktop overrides (mobile-first) */
+@media(min-width:900px){
+  nav{padding:16px 48px}
+  .nav-links a:not(.btn-wpp){display:inline-flex}
+  .hero{padding:110px 48px 80px}
+  .hero-inner{grid-template-columns:1fr 420px;gap:72px}
+  section{padding:88px 48px}
+  .sobre-grid{grid-template-columns:1fr 1fr}
+  .produtos-grid{grid-template-columns:repeat(2,1fr)}
+  .servs-grid{grid-template-columns:repeat(3,1fr)}
+  .deps-grid{grid-template-columns:repeat(3,1fr)}
+  .valores{grid-template-columns:1fr 1fr}
+  .cta-section{padding:88px 48px}
+  footer{padding:40px 48px}
+  .foot-inner{flex-direction:row}
+}
+
+/* MOBILE extras */
+@media(max-width:899px){
+  .hero-tag{white-space:normal;flex-wrap:wrap;font-size:10px;letter-spacing:.8px}
   h1{font-size:clamp(34px,9vw,54px);letter-spacing:-1.5px}
-  .hero-desc{font-size:14px;max-width:100%}
+  .hero-desc{font-size:14px}
   .alana-card{max-width:360px;margin:0 auto}
-  section{padding:60px 16px}
-  .sobre-grid,.produtos-grid{grid-template-columns:1fr}
-  .servs-grid,.deps-grid{grid-template-columns:1fr}
-  .valores{grid-template-columns:1fr}
-  .cta-section{padding:60px 16px}
   .foot-inner{flex-direction:column;text-align:center}
   .foot-links{justify-content:center}
   .hero-ctas{flex-direction:column;align-items:flex-start}
