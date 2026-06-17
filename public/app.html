@@ -4638,8 +4638,9 @@ PAGES.proposta=()=>`
       <td>${fmtVal(p.valor)}</td>
       <td><span class="badge ${p.status==='aprovada'?'b-green':p.status==='recusada'?'b-red':p.status==='enviada'?'b-blue':'b-gray'}">${p.status||'rascunho'}</span></td>
       <td>${p.data||'-'}</td>
-      <td style="display:flex;gap:4px">
-        <button class="btn btn-outline btn-sm" onclick="verProposta(${p.id})">👁️</button>
+      <td style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="verProposta(${p.id})" title="Visualizar / Salvar PDF">👁️ PDF</button>
+        <button class="btn btn-outline btn-sm" onclick="enviarEmailProposta(${p.id})" title="Enviar por e-mail" style="color:#2563eb;border-color:#2563eb">✉️</button>
         <button class="btn btn-outline btn-sm" onclick="editProposta(${p.id})">✏️</button>
         <button class="btn btn-red btn-sm" onclick="delProposta(${p.id})">🗑️</button>
       </td>
@@ -4657,6 +4658,7 @@ PAGES.proposta=()=>`
           <div class="fg"><label class="lbl">Status</label><select id="pro-st"><option value="rascunho">Rascunho</option><option value="enviada">Enviada</option><option value="aprovada">Aprovada</option><option value="recusada">Recusada</option></select></div>
           <div class="fg"><label class="lbl">Data</label><input id="pro-data" type="date"/></div>
           <div class="fg"><label class="lbl">Validade</label><input id="pro-val2" placeholder="Ex: 15 dias"/></div>
+          <div class="fg" style="grid-column:span 2"><label class="lbl">E-mail do Cliente (para envio)</label><input id="pro-email" type="email" placeholder="contato@empresa.com.br"/></div>
         </div>
         <div class="fg"><label class="lbl">Serviços (um por linha)</label><textarea id="pro-servs" rows="4" placeholder="Diagnóstico Psicossocial NR-1 — R$ 3.500&#10;Clima Organizacional — R$ 2.800"></textarea></div>
         <div class="fg"><label class="lbl">Observações</label><textarea id="pro-obs" rows="2"></textarea></div>
@@ -4664,39 +4666,89 @@ PAGES.proposta=()=>`
       <div class="modal-foot"><button class="btn btn-outline" onclick="closeM('modal-proposta')">Cancelar</button><button class="btn btn-primary" onclick="saveProposta()">Salvar</button></div>
     </div>
   </div>`;
-function openPropostaModal(){EID=null;['emp','cont','val','val2','obs'].forEach(f=>{const el=$('pro-'+f);if(el)el.value='';});$('pro-st').value='rascunho';$('pro-data').value=new Date().toISOString().split('T')[0];$('pro-servs').value='';openM('modal-proposta');}
-function editProposta(id){const p=S.propostas.find(x=>x.id===id);if(!p)return;EID=id;$('pro-emp').value=p.empresa||'';$('pro-cont').value=p.contato||'';$('pro-val').value=p.valor||'';$('pro-st').value=p.status||'rascunho';$('pro-data').value=p.data||'';$('pro-val2').value=p.validade||'';$('pro-servs').value=(p.servicos||[]).join('\n');$('pro-obs').value=p.obs||'';openM('modal-proposta');}
+function openPropostaModal(){EID=null;['emp','cont','val','val2','obs','email'].forEach(f=>{const el=$('pro-'+f);if(el)el.value='';});$('pro-st').value='rascunho';$('pro-data').value=new Date().toISOString().split('T')[0];$('pro-servs').value='';openM('modal-proposta');}
+function editProposta(id){const p=S.propostas.find(x=>x.id===id);if(!p)return;EID=id;$('pro-emp').value=p.empresa||'';$('pro-cont').value=p.contato||'';$('pro-val').value=p.valor||'';$('pro-st').value=p.status||'rascunho';$('pro-data').value=p.data||'';$('pro-val2').value=p.validade||'';$('pro-servs').value=(p.servicos||[]).join('\n');$('pro-obs').value=p.obs||'';if($('pro-email'))$('pro-email').value=p.email||'';openM('modal-proposta');}
 function saveProposta(){
   const emp=$('pro-emp').value.trim();if(!emp)return toast('Empresa obrigatória');
   const servicos=$('pro-servs').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  const d={empresa:emp,contato:$('pro-cont').value.trim(),servicos,valor:parseFloat($('pro-val').value)||0,status:$('pro-st').value,data:$('pro-data').value,validade:$('pro-val2').value.trim(),obs:$('pro-obs').value.trim()};
+  const d={empresa:emp,contato:$('pro-cont').value.trim(),email:$('pro-email')?$('pro-email').value.trim():'',servicos,valor:parseFloat($('pro-val').value)||0,status:$('pro-st').value,data:$('pro-data').value,validade:$('pro-val2').value.trim(),obs:$('pro-obs').value.trim()};
   if(EID){const i=S.propostas.findIndex(x=>x.id===EID);S.propostas[i]={...S.propostas[i],...d};}
   else{S.propostas.push({id:S.nids.proid++,...d});registrarLog('📝','Proposta criada: '+emp,'proposta');}
   closeM('modal-proposta');nav('proposta');toast('✅ Proposta salva!');
 }
 function delProposta(id){conf('Excluir proposta?',()=>{S.propostas=S.propostas.filter(p=>p.id!==id);nav('proposta');toast('🗑️ Excluída');})}
+function enviarEmailProposta(id){
+  const p=S.propostas.find(x=>x.id===id);if(!p)return;
+  const para=p.email||'';
+  const assunto=encodeURIComponent('Proposta Comercial — '+p.empresa+' — RH Essencial Digital');
+  const servLista=(p.servicos||[]).map(s=>'• '+s).join('\n');
+  const corpo=encodeURIComponent(
+    'Olá, '+(p.contato||p.empresa)+'!\n\n'+
+    'Segue nossa proposta comercial conforme conversamos:\n\n'+
+    'SERVIÇOS:\n'+servLista+'\n\n'+
+    'VALOR TOTAL: '+fmtVal(p.valor)+'\n'+
+    'VALIDADE: '+(p.validade||'15 dias')+'\n\n'+
+    (p.obs?'OBS: '+p.obs+'\n\n':'')+
+    'Para visualizar e salvar em PDF, acesse o link enviado ou entre em contato.\n\n'+
+    'Atenciosamente,\nAlana Carvalho\nEspecialista em Psicologia Organizacional\nRH Essencial Digital / Essencial Agro\n📱 rhessencialdigital.com.br'
+  );
+  window.open('mailto:'+encodeURIComponent(para)+'?subject='+assunto+'&body='+corpo,'_blank');
+  toast('✉️ Abrindo cliente de e-mail...');
+}
 function verProposta(id){
   const p=S.propostas.find(x=>x.id===id);if(!p)return;
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Proposta</title>
-  <style>body{font-family:'Segoe UI',sans-serif;max-width:700px;margin:40px auto;padding:20px}
-  .header{background:#4e5c2d;color:#fff;padding:24px;border-radius:8px 8px 0 0}
-  .body{border:1px solid #ddd;border-top:none;padding:24px;border-radius:0 0 8px 8px}
-  table{width:100%;border-collapse:collapse}td,th{padding:10px;border:1px solid #e5e7eb;font-size:13px}
-  th{background:#f0f4e8}@media print{button{display:none}}</style></head><body>
-  <div class="header"><h2>🌿 Proposta Comercial</h2><p>RH Essencial Digital / Essencial Agro · Alana Carvalho</p><p style="font-size:11px;color:#9ca3af;margin-top:8px">Este instrumento não substitui acompanhamento profissional especializado.</p></div>
-  <div class="body">
-    <p><strong>Cliente:</strong> ${p.empresa}</p>
-    <p><strong>Data:</strong> ${p.data||'-'} · <strong>Validade:</strong> ${p.validade||'15 dias'}</p>
-    <h3 style="margin:16px 0 8px">Serviços</h3>
-    <table><thead><tr><th>Serviço</th></tr></thead><tbody>
-      ${(p.servicos||[]).map(s=>`<tr><td>${s}</td></tr>`).join('')}
-    </tbody></table>
-    <div style="text-align:right;margin-top:16px;font-size:18px;font-weight:700;color:#4e5c2d">Total: ${fmtVal(p.valor)}</div>
-    <p style="margin-top:24px;font-size:12px;color:#6b7280">${p.obs||''}</p>
-    <div style="margin-top:32px;text-align:right"><p>_____________________________</p><p><strong>Alana Carvalho</strong></p><p>RH Essencial Digital / Essencial Agro</p></div>
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Proposta — ${p.empresa}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;padding:20px}
+    .page{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 20px rgba(0,0,0,.1)}
+    .header{background:linear-gradient(135deg,#4e5c2d,#6b7a3e);color:#fff;padding:32px}
+    .header h1{font-size:22px;font-weight:700;margin-bottom:4px}
+    .header p{font-size:13px;opacity:.85}
+    .body{padding:32px}
+    .info-row{display:flex;gap:24px;margin-bottom:24px;flex-wrap:wrap}
+    .info-box{flex:1;min-width:140px;background:#f0f4e8;border-radius:8px;padding:12px}
+    .info-box label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px}
+    .info-box p{font-size:14px;font-weight:600;color:#374151;margin-top:2px}
+    table{width:100%;border-collapse:collapse;margin:16px 0}
+    th{background:#f0f4e8;padding:10px 14px;text-align:left;font-size:12px;color:#4e5c2d;text-transform:uppercase;letter-spacing:.5px}
+    td{padding:10px 14px;border-bottom:1px solid #f3f4f6;font-size:13px}
+    .total{text-align:right;font-size:20px;font-weight:700;color:#4e5c2d;padding:16px 0}
+    .obs{font-size:12px;color:#6b7280;margin-top:16px;padding:12px;background:#fafafa;border-radius:6px}
+    .assinatura{margin-top:40px;display:flex;justify-content:flex-end}
+    .assinatura div{text-align:center;border-top:1px solid #374151;padding-top:8px;width:220px;font-size:12px}
+    .no-print{display:flex;gap:8px;justify-content:flex-end;padding:16px 32px;background:#fafafa;border-top:1px solid #e5e7eb}
+    @media print{.no-print{display:none}body{background:#fff;padding:0}.page{box-shadow:none;border-radius:0}}
+  </style></head><body>
+  <div class="no-print">
+    <button onclick="window.print()" style="padding:8px 20px;background:#4e5c2d;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px">🖨️ Imprimir / Salvar PDF</button>
+    <button onclick="window.close()" style="padding:8px 16px;background:#e5e7eb;color:#374151;border:none;border-radius:8px;cursor:pointer;font-size:13px">✕ Fechar</button>
   </div>
-  <button onclick="window.print()" style="margin-top:16px;padding:8px 20px;background:#4e5c2d;color:#fff;border:none;border-radius:6px;cursor:pointer">🖨️ Imprimir</button>
+  <div class="page">
+    <div class="header">
+      <h1>Proposta Comercial</h1>
+      <p>RH Essencial Digital · Alana Carvalho · Especialista em Psicologia Organizacional</p>
+    </div>
+    <div class="body">
+      <div class="info-row">
+        <div class="info-box"><label>Cliente</label><p>${p.empresa}</p></div>
+        ${p.contato?`<div class="info-box"><label>Contato</label><p>${p.contato}</p></div>`:''}
+        <div class="info-box"><label>Data</label><p>${p.data||'-'}</p></div>
+        <div class="info-box"><label>Validade</label><p>${p.validade||'15 dias'}</p></div>
+      </div>
+      <h3 style="font-size:14px;color:#4e5c2d;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Serviços Propostos</h3>
+      <table>
+        <thead><tr><th>Serviço</th></tr></thead>
+        <tbody>${(p.servicos||[]).map(s=>`<tr><td>${s}</td></tr>`).join('')}</tbody>
+      </table>
+      <div class="total">Total: ${fmtVal(p.valor)}</div>
+      ${p.obs?`<div class="obs"><strong>Observações:</strong> ${p.obs}</div>`:''}
+      <div class="assinatura">
+        <div><p style="margin-bottom:32px"></p><p><strong>Alana Carvalho</strong></p><p>RH Essencial Digital / Essencial Agro</p></div>
+      </div>
+    </div>
+  </div>
   </body></html>`);w.document.close();
 }
 
@@ -5288,7 +5340,7 @@ function pesquisaGlobal(q){
 }
 
 PAGES.site=()=>{
-  const SITE_URL='https://rhessencialdigital.com.br/alana-landing.html';
+  const SITE_URL='https://rhessencialdigital.com.br/alana';
   const links=[
     {ic:'👤',label:'Hub da Alana',url:SITE_URL,desc:'Página pessoal com todos os produtos e serviços'},
     {ic:'🧠',label:'Essencial Mente',url:'https://rhessencialdigital.com.br/mente',desc:'Landing page do Essencial Mente'},
@@ -5320,7 +5372,7 @@ PAGES.site=()=>{
             <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block"></span>
             <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block"></span>
           </span>
-          <span style="color:var(--gray);flex:1">rhessencialdigital.com.br/alana-landing.html</span>
+          <span style="color:var(--gray);flex:1">rhessencialdigital.com.br/alana</span>
           <button class="btn btn-outline btn-sm" onclick="window.open('${SITE_URL}','_blank')">⤢ Tela cheia</button>
         </div>
         <iframe style="width:100%;height:580px;border:none;background:#fff" src="${SITE_URL}" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
