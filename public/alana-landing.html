@@ -521,31 +521,38 @@ document.querySelectorAll('.fu').forEach(el=>{
   draw();
 })();
 
-// ── FORÇAR LAYOUT MOBILE (Instagram WebView / qualquer browser) ──
+// ── FORÇAR LAYOUT MOBILE (funciona em qualquer WebView incluindo Instagram 980px) ──
 (function(){
   function fixLayout(){
     var w = window.innerWidth || document.documentElement.clientWidth || screen.width;
-    if(w < 900){
-      var s = document.createElement('style');
-      s.id = 'mobile-force';
+    var isMobile = w < 1024 || screen.width < 500;
+    var s = document.createElement('style');
+    s.id = 'mobile-force';
+    if(isMobile){
       s.innerHTML = [
-        '.hero-inner{display:block!important;width:100%!important;max-width:100%!important;overflow:hidden!important}',
-        '.hero-inner>div{display:block!important;width:100%!important;max-width:100%!important;float:none!important}',
-        '.hero-inner>.fu2{max-width:380px!important;margin:40px auto 0!important}',
-        '.hero{padding:80px 16px 48px!important;overflow:hidden!important}',
-        'h1{font-size:clamp(32px,8vw,52px)!important}',
-        '.hero-tag{white-space:normal!important;flex-wrap:wrap!important;font-size:10px!important}',
+        'html,body{overflow-x:hidden!important;max-width:100vw!important}',
+        '.hero{padding:80px 16px 48px!important;overflow:hidden!important;max-width:100%!important}',
+        '.hero-inner{display:block!important;width:100%!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}',
+        '.hero-inner>div{display:block!important;width:100%!important;max-width:100%!important;float:none!important;box-sizing:border-box!important}',
+        '.hero-inner>.fu2{max-width:360px!important;margin:40px auto 0!important}',
+        'h1{font-size:clamp(32px,8vw,48px)!important;letter-spacing:-1px!important}',
+        '.hero-tag{white-space:normal!important;flex-wrap:wrap!important;font-size:10px!important;letter-spacing:.5px!important;max-width:100%!important}',
+        '.hero-role{font-size:15px!important}',
         '.hero-desc{max-width:100%!important;font-size:14px!important}',
         '.social-row{flex-wrap:wrap!important}',
         '.nav-links a:not(.btn-wpp){display:none!important}',
-        'section{padding:56px 16px!important}',
+        'nav{padding:12px 16px!important}',
+        'section{padding:48px 16px!important}',
         '.sobre-grid,.produtos-grid,.servs-grid,.deps-grid,.valores{grid-template-columns:1fr!important}',
-        '.prod-card.p-teams{flex-direction:column!important}'
+        '.prod-card.p-teams{flex-direction:column!important}',
+        '.orb1,.orb2,.orb3{display:none!important}'
       ].join('');
-      var old = document.getElementById('mobile-force');
-      if(old) old.remove();
-      document.head.appendChild(s);
+    } else {
+      s.innerHTML = '';
     }
+    var old = document.getElementById('mobile-force');
+    if(old) old.remove();
+    document.head.appendChild(s);
   }
   fixLayout();
   window.addEventListener('resize', fixLayout);
