@@ -57,7 +57,11 @@ h1{font-size:clamp(40px,5vw,66px);font-weight:900;line-height:1.02;letter-spacin
 .alana-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(78,92,45,.3),transparent);pointer-events:none}
 .alana-photo{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(135deg,rgba(78,92,45,.18),rgba(99,102,241,.12));display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;overflow:hidden}
 .alana-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(15,23,42,.5))}
-.ac-signature{font-family:'Dancing Script',cursive;font-size:100px;font-weight:700;background:linear-gradient(135deg,#c5d896,#a3b67a,#6b7c3a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;letter-spacing:-6px;position:relative;z-index:1;filter:drop-shadow(0 2px 18px rgba(163,182,122,.45))}
+.e-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;flex-direction:column;gap:0}
+.e-main{font-family:'Dancing Script',cursive;font-size:120px;font-weight:700;background:linear-gradient(160deg,#dff0a8,#a3b67a,#5a7030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:2;filter:drop-shadow(0 4px 28px rgba(163,182,122,.55));line-height:.95;animation:ePulse 3s ease-in-out infinite}
+.e-dig-behind{position:absolute;font-size:13px;font-weight:900;letter-spacing:0px;text-transform:uppercase;font-family:'Segoe UI',system-ui,sans-serif;z-index:1;opacity:0;color:rgba(163,182,122,.35);animation:digReveal 1.4s cubic-bezier(.22,1,.36,1) 0.6s forwards;white-space:nowrap;top:50%;transform:translateY(-50%)}
+@keyframes digReveal{0%{opacity:0;letter-spacing:28px}60%{opacity:1}100%{opacity:1;letter-spacing:10px}}
+@keyframes ePulse{0%,100%{filter:drop-shadow(0 4px 28px rgba(163,182,122,.55))}50%{filter:drop-shadow(0 4px 40px rgba(163,182,122,.8))}}
 .prod-card.p-teams{grid-column:1/-1;background:linear-gradient(135deg,rgba(236,72,153,.07),rgba(139,92,246,.07),rgba(15,23,42,.6));border-color:rgba(236,72,153,.18);display:flex;align-items:center;gap:36px}
 .prod-card.p-teams:hover{border-color:rgba(236,72,153,.4)}.prod-card.p-teams .prod-link{color:#f472b6}
 .prod-card.p-teams .prod-icon{font-size:52px;margin-bottom:0;flex-shrink:0}
@@ -212,7 +216,12 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
     </div>
     <div class="fu fu2" style="position:relative">
       <div class="alana-card">
-        <div class="alana-photo"><div class="ac-signature">AC</div></div>
+        <div class="alana-photo">
+          <div class="e-logo-wrap">
+            <span class="e-dig-behind">digital</span>
+            <span class="e-main">E</span>
+          </div>
+        </div>
         <div class="alana-name">Alana Carvalho</div>
         <div class="alana-title">Consultora de RH · Fundadora Essencial Digital</div>
         <div class="alana-chips">
@@ -365,33 +374,6 @@ footer{padding:40px 48px;border-top:1px solid rgba(255,255,255,.05)}
       <div class="serv fu fu2"><div class="ic">🎯</div><h4>Recrutamento & Seleção</h4><p>Processo seletivo com avaliação comportamental DISC e alinhamento cultural desde a contratação.</p></div>
       <div class="serv fu fu3"><div class="ic">🌾</div><h4>RH para Agronegócio</h4><p>Consultoria especializada para cooperativas e agropecuárias, com diagnósticos adaptados à realidade rural.</p></div>
       <div class="serv fu fu1" style="grid-column:1/-1;background:linear-gradient(135deg,rgba(79,70,229,.08),var(--bg2));border-color:rgba(99,102,241,.15)"><div class="ic">🎯</div><h4>Mentoria em RH & Gestão de Pessoas</h4><p>Acompanhamento individual para profissionais de RH, gestores e empreendedores que querem estruturar processos, desenvolver liderança e construir times mais saudáveis e produtivos. Sessões online, personalizadas e orientadas a resultados.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- DEPOIMENTOS -->
-<section class="deps-section">
-  <div class="sec-inner">
-    <div class="fu">
-      <div class="tag green">Depoimentos</div>
-      <h2 class="sec-title">Quem já transformou<br>sua equipe</h2>
-    </div>
-    <div class="deps-grid">
-      <div class="dep fu fu1">
-        <div class="dep-stars">★★★★★</div>
-        <p>"O diagnóstico NR-1 trouxe clareza real sobre o que acontecia com nossa equipe. O relatório foi preciso e as ações foram práticas. Em 60 dias vimos resultado."</p>
-        <div class="dep-who"><div class="dep-av">🏢</div><div><strong>Gestora de RH</strong><span>Empresa de logística · Goiânia</span></div></div>
-      </div>
-      <div class="dep fu fu2">
-        <div class="dep-stars">★★★★★</div>
-        <p>"O Essencial Mente foi divisor de águas. Identificamos o burnout antes de virar problema. A Alana acompanhou todo o processo com muito cuidado e competência."</p>
-        <div class="dep-who"><div class="dep-av">🧠</div><div><strong>Diretor de Pessoas</strong><span>Cooperativa · Mato Grosso</span></div></div>
-      </div>
-      <div class="dep fu fu3">
-        <div class="dep-stars">★★★★★</div>
-        <p>"Implantamos o RH do zero com a Alana. Em 3 meses tínhamos processos, políticas e ferramentas funcionando. Recomendo para qualquer empresa que queira crescer com pessoas."</p>
-        <div class="dep-who"><div class="dep-av">🌾</div><div><strong>Proprietário</strong><span>Agropecuária familiar · Goiás</span></div></div>
-      </div>
     </div>
   </div>
 </section>
