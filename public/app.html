@@ -5287,79 +5287,46 @@ function pesquisaGlobal(q){
 }
 
 PAGES.site=()=>{
+  const SITE_URL='https://rhessencialdigital.com.br/alana-landing.html';
+  const links=[
+    {ic:'👤',label:'Hub da Alana',url:SITE_URL,desc:'Página pessoal com todos os produtos e serviços'},
+    {ic:'🧠',label:'Essencial Mente',url:'https://rhessencialdigital.com.br/mente',desc:'Landing page do Essencial Mente'},
+    {ic:'🌿',label:'RH Essencial Digital',url:'https://rhessencialdigital.com.br',desc:'App principal de gestão de pessoas'},
+    {ic:'📚',label:'Essencial Estudo',url:'https://essencialestudo.com.br',desc:'Plataforma de estudos'},
+  ];
   return `
   <div class="section" style="margin-bottom:12px">
     <div class="sec-head">
       <h3>🌐 Meu Site Público</h3>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" onclick="abrirSiteLocal()">🔗 Abrir Site</button>
-        <button class="btn btn-outline btn-sm" onclick="copiarLinkSite()">📋 Copiar URL Netlify</button>
+        <button class="btn btn-primary btn-sm" onclick="window.open('${SITE_URL}','_blank')">🔗 Abrir Site</button>
+        <button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('${SITE_URL}').then(()=>toast('URL copiada!'))">📋 Copiar URL</button>
       </div>
     </div>
     <div class="sec-body">
-      <div style="background:var(--beige);border-radius:10px;padding:16px;margin-bottom:16px">
-        <div style="font-size:13px;font-weight:600;color:var(--olive-dark);margin-bottom:8px">📌 Status do Site</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-          <div style="background:#fff;border-radius:8px;padding:12px;text-align:center">
-            <div style="font-size:22px;margin-bottom:4px">🌐</div>
-            <div style="font-size:12px;font-weight:600">Arquivo Local</div>
-            <div style="font-size:11px;color:var(--gray)">index.html.html</div>
-            <span class="badge b-green" style="margin-top:6px">Pronto</span>
-          </div>
-          <div style="background:#fff;border-radius:8px;padding:12px;text-align:center">
-            <div style="font-size:22px;margin-bottom:4px">☁️</div>
-            <div style="font-size:12px;font-weight:600">Netlify</div>
-            <div style="font-size:11px;color:var(--gray)">${NETLIFY_URL||'Não configurado'}</div>
-            <span class="badge ${NETLIFY_URL?'b-green':'b-yellow'}" style="margin-top:6px">${NETLIFY_URL?'Configurado':'Pendente'}</span>
-          </div>
-          <div style="background:#fff;border-radius:8px;padding:12px;text-align:center">
-            <div style="font-size:22px;margin-bottom:4px">📱</div>
-            <div style="font-size:12px;font-weight:600">WhatsApp</div>
-            <div style="font-size:11px;color:var(--gray)">(61) 98527-2681</div>
-            <span class="badge b-green" style="margin-top:6px">Configurado</span>
-          </div>
-        </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        ${links.map(l=>`
+        <div style="background:var(--beige);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:box-shadow .2s" onclick="window.open('${l.url}','_blank')">
+          <div style="font-size:26px;margin-bottom:8px">${l.ic}</div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">${l.label}</div>
+          <div style="font-size:10px;color:var(--gray);line-height:1.4">${l.desc}</div>
+        </div>`).join('')}
       </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <div style="border:1px solid var(--gray-light);border-radius:10px;padding:16px">
-          <div style="font-weight:600;font-size:13px;margin-bottom:10px">📋 Seções do Site</div>
-          ${['🦸 Hero — Apresentação principal','📊 Números de impacto','🛠️ Serviços com descrição','💚 Bem-Estar — pacotes empresariais e individuais','🌾 Essencial Agro','⚙️ Como Funciona (5 etapas)','👩 Sobre Alana','💬 Depoimentos de clientes','📩 Formulário de contato Netlify','🔗 Rodapé completo','📱 Botão WhatsApp flutuante'].map(s=>`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px;border-bottom:1px solid #f9fafb"><span style="color:var(--olive)">✓</span>${s}</div>`).join('')}
-        </div>
-        <div style="border:1px solid var(--gray-light);border-radius:10px;padding:16px">
-          <div style="font-weight:600;font-size:13px;margin-bottom:10px">🚀 Como publicar no Netlify</div>
-          ${[
-            ['1','Acesse','netlify.com e faça login'],
-            ['2','Clique em','Add new site → Deploy manually'],
-            ['3','Renomeie','site-rh-essencial.html para index.html'],
-            ['4','Arraste','o arquivo index.html para a área de deploy'],
-            ['5','Pronto','Seu site estará online em segundos'],
-            ['6','Formulário','Netlify Forms ativa automaticamente']
-          ].map(([n,t,d])=>`<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #f9fafb;font-size:12px"><span style="background:var(--olive-dark);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${n}</span><div><strong>${t}</strong> ${d}</div></div>`).join('')}
-          <div class="alert a-green" style="margin-top:10px;font-size:11px">💡 Domínio personalizado (ex: rhessencial.com.br) pode ser configurado gratuitamente no Netlify.</div>
-        </div>
-      </div>
-
       <div style="border:1px solid var(--gray-light);border-radius:10px;overflow:hidden">
         <div style="background:var(--gray-light);padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:12px">
-          <span style="display:flex;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block"></span><span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block"></span><span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block"></span></span>
-          <span style="color:var(--gray)">Preview — rhessencialdigital.netlify.app</span>
-          <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="abrirSiteLocal()">⤢ Tela cheia</button>
+          <span style="display:flex;gap:4px">
+            <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;display:inline-block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block"></span>
+          </span>
+          <span style="color:var(--gray);flex:1">rhessencialdigital.com.br/alana-landing.html</span>
+          <button class="btn btn-outline btn-sm" onclick="window.open('${SITE_URL}','_blank')">⤢ Tela cheia</button>
         </div>
-        <iframe id="site-preview" style="width:100%;height:520px;border:none;background:#fff" src="${localStorage.getItem('netlify_site')||'https://essencialdigitalrh.netlify.app'}" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
+        <iframe style="width:100%;height:580px;border:none;background:#fff" src="${SITE_URL}" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"></iframe>
       </div>
     </div>
   </div>`;
 };
-
-function abrirSiteLocal(){
-  const urlSite=localStorage.getItem('netlify_site')||'https://rhessencialdigital.netlify.app/site-rh-essencial.html';
-  window.open(urlSite,'_blank');
-}
-function copiarLinkSite(){
-  const url=NETLIFY_URL||'Configure a URL do Netlify em Configurações';
-  navigator.clipboard.writeText(url).then(()=>toast('📋 URL copiada!'));
-}
 
 // QR CODE
 function mostrarQR(formId,colId){
