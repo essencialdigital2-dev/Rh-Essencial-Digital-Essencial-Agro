@@ -206,6 +206,7 @@ tr:hover td{background:#fafafa}
       <a onclick="nav('renovacao')" id="n-renovacao"><span class="ic">🔄</span>Renovações</a>
       <a onclick="nav('encerramento')" id="n-encerramento"><span class="ic">📦</span>Encerramento</a>
       <a onclick="nav('site')" id="n-site"><span class="ic">🌐</span>Meu Site</a>
+      <a onclick="nav('admin')" id="n-admin"><span class="ic">⚙️</span>Painel Admin</a>
     </nav>
     <div class="pin-bot">
       <a onclick="nav('config')" id="n-config"><span class="ic">⚙️</span>Configurações</a>
@@ -6882,9 +6883,360 @@ function gerarRelAbsenteismo(){
   ov.innerHTML='<div style="padding:10px 16px;background:#78350f;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Relatório de Absenteísmo</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe style="flex:1;border:none;width:100%;height:100%" src="'+url+'"></iframe>';
   document.body.appendChild(ov);setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
-</script>
-</body>
-</html>URL.revokeObjectURL(url),60000);
+
+// ── PAINEL ADMIN ──────────────────────────────────────────────────────────────
+if(!S.recibos)S.recibos=[];
+if(!S.contratos)S.contratos=[];
+if(!S.nids)S.nids={};
+if(!S.nids.recid)S.nids.recid=1;
+if(!S.nids.conid)S.nids.conid=1;
+
+let ADMTAB='visao';
+function admTab(t){ADMTAB=t;nav('admin');}
+
+PAGES.admin=()=>{
+  if(!S.recibos)S.recibos=[];
+  if(!S.contratos)S.contratos=[];
+  const receitaTotal=S.recibos.reduce((s,r)=>s+(parseFloat(r.valor)||0),0);
+  const recibosEmitidos=S.recibos.length;
+  const contratosAtivos=S.contratos.filter(c=>c.status==='ativo').length;
+  const empresasAtivas=(S.empresas||[]).filter(e=>e.status!=='inativo').length;
+  return `
+  <div class="tab-bar">
+    ${[['visao','Visão Geral'],['recibos','Recibos'],['contratos','Contratos'],['nfse','Nota Fiscal']].map(([k,l])=>`<div class="tab ${ADMTAB===k?'active':''}" onclick="admTab('${k}')">${l}</div>`).join('')}
+  </div>
+
+  ${ADMTAB==='visao'?`
+  <div class="cards">
+    <div class="card"><div class="lbl">Receita Total</div><div class="val" style="font-size:20px">R$ ${receitaTotal.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div><div class="sub">${recibosEmitidos} recibo(s) emitido(s)</div></div>
+    <div class="card"><div class="lbl">Contratos Ativos</div><div class="val">${contratosAtivos}</div><div class="sub">de ${S.contratos.length} total</div></div>
+    <div class="card"><div class="lbl">Empresas Ativas</div><div class="val">${empresasAtivas}</div><div class="sub">clientes</div></div>
+    <div class="card"><div class="lbl">Diagnósticos</div><div class="val">${S.relatorios?S.relatorios.length:0}</div><div class="sub">gerados</div></div>
+  </div>
+  <div class="section">
+    <div class="sec-head"><h3>Últimos Contratos</h3><button class="btn btn-primary btn-sm" onclick="admTab('contratos')">Ver todos</button></div>
+    <div class="sec-body">
+      ${S.contratos.length===0?'<div class="alert a-blue">Nenhum contrato cadastrado.</div>':
+        S.contratos.slice(-5).reverse().map(c=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6">
+          <div><strong style="font-size:13px">${c.empresa}</strong><div style="font-size:11px;color:#6b7280">${c.servico||''} · ${c.data||''}</div></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-weight:700;color:#4e5c2d">R$ ${parseFloat(c.valor||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+            <span class="badge ${c.status==='ativo'?'b-green':c.status==='encerrado'?'b-gray':'b-yellow'}">${c.status||'rascunho'}</span>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-head"><h3>Últimos Recibos</h3><button class="btn btn-primary btn-sm" onclick="admTab('recibos')">Ver todos</button></div>
+    <div class="sec-body">
+      ${S.recibos.length===0?'<div class="alert a-blue">Nenhum recibo emitido.</div>':
+        S.recibos.slice(-5).reverse().map(r=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6">
+          <div><strong style="font-size:13px">${r.pagador}</strong><div style="font-size:11px;color:#6b7280">${r.servico||''} · ${r.data||''}</div></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-weight:700;color:#4e5c2d">R$ ${parseFloat(r.valor||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+            <button class="btn btn-outline btn-sm" onclick="imprimirRecibo(${r.id})">PDF</button>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`:''}
+
+  ${ADMTAB==='recibos'?`
+  <div class="section">
+    <div class="sec-head"><h3>Recibos</h3><button class="btn btn-primary" onclick="openM('modal-recibo')">+ Novo Recibo</button></div>
+    <div class="sec-body">
+      ${S.recibos.length===0?'<div class="alert a-blue">Nenhum recibo emitido ainda.</div>':''}
+      ${S.recibos.slice().reverse().map(r=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f3f4f6">
+        <div>
+          <strong style="font-size:13px">#${r.id} · ${r.pagador}</strong>
+          <div style="font-size:11px;color:#6b7280">${r.servico} · ${r.data}</div>
+          ${r.obs?'<div style="font-size:11px;color:#9ca3af">'+r.obs+'</div>':''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:15px;font-weight:800;color:#4e5c2d">R$ ${parseFloat(r.valor).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+          <button class="btn btn-primary btn-sm" onclick="imprimirRecibo(${r.id})">PDF</button>
+          <button class="btn btn-outline btn-sm" onclick="delRecibo(${r.id})">Excluir</button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div id="modal-recibo" class="modal-bg hidden">
+    <div class="modal"><div class="modal-head"><h3>Novo Recibo</h3><button onclick="closeM('modal-recibo')">x</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Pagador (nome/empresa) *</label><input id="rec-pagador" placeholder="Nome ou empresa"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">CPF/CNPJ do Pagador</label><input id="rec-cpf" placeholder="000.000.000-00"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Servico prestado *</label><input id="rec-servico" placeholder="Ex: Diagnóstico Psicossocial NR-1"/></div>
+        <div class="fg"><label class="lbl">Valor (R$) *</label><input id="rec-valor" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="fg"><label class="lbl">Data</label><input id="rec-data" type="date"/></div>
+        <div class="fg"><label class="lbl">Forma de Pagamento</label><select id="rec-forma"><option>PIX</option><option>Transferência Bancária</option><option>Dinheiro</option><option>Boleto</option><option>Cartão</option></select></div>
+        <div class="fg"><label class="lbl">Número do Recibo</label><input id="rec-num" placeholder="Automático se vazio"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Observações</label><textarea id="rec-obs" rows="2" placeholder="Informações adicionais..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeM('modal-recibo')">Cancelar</button><button class="btn btn-primary" onclick="salvarRecibo()">Salvar e Gerar PDF</button></div>
+    </div>
+  </div>`:''}
+
+  ${ADMTAB==='contratos'?`
+  <div class="section">
+    <div class="sec-head"><h3>Contratos</h3><button class="btn btn-primary" onclick="openM('modal-contrato')">+ Novo Contrato</button></div>
+    <div class="sec-body">
+      ${S.contratos.length===0?'<div class="alert a-blue">Nenhum contrato cadastrado.</div>':''}
+      ${S.contratos.slice().reverse().map(c=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f3f4f6">
+        <div>
+          <strong style="font-size:13px">#${c.id} · ${c.empresa}</strong>
+          <div style="font-size:11px;color:#6b7280">${c.servico||''} · Inicio: ${c.inicio||'—'} · Término: ${c.termino||'indeterminado'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-weight:800;color:#4e5c2d">R$ ${parseFloat(c.valor||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+          <span class="badge ${c.status==='ativo'?'b-green':c.status==='encerrado'?'b-gray':'b-yellow'}">${c.status||'rascunho'}</span>
+          <button class="btn btn-primary btn-sm" onclick="imprimirContrato(${c.id})">PDF</button>
+          <button class="btn btn-outline btn-sm" onclick="delContrato(${c.id})">Excluir</button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div id="modal-contrato" class="modal-bg hidden">
+    <div class="modal" style="width:min(680px,100%);max-height:90vh;overflow-y:auto">
+    <div class="modal-head"><h3>Novo Contrato</h3><button onclick="closeM('modal-contrato')">x</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Empresa Contratante *</label><input id="con-empresa" placeholder="Razão social da empresa"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">CNPJ / CPF da Contratante</label><input id="con-cnpj" placeholder="00.000.000/0001-00"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Responsável / Representante</label><input id="con-responsavel" placeholder="Nome do signatário"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Servico / Objeto do Contrato *</label><input id="con-servico" placeholder="Ex: Consultoria em Gestão de Pessoas e Diagnóstico NR-1"/></div>
+        <div class="fg"><label class="lbl">Valor (R$) *</label><input id="con-valor" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="fg"><label class="lbl">Modalidade</label><select id="con-modalidade"><option>Avulso</option><option>Mensal</option><option>Trimestral</option><option>Semestral</option><option>Anual</option></select></div>
+        <div class="fg"><label class="lbl">Data de Inicio</label><input id="con-inicio" type="date"/></div>
+        <div class="fg"><label class="lbl">Data de Término</label><input id="con-termino" type="date"/></div>
+        <div class="fg"><label class="lbl">Forma de Pagamento</label><select id="con-pagamento"><option>PIX</option><option>Transferência Bancária</option><option>Boleto</option><option>Cartão</option></select></div>
+        <div class="fg"><label class="lbl">Status</label><select id="con-status"><option value="ativo">Ativo</option><option value="rascunho">Rascunho</option><option value="encerrado">Encerrado</option></select></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Escopo / Entregas</label><textarea id="con-escopo" rows="3" placeholder="Descreva o que será entregue..."></textarea></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Cláusulas adicionais</label><textarea id="con-clausulas" rows="2" placeholder="Cláusulas específicas (opcional)..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeM('modal-contrato')">Cancelar</button><button class="btn btn-primary" onclick="salvarContrato()">Salvar e Gerar PDF</button></div>
+    </div>
+  </div>`:''}
+
+  ${ADMTAB==='nfse'?`
+  <div class="section">
+    <div class="sec-head"><h3>Nota Fiscal de Servico (NFS-e)</h3></div>
+    <div class="sec-body">
+      <div class="alert a-blue" style="margin-bottom:16px">
+        Como MEI, voce emite NFS-e diretamente no portal da sua prefeitura. Preencha os dados abaixo para gerar um documento de apoio e acesse o portal para emissão oficial.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="fg"><label class="lbl">Tomador (Empresa/Pessoa) *</label><input id="nf-tomador" placeholder="Nome ou razão social"/></div>
+        <div class="fg"><label class="lbl">CPF/CNPJ do Tomador</label><input id="nf-cnpj" placeholder="00.000.000/0001-00"/></div>
+        <div class="fg" style="grid-column:span 2"><label class="lbl">Descricao do Servico *</label><input id="nf-servico" placeholder="Ex: Consultoria em Gestão de Pessoas"/></div>
+        <div class="fg"><label class="lbl">Valor (R$) *</label><input id="nf-valor" type="number" step="0.01" placeholder="0,00"/></div>
+        <div class="fg"><label class="lbl">Data de Competência</label><input id="nf-data" type="date"/></div>
+        <div class="fg"><label class="lbl">Código do Servico (CNAE)</label><input id="nf-cnae" value="7020-4/00" placeholder="7020-4/00"/></div>
+        <div class="fg"><label class="lbl">ISS (%)</label><input id="nf-iss" value="2" placeholder="2 a 5%"/></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="gerarDocNFSe()">Gerar Documento de Apoio</button>
+        <a href="https://www.nfse.gov.br/EmissorNacional/" target="_blank" class="btn btn-gold">Emissor Nacional NFS-e</a>
+        <a href="https://www8.receita.fazenda.gov.br/SimplesNacional/" target="_blank" class="btn btn-outline">Portal MEI</a>
+      </div>
+      <div class="alert a-blue" style="margin-top:16px">
+        <strong>Dica:</strong> MEI pode faturar ate R$ 81.000/ano. O ISS e fixo mensal e ja esta incluso no DAS — nao incide por nota emitida na maioria dos municipios.
+      </div>
+    </div>
+  </div>`:''}
+  `;
+};
+
+function salvarRecibo(){
+  const pagador=document.getElementById('rec-pagador')?.value.trim();
+  const valor=document.getElementById('rec-valor')?.value;
+  const servico=document.getElementById('rec-servico')?.value.trim();
+  if(!pagador||!valor||!servico)return toast('Preencha pagador, servico e valor');
+  if(!S.recibos)S.recibos=[];if(!S.nids)S.nids={};if(!S.nids.recid)S.nids.recid=1;
+  const num=document.getElementById('rec-num')?.value.trim()||String(S.nids.recid).padStart(4,'0');
+  const rec={
+    id:S.nids.recid++,pagador,
+    cpf:document.getElementById('rec-cpf')?.value.trim(),
+    servico,valor:parseFloat(valor),
+    data:document.getElementById('rec-data')?.value||new Date().toISOString().slice(0,10),
+    forma:document.getElementById('rec-forma')?.value,num,
+    obs:document.getElementById('rec-obs')?.value.trim(),
+  };
+  S.recibos.push(rec);saveS();closeM('modal-recibo');
+  toast('Recibo salvo!');setTimeout(()=>imprimirRecibo(rec.id),300);nav('admin');
+}
+
+function imprimirRecibo(id){
+  const r=S.recibos.find(x=>x.id===id);if(!r)return;
+  const valorExt=valorPorExtenso(r.valor);
+  const data=new Date((r.data||new Date().toISOString().slice(0,10))+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recibo #'+r.num+'</title>'
+  +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;color:#1f2937;font-size:13px}'
+  +'.page{max-width:700px;margin:40px auto;padding:40px;border:2px solid #4e5c2d;border-radius:12px}'
+  +'.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #4e5c2d}'
+  +'.logo-txt{font-size:16px;font-weight:800;color:#4e5c2d}.logo-sub{font-size:11px;color:#6b7280;margin-top:2px}'
+  +'.rn{text-align:right}.rn h1{font-size:22px;font-weight:800;color:#4e5c2d}.rn p{font-size:11px;color:#6b7280}'
+  +'.vbox{background:#f0f9f0;border:2px solid #4e5c2d;border-radius:10px;padding:20px;text-align:center;margin:20px 0}'
+  +'.vbox .v{font-size:36px;font-weight:900;color:#4e5c2d}.vbox .ext{font-size:12px;color:#6b7280;margin-top:4px;font-style:italic}'
+  +'.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}'
+  +'.field{background:#f9fafb;border-radius:8px;padding:12px}.field label{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;display:block;margin-bottom:4px}'
+  +'.field span{font-size:13px;font-weight:600;color:#1f2937}'
+  +'.sbox{background:#f9fafb;border-radius:8px;padding:14px;margin-bottom:16px}'
+  +'.assin{margin-top:32px;padding-top:20px;border-top:2px solid #e5e7eb;text-align:center}'
+  +'.np{display:flex;gap:8px;justify-content:flex-end;margin-bottom:16px}'
+  +'@media print{.np{display:none!important}}</style></head><body>'
+  +'<div class="np"><button onclick="window.print()" style="padding:8px 20px;background:#4e5c2d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Imprimir / Salvar PDF</button></div>'
+  +'<div class="page"><div class="header"><div><div class="logo-txt">RH Essencial Digital</div>'
+  +'<div class="logo-sub">Alana Carvalho · essencialdigital2@gmail.com · rhessencialdigital.com.br</div></div>'
+  +'<div class="rn"><h1>RECIBO</h1><p>No '+r.num+' · '+data+'</p></div></div>'
+  +'<div class="vbox"><div class="v">R$ '+r.valor.toLocaleString('pt-BR',{minimumFractionDigits:2})+'</div><div class="ext">'+valorExt+'</div></div>'
+  +'<div class="grid">'
+  +'<div class="field"><label>Recebido de</label><span>'+r.pagador+'</span></div>'
+  +'<div class="field"><label>CPF / CNPJ</label><span>'+(r.cpf||'Não informado')+'</span></div>'
+  +'<div class="field"><label>Data</label><span>'+data+'</span></div>'
+  +'<div class="field"><label>Forma de Pagamento</label><span>'+(r.forma||'PIX')+'</span></div>'
+  +'</div>'
+  +'<div class="sbox"><label style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;display:block;margin-bottom:6px">Referente a</label>'
+  +'<span style="font-size:13px">'+r.servico+'</span>'+(r.obs?'<div style="margin-top:8px;font-size:12px;color:#6b7280">'+r.obs+'</div>':'')+'</div>'
+  +'<div class="assin"><div style="width:200px;border-top:1px solid #1f2937;margin:0 auto 8px;padding-top:8px"></div>'
+  +'<strong>Alana Carvalho</strong><span style="font-size:12px;color:#6b7280;display:block">Consultora de RH · RH Essencial Digital · '+data+'</span></div>'
+  +'<div style="text-align:center;margin-top:16px;font-size:10px;color:#9ca3af">Este recibo e valido como comprovante de pagamento pelos servicos descritos acima.</div>'
+  +'</div></body></html>';
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
+  ov.innerHTML='<div style="padding:10px 16px;background:#4e5c2d;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Recibo #'+r.num+' · '+r.pagador+'</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe srcdoc="" style="flex:1;border:none;width:100%;height:100%"></iframe>';
+  document.body.appendChild(ov);ov.querySelector('iframe').srcdoc=html;
+}
+
+function delRecibo(id){conf('Excluir recibo?',()=>{S.recibos=S.recibos.filter(r=>r.id!==id);saveS();nav('admin');toast('Excluído');})}
+
+function salvarContrato(){
+  const empresa=document.getElementById('con-empresa')?.value.trim();
+  const valor=document.getElementById('con-valor')?.value;
+  const servico=document.getElementById('con-servico')?.value.trim();
+  if(!empresa||!valor||!servico)return toast('Preencha empresa, servico e valor');
+  if(!S.contratos)S.contratos=[];if(!S.nids)S.nids={};if(!S.nids.conid)S.nids.conid=1;
+  const con={
+    id:S.nids.conid++,empresa,
+    cnpj:document.getElementById('con-cnpj')?.value.trim(),
+    responsavel:document.getElementById('con-responsavel')?.value.trim(),
+    servico,valor:parseFloat(valor),
+    modalidade:document.getElementById('con-modalidade')?.value,
+    inicio:document.getElementById('con-inicio')?.value,
+    termino:document.getElementById('con-termino')?.value,
+    pagamento:document.getElementById('con-pagamento')?.value,
+    status:document.getElementById('con-status')?.value||'ativo',
+    escopo:document.getElementById('con-escopo')?.value.trim(),
+    clausulas:document.getElementById('con-clausulas')?.value.trim(),
+    data:new Date().toISOString().slice(0,10),
+  };
+  S.contratos.push(con);saveS();closeM('modal-contrato');
+  toast('Contrato salvo!');setTimeout(()=>imprimirContrato(con.id),300);nav('admin');
+}
+
+function imprimirContrato(id){
+  const c=S.contratos.find(x=>x.id===id);if(!c)return;
+  const dataFmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'indeterminado';
+  const hoje=new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Contrato #'+c.id+'</title>'
+  +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;color:#1f2937;font-size:13px;line-height:1.6}'
+  +'.page{max-width:760px;margin:40px auto;padding:48px}'
+  +'h1{font-size:18px;font-weight:800;text-align:center;color:#4e5c2d;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}'
+  +'.sub{text-align:center;font-size:11px;color:#6b7280;margin-bottom:32px}'
+  +'.cl{margin-bottom:20px}.cl h3{font-size:13px;font-weight:700;color:#4e5c2d;margin-bottom:6px;text-transform:uppercase}'
+  +'.cl p{font-size:13px;color:#374151;text-align:justify}'
+  +'.partes{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}'
+  +'.parte{background:#f9fafb;border-radius:8px;padding:16px;border-left:4px solid #4e5c2d}'
+  +'.parte h4{font-size:11px;font-weight:700;color:#4e5c2d;text-transform:uppercase;margin-bottom:8px}'
+  +'.parte p{font-size:12px;color:#374151;margin-bottom:3px}'
+  +'.assinaturas{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px;padding-top:24px;border-top:1px solid #e5e7eb}'
+  +'.assin-box{text-align:center}.assin-linha{border-top:1px solid #1f2937;margin-bottom:8px;margin-top:40px}'
+  +'.np{display:flex;gap:8px;justify-content:flex-end;margin-bottom:20px}'
+  +'@media print{.np{display:none!important}}</style></head><body>'
+  +'<div class="np"><button onclick="window.print()" style="padding:8px 20px;background:#4e5c2d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Imprimir / Salvar PDF</button></div>'
+  +'<div class="page"><h1>Contrato de Prestação de Servicos</h1>'
+  +'<div class="sub">Contrato No '+String(c.id).padStart(4,'0')+' · Emitido em '+hoje+'</div>'
+  +'<div class="partes">'
+  +'<div class="parte"><h4>Contratada (Prestador)</h4><p><strong>RH Essencial Digital</strong></p><p>Alana Carvalho</p><p>rhessencialdigital.com.br</p><p>essencialdigital2@gmail.com</p></div>'
+  +'<div class="parte"><h4>Contratante</h4><p><strong>'+c.empresa+'</strong></p>'+(c.cnpj?'<p>CNPJ/CPF: '+c.cnpj+'</p>':'')+(c.responsavel?'<p>Representante: '+c.responsavel+'</p>':'')+'</div>'
+  +'</div>'
+  +'<div class="cl"><h3>Clausula 1 — Objeto</h3><p>O presente contrato tem por objeto a prestacao dos seguintes servicos: <strong>'+c.servico+'</strong>.'+(c.escopo?'<br><br>'+c.escopo:'')+'</p></div>'
+  +'<div class="cl"><h3>Clausula 2 — Valor e Forma de Pagamento</h3><p>Pelos servicos prestados, a Contratante pagara a Contratada o valor de <strong>R$ '+parseFloat(c.valor).toLocaleString('pt-BR',{minimumFractionDigits:2})+'</strong> ('+valorPorExtenso(c.valor)+'), na modalidade <strong>'+(c.modalidade||'avulso')+'</strong>, via <strong>'+(c.pagamento||'PIX')+'</strong>.</p></div>'
+  +'<div class="cl"><h3>Clausula 3 — Prazo</h3><p>O presente contrato vigorara a partir de <strong>'+dataFmt(c.inicio)+'</strong>'+(c.termino?' ate <strong>'+dataFmt(c.termino)+'</strong>':' por prazo indeterminado, podendo ser rescindido mediante aviso previo de 30 dias')+'.</p></div>'
+  +'<div class="cl"><h3>Clausula 4 — Confidencialidade e LGPD</h3><p>As partes comprometem-se a manter sigilo sobre todas as informacoes trocadas. O tratamento de dados pessoais obedecera a Lei no 13.709/2018 (LGPD).</p></div>'
+  +'<div class="cl"><h3>Clausula 5 — Rescisao</h3><p>O contrato podera ser rescindido por descumprimento de qualquer de suas clausulas, mediante notificacao previa de 30 dias.</p></div>'
+  +(c.clausulas?'<div class="cl"><h3>Clausula 6 — Disposicoes Adicionais</h3><p>'+c.clausulas+'</p></div>':'')
+  +'<div class="cl"><h3>Foro</h3><p>As partes elegem o foro da comarca do domicilio da Contratada para dirimir quaisquer duvidas.</p></div>'
+  +'<div class="assinaturas">'
+  +'<div class="assin-box"><div class="assin-linha"></div><strong>Alana Carvalho</strong><div style="font-size:11px;color:#6b7280">Contratada · RH Essencial Digital</div></div>'
+  +'<div class="assin-box"><div class="assin-linha"></div><strong>'+(c.responsavel||c.empresa)+'</strong><div style="font-size:11px;color:#6b7280">Contratante · '+c.empresa+'</div></div>'
+  +'</div>'
+  +'<div style="text-align:center;margin-top:24px;font-size:10px;color:#9ca3af">Documento gerado em '+hoje+' · RH Essencial Digital</div>'
+  +'</div></body></html>';
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
+  ov.innerHTML='<div style="padding:10px 16px;background:#4e5c2d;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Contrato #'+String(c.id).padStart(4,'0')+' · '+c.empresa+'</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe srcdoc="" style="flex:1;border:none;width:100%;height:100%"></iframe>';
+  document.body.appendChild(ov);ov.querySelector('iframe').srcdoc=html;
+}
+
+function delContrato(id){conf('Excluir contrato?',()=>{S.contratos=S.contratos.filter(c=>c.id!==id);saveS();nav('admin');toast('Excluído');})}
+
+function gerarDocNFSe(){
+  const tomador=document.getElementById('nf-tomador')?.value.trim();
+  const valor=parseFloat(document.getElementById('nf-valor')?.value||0);
+  const servico=document.getElementById('nf-servico')?.value.trim();
+  if(!tomador||!valor||!servico)return toast('Preencha tomador, servico e valor');
+  const cnpj=document.getElementById('nf-cnpj')?.value.trim();
+  const dataInput=document.getElementById('nf-data')?.value||new Date().toISOString().slice(0,10);
+  const data=new Date(dataInput+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+  const iss=parseFloat(document.getElementById('nf-iss')?.value||2)/100;
+  const vlrIss=valor*iss;const vlrLiq=valor-vlrIss;
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Documento NFS-e</title>'
+  +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Segoe UI,sans-serif;color:#1f2937;font-size:13px}'
+  +'.page{max-width:700px;margin:40px auto;padding:40px;border:2px dashed #4e5c2d;border-radius:12px}'
+  +'.hdr{background:#4e5c2d;color:#fff;padding:20px;border-radius:8px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}'
+  +'.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}'
+  +'.field{background:#f9fafb;border-radius:8px;padding:12px}.field label{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;display:block;margin-bottom:4px}'
+  +'.vbox{background:#f0f9f0;border:2px solid #4e5c2d;border-radius:8px;padding:16px;margin-bottom:20px}'
+  +'.alerta{background:#fef9c3;border-left:4px solid #d97706;padding:12px;border-radius:6px;font-size:12px;margin-bottom:16px}'
+  +'.np{display:flex;gap:8px;justify-content:flex-end;margin-bottom:16px}'
+  +'@media print{.np{display:none!important}}</style></head><body>'
+  +'<div class="np"><button onclick="window.print()" style="padding:8px 20px;background:#4e5c2d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">Imprimir / Salvar PDF</button></div>'
+  +'<div class="page"><div class="hdr"><div><div style="font-size:10px;opacity:.7;text-transform:uppercase">RH Essencial Digital</div><div style="font-size:18px;font-weight:800">DOCUMENTO DE APOIO — NFS-e</div></div><div style="font-size:12px;opacity:.85">'+data+'</div></div>'
+  +'<div class="alerta">Este e um documento de apoio. A nota fiscal oficial deve ser emitida no Portal do Emissor Nacional NFS-e ou no site da sua prefeitura.</div>'
+  +'<div class="grid">'
+  +'<div class="field"><label>Prestador</label><span>Alana Carvalho · RH Essencial Digital</span></div>'
+  +'<div class="field"><label>Tomador</label><span>'+tomador+'</span></div>'
+  +(cnpj?'<div class="field"><label>CNPJ/CPF Tomador</label><span>'+cnpj+'</span></div>':'')
+  +'<div class="field"><label>Data de Competência</label><span>'+data+'</span></div>'
+  +'<div class="field" style="grid-column:span 2"><label>Descricao do Servico</label><span>'+servico+'</span></div>'
+  +'<div class="field"><label>CNAE</label><span>'+(document.getElementById('nf-cnae')?.value||'7020-4/00')+'</span></div>'
+  +'<div class="field"><label>Aliquota ISS</label><span>'+(iss*100).toFixed(0)+'%</span></div>'
+  +'</div>'
+  +'<div class="vbox"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">'
+  +'<div><div style="font-size:11px;color:#6b7280;margin-bottom:4px">Valor Bruto</div><div style="font-size:22px;font-weight:800;color:#4e5c2d">R$ '+valor.toLocaleString('pt-BR',{minimumFractionDigits:2})+'</div></div>'
+  +'<div><div style="font-size:11px;color:#6b7280;margin-bottom:4px">ISS Retido</div><div style="font-size:22px;font-weight:800;color:#d97706">R$ '+vlrIss.toLocaleString('pt-BR',{minimumFractionDigits:2})+'</div></div>'
+  +'<div><div style="font-size:11px;color:#6b7280;margin-bottom:4px">Valor Líquido</div><div style="font-size:22px;font-weight:800;color:#059669">R$ '+vlrLiq.toLocaleString('pt-BR',{minimumFractionDigits:2})+'</div></div>'
+  +'</div></div>'
+  +'<div style="text-align:center;font-size:11px;color:#9ca3af">Emita a NFS-e oficial em: nfse.gov.br/EmissorNacional</div>'
+  +'</div></body></html>';
+  const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column';
+  ov.innerHTML='<div style="padding:10px 16px;background:#4e5c2d;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0"><strong>Documento NFS-e · '+tomador+'</strong><button onclick="this.closest(\'[style*=fixed]\').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 14px;border-radius:6px;cursor:pointer">x Fechar</button></div><iframe srcdoc="" style="flex:1;border:none;width:100%;height:100%"></iframe>';
+  document.body.appendChild(ov);ov.querySelector('iframe').srcdoc=html;
+}
+
+function valorPorExtenso(v){
+  const n=Math.round(v*100);const reais=Math.floor(n/100);const cents=n%100;
+  const u=['','um','dois','tres','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito','dezenove'];
+  const d=['','','vinte','trinta','quarenta','cinquenta','sessenta','setenta','oitenta','noventa'];
+  const c=['','cem','duzentos','trezentos','quatrocentos','quinhentos','seiscentos','setecentos','oitocentos','novecentos'];
+  const milhar=m=>{if(m===0)return '';if(m===1)return 'um';let s='';if(m>=100){s+=c[Math.floor(m/100)];m=m%100;if(m>0)s+=' e ';}if(m>=20){s+=d[Math.floor(m/10)];if(m%10>0)s+=' e '+u[m%10];}else if(m>0)s+=u[m];return s;};
+  let s='';if(reais>0){const mil=Math.floor(reais/1000);const rem=reais%1000;if(mil>0)s+=(mil===1?'um mil':milhar(mil)+' mil');if(rem>0)s+=(mil>0?' e ':'')+milhar(rem);s+=reais===1?' real':' reais';}
+  if(cents>0){if(s)s+=' e ';s+=milhar(cents)+(cents===1?' centavo':' centavos');}
+  return (s.charAt(0).toUpperCase()+s.slice(1))||'zero reais';
 }
 </script>
 </body>
