@@ -360,10 +360,10 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
   let t = 0;
   function draw(){
     const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
-    const pr = W<280?9:W<360?11:14;
-    const hr = W<280?14:W<360?17:22;
-    const nameOff = W<280?16:W<360?20:24;
-    const raio = Math.min(W*0.38, W/2-hr-12);
+    const pr = W<280?12:W<360?14:16;
+    const hr = W<280?18:W<360?21:26;
+    const nameOff = hr + 10;
+    const raio = Math.min(W*0.34, W/2-hr-20);
 
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle='#05080f'; ctx.fillRect(0,0,W,H);
@@ -413,11 +413,14 @@ footer{padding:36px 16px;border-top:1px solid rgba(255,255,255,.05)}
       // emoji
       ctx.font=`${pr*0.9}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(p.label, p.x, p.y);
-      // nome
-      ctx.font=`bold 9px Inter,system-ui,sans-serif`;
-      ctx.fillStyle=p.cor; ctx.textAlign='center'; ctx.textBaseline='top';
-      ctx.shadowColor=p.cor; ctx.shadowBlur=4;
-      ctx.fillText(p.nome, p.x, p.y+nameOff);
+      // nome radial (aponta para fora do centro)
+      const ang = Math.atan2(p.y-cy, p.x-cx);
+      const nx = cx + Math.cos(ang)*(raio+nameOff);
+      const ny = cy + Math.sin(ang)*(raio+nameOff);
+      ctx.font=`bold 10px Inter,system-ui,sans-serif`;
+      ctx.fillStyle=p.cor; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowColor=p.cor; ctx.shadowBlur=6;
+      ctx.fillText(p.nome, nx, ny);
       ctx.shadowBlur=0;
     });
 
