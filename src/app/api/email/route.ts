@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = 'Essencial Sense AI <noreply@rhessencialdigital.com.br>';
 
 function htmlBase(titulo: string, corpo: string) {
@@ -162,6 +161,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'tipo não reconhecido' }, { status: 400 });
     }
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const result = await resend.emails.send({
       from: FROM,
       to: [to],

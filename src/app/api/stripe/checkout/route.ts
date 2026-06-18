@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+let stripe: Stripe;
 
 // Planos Sense AI — IDs de preço serão criados no Stripe Dashboard
 // Substitua pelos Price IDs reais após criar os produtos no Stripe
@@ -13,6 +13,7 @@ const PLANOS: Record<string, { priceId: string; nome: string }> = {
 
 export async function POST(req: NextRequest) {
   try {
+    if (!stripe) stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
     const { plano, email, empresaId, userId } = await req.json();
 
     if (!plano || !email) {
