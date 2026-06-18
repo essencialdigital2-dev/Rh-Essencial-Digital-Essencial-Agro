@@ -2886,6 +2886,27 @@
                 <textarea class="f360-obs" placeholder="Observação opcional"></textarea>
               </div>
 
+              <div class="f360-comp">
+                <div class="f360-comp-nome">⚖️ Ética e integridade</div>
+                <div class="f360-comp-desc">Transparência, honestidade, coerência entre discurso e prática no dia a dia.</div>
+                <div class="f360-stars" data-comp="etica"><span onclick="f360Star(this,1)" data-v="1">★</span><span onclick="f360Star(this,2)" data-v="2">★</span><span onclick="f360Star(this,3)" data-v="3">★</span><span onclick="f360Star(this,4)" data-v="4">★</span><span onclick="f360Star(this,5)" data-v="5">★</span></div>
+                <textarea class="f360-obs" placeholder="Observação opcional"></textarea>
+              </div>
+
+              <div class="f360-comp">
+                <div class="f360-comp-nome">🔄 Adaptabilidade e resiliência</div>
+                <div class="f360-comp-desc">Capacidade de lidar com mudanças, pressão e imprevistos mantendo a qualidade.</div>
+                <div class="f360-stars" data-comp="adaptabilidade"><span onclick="f360Star(this,1)" data-v="1">★</span><span onclick="f360Star(this,2)" data-v="2">★</span><span onclick="f360Star(this,3)" data-v="3">★</span><span onclick="f360Star(this,4)" data-v="4">★</span><span onclick="f360Star(this,5)" data-v="5">★</span></div>
+                <textarea class="f360-obs" placeholder="Observação opcional"></textarea>
+              </div>
+
+              <div class="f360-comp">
+                <div class="f360-comp-nome">🎯 Foco no cliente interno/externo</div>
+                <div class="f360-comp-desc">Orientação para servir bem, antecipar necessidades e superar expectativas.</div>
+                <div class="f360-stars" data-comp="foco_cliente"><span onclick="f360Star(this,1)" data-v="1">★</span><span onclick="f360Star(this,2)" data-v="2">★</span><span onclick="f360Star(this,3)" data-v="3">★</span><span onclick="f360Star(this,4)" data-v="4">★</span><span onclick="f360Star(this,5)" data-v="5">★</span></div>
+                <textarea class="f360-obs" placeholder="Observação opcional"></textarea>
+              </div>
+
             </div>
 
             <!-- Feedback livre -->
@@ -3336,66 +3357,78 @@
           <div class="card card-p" style="margin-bottom:16px;">
             <div style="font-size:13px;color:var(--text-muted);margin-bottom:18px;">Responda rapidamente — leva menos de 2 minutos</div>
 
-            <div id="climate-questions" style="display:flex;flex-direction:column;gap:18px;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">1 = Muito insatisfeito &nbsp;·&nbsp; 5 = Muito satisfeito</div>
+
+            <div id="climate-questions" style="display:flex;flex-direction:column;gap:16px;">
 
               <div>
                 <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">1</span>Como você avalia a comunicação da sua liderança?</div>
-                <div style="display:flex;gap:6px;" data-q="1">
-                  <button class="climate-scale-btn" onclick="selectClimate(this,1,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,1,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,1,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,1,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,1,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button>
-                </div>
+                <div style="display:flex;gap:6px;" data-q="1"><button class="climate-scale-btn" onclick="selectClimate(this,1,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,1,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,1,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,1,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,1,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
               </div>
 
               <div>
-                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">2</span>Você sente que seu trabalho é reconhecido?</div>
-                <div style="display:flex;gap:6px;" data-q="2">
-                  <button class="climate-scale-btn" onclick="selectClimate(this,2,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,2,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,2,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,2,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,2,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button>
-                </div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">2</span>Você sente que seu trabalho é reconhecido e valorizado?</div>
+                <div style="display:flex;gap:6px;" data-q="2"><button class="climate-scale-btn" onclick="selectClimate(this,2,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,2,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,2,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,2,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,2,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
               </div>
 
               <div>
-                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">3</span>Você se sente psicologicamente seguro para falar o que pensa?</div>
-                <div style="display:flex;gap:6px;" data-q="3">
-                  <button class="climate-scale-btn" onclick="selectClimate(this,3,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,3,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,3,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,3,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,3,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button>
-                </div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">3</span>Você se sente psicologicamente seguro para falar o que pensa sem medo de represálias?</div>
+                <div style="display:flex;gap:6px;" data-q="3"><button class="climate-scale-btn" onclick="selectClimate(this,3,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,3,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,3,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,3,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,3,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
               </div>
 
               <div>
-                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">4</span>Como está o clima na sua equipe esta semana?</div>
-                <div style="display:flex;gap:6px;" data-q="4">
-                  <button class="climate-scale-btn" onclick="selectClimate(this,4,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,4,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,4,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,4,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,4,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button>
-                </div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">4</span>Como está o clima geral na sua equipe esta semana?</div>
+                <div style="display:flex;gap:6px;" data-q="4"><button class="climate-scale-btn" onclick="selectClimate(this,4,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,4,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,4,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,4,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,4,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
               </div>
 
               <div>
-                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">5</span>Você recomendaria esta empresa como um bom lugar para trabalhar?</div>
-                <div style="display:flex;gap:6px;" data-q="5">
-                  <button class="climate-scale-btn" onclick="selectClimate(this,5,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,5,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,5,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,5,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button>
-                  <button class="climate-scale-btn" onclick="selectClimate(this,5,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button>
-                </div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">5</span>Você tem autonomia suficiente para tomar decisões no seu trabalho?</div>
+                <div style="display:flex;gap:6px;" data-q="5"><button class="climate-scale-btn" onclick="selectClimate(this,5,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,5,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,5,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,5,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,5,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">6</span>Sua carga de trabalho atual está em um nível saudável e sustentável?</div>
+                <div style="display:flex;gap:6px;" data-q="6"><button class="climate-scale-btn" onclick="selectClimate(this,6,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,6,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,6,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,6,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,6,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">7</span>Você sente que seu trabalho tem propósito e impacto real?</div>
+                <div style="display:flex;gap:6px;" data-q="7"><button class="climate-scale-btn" onclick="selectClimate(this,7,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,7,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,7,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,7,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,7,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">8</span>A empresa oferece oportunidades reais de desenvolvimento e crescimento?</div>
+                <div style="display:flex;gap:6px;" data-q="8"><button class="climate-scale-btn" onclick="selectClimate(this,8,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,8,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,8,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,8,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,8,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">9</span>O ambiente é inclusivo e respeitoso com as diferenças?</div>
+                <div style="display:flex;gap:6px;" data-q="9"><button class="climate-scale-btn" onclick="selectClimate(this,9,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,9,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,9,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,9,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,9,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">10</span>Existe boa colaboração entre as diferentes áreas da empresa?</div>
+                <div style="display:flex;gap:6px;" data-q="10"><button class="climate-scale-btn" onclick="selectClimate(this,10,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,10,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,10,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,10,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,10,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">11</span>Você consegue manter equilíbrio saudável entre vida pessoal e trabalho?</div>
+                <div style="display:flex;gap:6px;" data-q="11"><button class="climate-scale-btn" onclick="selectClimate(this,11,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,11,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,11,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,11,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,11,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;"><span class="disc-q-num">12</span>De 0 a 5, você recomendaria esta empresa como um bom lugar para trabalhar?</div>
+                <div style="display:flex;gap:6px;" data-q="12"><button class="climate-scale-btn" onclick="selectClimate(this,12,0)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">0</button><button class="climate-scale-btn" onclick="selectClimate(this,12,1)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">1</button><button class="climate-scale-btn" onclick="selectClimate(this,12,2)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">2</button><button class="climate-scale-btn" onclick="selectClimate(this,12,3)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">3</button><button class="climate-scale-btn" onclick="selectClimate(this,12,4)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">4</button><button class="climate-scale-btn" onclick="selectClimate(this,12,5)" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;font-weight:700;font-size:14px;transition:all .15s;">5</button></div>
+              </div>
+
+              <div style="margin-top:4px;">
+                <label style="font-size:12px;font-weight:700;color:rgba(248,248,255,0.5);display:block;margin-bottom:6px;">Algo que você quer destacar? (opcional — anônimo)</label>
+                <textarea id="climate-comentario" style="width:100%;background:#08080F;color:#F8F8FF;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 12px;font-size:13px;font-family:system-ui,sans-serif;resize:vertical;min-height:60px;" placeholder="Sugestão, elogio ou ponto de atenção..."></textarea>
               </div>
 
             </div>
 
-            <button class="btn-primary" style="margin-top:20px;width:100%;" onclick="showToast('Avaliação de clima enviada com sucesso!')">Enviar avaliação de clima</button>
+            <button class="btn-primary" style="margin-top:20px;width:100%;" onclick="enviarClima()">Enviar avaliação de clima →</button>
           </div>
         </div>
 
@@ -6252,45 +6285,64 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
   };
 
   // ===== SALVAR CLIMA =====
-  document.addEventListener('DOMContentLoaded', function() {
-    var btnClima = document.querySelector('#panel-climate .btn-primary');
-    if (btnClima) {
-      btnClima.onclick = async function() {
-        var respostas = {};
-        document.querySelectorAll('#climate-questions [data-q]').forEach(function(grupo) {
-          var q = grupo.getAttribute('data-q');
-          var sel = grupo.querySelector('.climate-scale-btn.selected');
-          if (sel) respostas['q' + q] = parseInt(sel.textContent.trim());
-        });
+  window.enviarClima = async function() {
+    var respostas = {};
+    document.querySelectorAll('#climate-questions [data-q]').forEach(function(grupo) {
+      var q = grupo.getAttribute('data-q');
+      var sel = grupo.querySelector('.climate-scale-btn.selected');
+      if (sel) respostas['q' + q] = parseInt(sel.textContent.trim());
+    });
 
-        if (Object.keys(respostas).length < 5) {
-          showToast('Responda todas as perguntas antes de enviar.');
-          return;
-        }
-
-        if (senseUser && senseEmpresa) {
-          try {
-            var enps = respostas.q5 ? Math.round(((respostas.q5 - 1) / 4) * 200 - 100) : null;
-            await sb.from('sense_clima').insert({
-              empresa_id: senseEmpresa,
-              usuario_id: senseUser.id,
-              enps: enps,
-              seguranca_psicologica: respostas.q3 ? Math.round((respostas.q3 / 5) * 100) : null,
-              engajamento: respostas.q4 ? Math.round((respostas.q4 / 5) * 100) : null,
-              confianca_lideranca: respostas.q1 ? Math.round((respostas.q1 / 5) * 100) : null,
-            });
-            await sb.from('sense_logs').insert({
-              usuario_id: senseUser.id,
-              empresa_id: senseEmpresa,
-              acao: 'clima_respondido',
-              modulo: 'sense_climate'
-            });
-          } catch(e) { console.error('Erro ao salvar clima:', e); }
-        }
-        showToast('Avaliação de clima enviada com sucesso!');
-      };
+    if (Object.keys(respostas).length < 11) {
+      showToast('Responda pelo menos as 11 primeiras perguntas antes de enviar.');
+      return;
     }
-  });
+
+    if (senseUser && senseEmpresa) {
+      try {
+        var comentario = document.getElementById('climate-comentario') ? document.getElementById('climate-comentario').value : '';
+        var enpsRaw = respostas.q12 != null ? respostas.q12 : null;
+        var media = function(keys) {
+          var vals = keys.map(function(k){ return respostas[k]; }).filter(function(v){ return v != null; });
+          return vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length/5*100) : null;
+        };
+        await sb.from('sense_clima').insert({
+          empresa_id: senseEmpresa,
+          usuario_id: senseUser.id,
+          enps: enpsRaw != null ? Math.round((enpsRaw / 5) * 100) : null,
+          seguranca_psicologica: respostas.q3 ? Math.round(respostas.q3/5*100) : null,
+          engajamento: media(['q4','q7']),
+          confianca_lideranca: respostas.q1 ? Math.round(respostas.q1/5*100) : null,
+          // campos extras como JSON no comentário
+          dados_extras: JSON.stringify({
+            reconhecimento: respostas.q2,
+            autonomia: respostas.q5,
+            carga_trabalho: respostas.q6,
+            proposito: respostas.q7,
+            desenvolvimento: respostas.q8,
+            inclusao: respostas.q9,
+            colaboracao: respostas.q10,
+            equilibrio: respostas.q11,
+            comentario: comentario
+          })
+        });
+        await sb.from('sense_logs').insert({
+          usuario_id: senseUser.id,
+          empresa_id: senseEmpresa,
+          acao: 'clima_respondido',
+          modulo: 'sense_climate'
+        });
+      } catch(e) { console.error('Erro ao salvar clima:', e); }
+    }
+
+    var btn = document.querySelector('#panel-climate .btn-primary');
+    if (btn) {
+      btn.textContent = '✓ Avaliação enviada!';
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+    }
+    showToast('Avaliação de clima enviada — obrigado!');
+  };
 
   // ===== CARREGAR DADOS DO DASHBOARD =====
   async function carregarDashboard() {
