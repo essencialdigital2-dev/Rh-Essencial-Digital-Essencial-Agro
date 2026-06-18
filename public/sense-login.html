@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essencial Sense AI — Acesso</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-app:     #08080F;
+    --bg-card:    #13131F;
+    --border:     rgba(139,92,246,0.2);
+    --purple:     #8B5CF6;
+    --pink:       #EC4899;
+    --cyan:       #06B6D4;
+    --text:       #F8F8FF;
+    --text-muted: rgba(248,248,255,0.5);
+    --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-app);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Background orbs */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 420px;
+    padding: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Logo */
+  .logo {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .logo-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+  }
+  .logo h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .logo h1 span {
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .logo p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Card */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(139,92,246,0.08);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    border: none;
+    background: none;
+  }
+  .tab.active {
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+  }
+
+  /* Forms */
+  .form { display: none; }
+  .form.active { display: block; }
+
+  .form-group { margin-bottom: 20px; }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(139,92,246,0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--font);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input::placeholder { color: rgba(248,248,255,0.25); }
+  input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(139,92,246,0.5);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Divider */
+  .divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 38%;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+
+  /* Alert */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .alert.error {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #FCA5A5;
+    display: block;
+  }
+  .alert.success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.3);
+    color: #6EE7B7;
+    display: block;
+  }
+  .alert.info {
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.3);
+    color: #C4B5FD;
+    display: block;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .footer a {
+    color: var(--purple);
+    text-decoration: none;
+  }
+
+  /* Loading spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Reset password link */
+  .forgot {
+    text-align: right;
+    margin-top: -12px;
+    margin-bottom: 20px;
+  }
+  .forgot a {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .forgot a:hover { color: var(--purple); }
+
+  /* Plan badges */
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .plan-badge {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(139,92,246,0.04);
+  }
+  .plan-badge.selected {
+    border-color: var(--purple);
+    background: rgba(139,92,246,0.15);
+  }
+  .plan-badge .plan-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .plan-badge .plan-price {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .plan-badge input[type=radio] { display: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">
+    <div class="logo-icon">🧠</div>
+    <h1>Essencial <span>Sense AI</span></h1>
+    <p>Human Intelligence Platform</p>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Entrar</button>
+      <button class="tab" onclick="switchTab('register')">Criar conta</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login" class="form active">
+      <div id="alert-login" class="alert"></div>
+
+      <div class="form-group">
+        <label>E-mail corporativo</label>
+        <input type="email" id="login-email" placeholder="empresa@exemplo.com" />
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+
+      <div class="forgot">
+        <a onclick="switchTab('reset')">Esqueci minha senha</a>
+      </div>
+
+      <button class="btn btn-primary" onclick="handleLogin()">
+        Entrar na plataforma
+      </button>
+
+      <div class="divider">acesso seguro via Supabase Auth</div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register" class="form">
+      <div id="alert-register" class="alert"></div>
+
+      <div class="form-group">
+        <label>Nome da empresa</label>
+        <input type="text" id="reg-empresa" placeholder="Ex: Empresa ABC Ltda" />
+      </div>
+
+      <div class="form-group">
+        <label>CNPJ (opcional)</label>
+        <input type="text" id="reg-cnpj" placeholder="00.000.000/0000-00" maxlength="18" />
+      </div>
+
+      <div class="form-group">
+        <label>Seu nome completo</label>
+        <input type="text" id="reg-nome" placeholder="Nome do responsável" />
+      </div>
+
+      <div class="form-group">
+        <label>E-mail corporativo</label>
+        <input type="email" id="reg-email" placeholder="voce@empresa.com" />
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 8 caracteres" />
+      </div>
+
+      <div class="form-group">
+        <label>Plano</label>
+        <div class="plans">
+          <label class="plan-badge selected" onclick="selectPlan(this,'starter')">
+            <input type="radio" name="plano" value="starter" checked>
+            <div class="plan-name">Starter</div>
+            <div class="plan-price">Grátis / 30 dias</div>
+          </label>
+          <label class="plan-badge" onclick="selectPlan(this,'growth')">
+            <input type="radio" name="plano" value="growth">
+            <div class="plan-name">Growth</div>
+            <div class="plan-price">R$ 297/mês</div>
+          </label>
+          <label class="plan-badge" onclick="selectPlan(this,'enterprise')">
+            <input type="radio" name="plano" value="enterprise">
+            <div class="plan-name">Enterprise</div>
+            <div class="plan-price">Sob consulta</div>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="handleRegister()">
+        Criar conta grátis
+      </button>
+    </div>
+
+    <!-- RESET FORM -->
+    <div id="form-reset" class="form">
+      <div id="alert-reset" class="alert"></div>
+
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">
+        Digite seu e-mail e enviaremos um link para redefinir sua senha.
+      </p>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="reset-email" placeholder="seu@email.com" />
+      </div>
+
+      <button class="btn btn-primary" onclick="handleReset()">
+        Enviar link de redefinição
+      </button>
+
+      <div style="text-align:center;margin-top:16px;">
+        <a onclick="switchTab('login')" style="font-size:13px;color:var(--text-muted);cursor:pointer;">
+          ← Voltar ao login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Proteção de dados em conformidade com a <strong>LGPD</strong></p>
+    <p style="margin-top:6px;">© 2026 <strong>Alana Carvalho</strong> · Gestora de Pessoas · Especialista em Psicologia Organizacional</p>
+    <p style="margin-top:4px;font-size:11px;opacity:0.6;">CNPJ 58.062.495/0001-63 · Todos os direitos reservados · <a href="/sense">Essencial Sense AI</a></p>
+  </div>
+</div>
+
+<script>
+  // ── Supabase init ──────────────────────────────────────
+  const SUPABASE_URL = 'https://feivfptwfbcftyhaypov.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlaXZmcHR3ZmJjZnR5aGF5cG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NDIyMjMsImV4cCI6MjA5NTIxODIyM30.rx23t7QlrdIc411jxhVpnvg3fOV-Iy08vKopGUcFyQU';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── Tab switching ──────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => {
+      t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
+    });
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.getElementById('form-' + tab).classList.add('active');
+  }
+
+  function selectPlan(el, plano) {
+    document.querySelectorAll('.plan-badge').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // ── Show alert ─────────────────────────────────────────
+  function showAlert(formName, msg, type) {
+    const el = document.getElementById('alert-' + formName);
+    el.className = 'alert ' + type;
+    el.textContent = msg;
+    setTimeout(() => { if (type !== 'success') el.className = 'alert'; }, 5000);
+  }
+
+  // ── Set loading state ──────────────────────────────────
+  function setLoading(btn, loading) {
+    btn.disabled = loading;
+    btn.innerHTML = loading
+      ? '<span class="spinner"></span>Aguarde...'
+      : btn.dataset.label;
+  }
+
+  // ── LOGIN ──────────────────────────────────────────────
+  async function handleLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn = document.querySelector('#form-login .btn');
+    btn.dataset.label = btn.textContent;
+
+    if (!email || !password) {
+      showAlert('login', 'Preencha e-mail e senha.', 'error');
+      return;
+    }
+
+    setLoading(btn, true);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(btn, false);
+
+    if (error) {
+      showAlert('login', traduzirErro(error.message), 'error');
+      return;
+    }
+
+    showAlert('login', 'Login realizado! Redirecionando...', 'success');
+    setTimeout(() => { window.location.href = '/sense-app'; }, 1200);
+  }
+
+  // ── REGISTER ───────────────────────────────────────────
+  async function handleRegister() {
+    const empresa = document.getElementById('reg-empresa').value.trim();
+    const cnpj    = document.getElementById('reg-cnpj').value.trim();
+    const nome    = document.getElementById('reg-nome').value.trim();
+    const email   = document.getElementById('reg-email').value.trim();
+    const pass    = document.getElementById('reg-password').value;
+    const plano   = document.querySelector('input[name="plano"]:checked').value;
+    const btn     = document.querySelector('#form-register .btn');
+    btn.dataset.label = btn.textContent;
+
+    if (!empresa || !nome || !email || !pass) {
+      showAlert('register', 'Preencha todos os campos obrigatórios.', 'error');
+      return;
+    }
+    if (pass.length < 8) {
+      showAlert('register', 'A senha deve ter pelo menos 8 caracteres.', 'error');
+      return;
+    }
+
+    setLoading(btn, true);
+
+    // 1. Criar usuário no Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password: pass,
+      options: { data: { nome, empresa, plano } }
+    });
+
+    if (authError) {
+      setLoading(btn, false);
+      showAlert('register', traduzirErro(authError.message), 'error');
+      return;
+    }
+
+    // 2. Criar empresa + usuário via RPC (bypassa RLS)
+    const { data: rpcData, error: rpcError } = await supabase.rpc('registrar_empresa', {
+      p_user_id:       authData.user.id,
+      p_nome_empresa:  empresa,
+      p_cnpj:          cnpj || '',
+      p_plano:         plano,
+      p_nome_usuario:  nome,
+      p_email:         email
+    });
+
+    setLoading(btn, false);
+
+    if (rpcError || (rpcData && !rpcData.ok)) {
+      showAlert('register', 'Conta criada, mas erro ao registrar empresa. Contate o suporte.', 'error');
+      return;
+    }
+
+    showAlert('register', '✓ Conta criada! Verifique seu e-mail para confirmar o acesso.', 'success');
+    // E-mail de boas-vindas via Resend
+    fetch('/api/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo: 'boas_vindas', to: email, nome: nome, dados: { plano } })
+    }).catch(() => {});
+    setTimeout(() => { switchTab('login'); }, 3000);
+  }
+
+  // ── RESET ──────────────────────────────────────────────
+  async function handleReset() {
+    const email = document.getElementById('reset-email').value.trim();
+    const btn   = document.querySelector('#form-reset .btn');
+    btn.dataset.label = btn.textContent;
+
+    if (!email) {
+      showAlert('reset', 'Digite seu e-mail.', 'error');
+      return;
+    }
+
+    setLoading(btn, true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/sense-login'
+    });
+    setLoading(btn, false);
+
+    if (error) {
+      showAlert('reset', traduzirErro(error.message), 'error');
+    } else {
+      showAlert('reset', 'Link enviado! Verifique seu e-mail.', 'success');
+    }
+  }
+
+  // ── Tradução de erros Supabase ─────────────────────────
+  function traduzirErro(msg) {
+    if (msg.includes('Invalid login credentials')) return 'E-mail ou senha incorretos.';
+    if (msg.includes('Email not confirmed'))        return 'Confirme seu e-mail antes de entrar.';
+    if (msg.includes('User already registered'))    return 'Este e-mail já possui uma conta.';
+    if (msg.includes('Password should be'))         return 'A senha deve ter pelo menos 8 caracteres.';
+    if (msg.includes('rate limit'))                 return 'Muitas tentativas. Aguarde alguns minutos.';
+    return msg;
+  }
+
+  // ── Verificar sessão ativa ─────────────────────────────
+  (async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      window.location.href = '/sense-app';
+    }
+  })();
+
+  // ── CNPJ mask ──────────────────────────────────────────
+  document.getElementById('reg-cnpj').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g,'');
+    v = v.replace(/^(\d{2})(\d)/,'$1.$2');
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/,'.$1/$2');
+    v = v.replace(/(\d{4})(\d)/,'$1-$2');
+    e.target.value = v;
+  });
+</script>
+</body>
+</html>

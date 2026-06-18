@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essencial Sense AI — Inteligência Humana e Prevenção Organizacional</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#7B3FF2;
+  --purple-light:#9B6CF5;
+  --purple-dim:#EDE8FD;
+  --lilac:#C4B0FA;
+  --gray:#F5F5F7;
+  --gray-mid:#D1D1D6;
+  --gray-dark:#6E6E73;
+  --text:#1D1D1F;
+  --white:#FFFFFF;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.nav-logo span{color:var(--purple)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:14px;color:var(--gray-dark);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--purple);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{padding:140px 5% 100px;text-align:center;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--purple-dim);color:var(--purple);font-size:12px;font-weight:600;padding:6px 16px;border-radius:99px;margin-bottom:32px;letter-spacing:.04em}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--purple);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.05;letter-spacing:-2px;color:var(--text);margin-bottom:24px}
+h1 span{color:var(--purple)}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--gray-dark);line-height:1.6;max-width:600px;margin:0 auto 48px}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--purple);color:#fff;border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--text);border:1.5px solid var(--gray-mid);padding:14px 32px;border-radius:99px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--purple);color:var(--purple)}
+
+/* ISHO INDICATOR */
+.isho-wrap{margin:80px auto;max-width:900px;padding:0 5%}
+.isho-card{background:linear-gradient(135deg,#1a0533,#2d0a5c);border-radius:24px;padding:48px;color:#fff;text-align:center;position:relative;overflow:hidden}
+.isho-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(123,63,242,.3),transparent 60%)}
+.isho-label{font-size:13px;font-weight:600;letter-spacing:.1em;color:var(--lilac);margin-bottom:16px;text-transform:uppercase}
+.isho-title{font-size:clamp(20px,3vw,28px);font-weight:700;margin-bottom:32px}
+.isho-score-wrap{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.isho-score{display:flex;flex-direction:column;align-items:center;gap:8px}
+.isho-num{font-size:56px;font-weight:800;letter-spacing:-2px}
+.isho-num.green{color:#34D399}
+.isho-num.yellow{color:#FBBF24}
+.isho-num.red{color:#F87171}
+.isho-dept{font-size:13px;color:rgba(255,255,255,.6)}
+.isho-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:99px;margin-top:4px}
+.badge-green{background:rgba(52,211,153,.15);color:#34D399}
+.badge-yellow{background:rgba(251,191,36,.15);color:#FBBF24}
+.badge-red{background:rgba(248,113,113,.15);color:#F87171}
+
+/* INSIGHT TICKER */
+.insights{background:var(--gray);padding:20px 5%;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none}
+.insights::-webkit-scrollbar{display:none}
+.insight-chip{background:#fff;border:1px solid var(--gray-mid);border-radius:99px;padding:8px 16px;font-size:12px;color:var(--gray-dark);white-space:nowrap;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.insight-chip i{font-size:14px}
+.chip-purple{border-color:var(--purple-dim);color:var(--purple)}
+.chip-red{border-color:#FFE4E4;color:#D00}
+.chip-amber{border-color:#FEF3C7;color:#92400E}
+
+/* MODULES */
+.modules{padding:80px 5%;max-width:1100px;margin:0 auto}
+.section-tag{font-size:12px;font-weight:600;color:var(--purple);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-1px;margin-bottom:8px}
+.section-sub{font-size:16px;color:var(--gray-dark);margin-bottom:48px;line-height:1.6}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.mod-card{border:1px solid #EBEBEB;border-radius:16px;padding:24px;transition:all .25s;cursor:default}
+.mod-card:hover{border-color:var(--purple);box-shadow:0 4px 24px rgba(123,63,242,.08)}
+.mod-icon{width:40px;height:40px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.mod-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.mod-desc{font-size:13px;color:var(--gray-dark);line-height:1.6}
+.mod-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.mod-tag{font-size:11px;background:var(--purple-dim);color:var(--purple);padding:2px 8px;border-radius:99px}
+
+/* DIFFERENTIALS */
+.diffs{background:var(--gray);padding:80px 5%}
+.diffs-inner{max-width:1100px;margin:0 auto}
+.diffs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:48px}
+.diff-card{background:#fff;border-radius:16px;padding:24px}
+.diff-num{font-size:40px;font-weight:800;color:var(--purple);letter-spacing:-1px;margin-bottom:8px}
+.diff-label{font-size:15px;font-weight:600;margin-bottom:6px}
+.diff-text{font-size:13px;color:var(--gray-dark);line-height:1.6}
+
+/* CTA FINAL */
+.cta-final{padding:100px 5%;text-align:center;max-width:700px;margin:0 auto}
+.cta-final h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1.5px;margin-bottom:16px}
+.cta-final p{font-size:16px;color:var(--gray-dark);margin-bottom:40px;line-height:1.7}
+
+/* FOOTER */
+footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-logo{font-size:14px;font-weight:700}
+.foot-logo span{color:var(--purple)}
+.foot-text{font-size:12px;color:var(--gray-dark)}
+
+@media(max-width:640px){
+  .nav-links{display:none}
+  .isho-score-wrap{gap:20px}
+  .isho-num{font-size:40px}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">essencial<span>sense</span> <span style="font-weight:400;font-size:12px;color:var(--gray-dark)">AI</span></div>
+  <ul class="nav-links">
+    <li><a href="#modulos">Módulos</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <button class="nav-cta">Solicitar demo</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Plataforma de Inteligência Humana</div>
+  <h1>As pessoas sempre dão <span>sinais.</span><br>Nós ajudamos você a enxergá-los.</h1>
+  <p class="hero-sub">Transforme o RH tradicional em um RH preditivo. Identifique riscos humanos antes que se tornem problemas.</p>
+  <div class="hero-ctas">
+    <button class="btn-primary">Solicitar demonstração</button>
+    <button class="btn-secondary">Conhecer os módulos</button>
+  </div>
+</section>
+
+<div class="insights">
+  <div class="insight-chip chip-red">🔴 Risco de turnover elevado — equipe Comercial</div>
+  <div class="insight-chip chip-amber">🟡 Queda de 14% no engajamento — setor Financeiro</div>
+  <div class="insight-chip chip-purple">🧠 Potencial de liderança identificado — 3 colaboradores</div>
+  <div class="insight-chip chip-red">🔴 Possível burnout detectado em 2 líderes</div>
+  <div class="insight-chip chip-amber">🟡 NR-1: sobrecarga em equipe de Operações</div>
+  <div class="insight-chip chip-purple">✅ ISHO geral: 74 — Atenção recomendada</div>
+</div>
+
+<div class="isho-wrap">
+  <div class="isho-card">
+    <div class="isho-label">People Pulse AI · Índice de Saúde Humana Organizacional</div>
+    <div class="isho-title">ISHO — Visão geral da empresa</div>
+    <div class="isho-score-wrap">
+      <div class="isho-score">
+        <div class="isho-num green">83</div>
+        <div class="isho-dept">TI & Produto</div>
+        <div class="isho-badge badge-green">🟢 Saudável</div>
+      </div>
+      <div class="isho-score">
+        <div class="isho-num yellow">61</div>
+        <div class="isho-dept">Comercial</div>
+        <div class="isho-badge badge-yellow">🟡 Atenção</div>
+      </div>
+      <div class="isho-score">
+        <div class="isho-num red">38</div>
+        <div class="isho-dept">Financeiro</div>
+        <div class="isho-badge badge-red">🔴 Crítico</div>
+      </div>
+      <div class="isho-score">
+        <div class="isho-num green">79</div>
+        <div class="isho-dept">RH</div>
+        <div class="isho-badge badge-green">🟢 Saudável</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="modules" id="modulos">
+  <div class="section-tag">Módulos</div>
+  <h2 class="section-title">13 módulos integrados</h2>
+  <p class="section-sub">Uma plataforma completa de Inteligência Humana — do check-in emocional à predição de turnover.</p>
+  <div class="modules-grid">
+
+    <div class="mod-card">
+      <div class="mod-icon">📊</div>
+      <div class="mod-name">Sense Analytics</div>
+      <div class="mod-desc">Dashboard executivo em tempo real com insights automáticos por IA sobre engajamento, absenteísmo e clima.</div>
+      <div class="mod-tags"><span class="mod-tag">Tempo real</span><span class="mod-tag">IA</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">💚</div>
+      <div class="mod-name">Sense Health</div>
+      <div class="mod-desc">Monitoramento emocional contínuo. Check-in diário com texto, áudio e emojis. Alertas preventivos de burnout.</div>
+      <div class="mod-tags"><span class="mod-tag">Burnout</span><span class="mod-tag">Alertas</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🎙️</div>
+      <div class="mod-name">Sense Voice</div>
+      <div class="mod-desc">Check-in por voz. IA analisa emoções, linguagem e frequência de termos negativos. Detecta sinais invisíveis.</div>
+      <div class="mod-tags"><span class="mod-tag">Voz</span><span class="mod-tag">NLP</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🧩</div>
+      <div class="mod-name">Sense DISC</div>
+      <div class="mod-desc">Avaliação DISC completa com perfil, pontos fortes, motivadores e mapa de compatibilidade entre equipes.</div>
+      <div class="mod-tags"><span class="mod-tag">DISC</span><span class="mod-tag">Relatório PDF</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🤖</div>
+      <div class="mod-name">Human Twin AI</div>
+      <div class="mod-desc">Gêmeo digital de cada colaborador. A IA responde: quem tem potencial de liderança? Quem está em risco?</div>
+      <div class="mod-tags"><span class="mod-tag">Preditivo</span><span class="mod-tag">Exclusivo</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">⚠️</div>
+      <div class="mod-name">Sense Turnover</div>
+      <div class="mod-desc">Predição inteligente de desligamentos. Cruza absenteísmo, engajamento e emoções. Plano de retenção automático.</div>
+      <div class="mod-tags"><span class="mod-tag">82% precisão</span><span class="mod-tag">Retenção</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🛡️</div>
+      <div class="mod-name">Sense Risk</div>
+      <div class="mod-desc">Conformidade NR-1. Identifica sobrecarga, assédio e riscos psicossociais. Gera relatório e plano de ação em PDF.</div>
+      <div class="mod-tags"><span class="mod-tag">NR-1</span><span class="mod-tag">LGPD</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🏆</div>
+      <div class="mod-name">Sense Leader</div>
+      <div class="mod-desc">Coach de liderança com IA. Orienta gestores sobre feedbacks, comunicação e conflitos com base no perfil DISC.</div>
+      <div class="mod-tags"><span class="mod-tag">Liderança</span><span class="mod-tag">Coach IA</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🌡️</div>
+      <div class="mod-name">Sense Climate</div>
+      <div class="mod-desc">Pesquisa de clima contínua. eNPS, mapa de calor e plano de ação automático baseado em resultados reais.</div>
+      <div class="mod-tags"><span class="mod-tag">eNPS</span><span class="mod-tag">Mapa de calor</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">🔄</div>
+      <div class="mod-name">Feedback 360°</div>
+      <div class="mod-desc">Autoavaliação, avaliação de pares, líderes e equipe. Relatórios inteligentes com insights gerados por IA.</div>
+      <div class="mod-tags"><span class="mod-tag">360°</span><span class="mod-tag">Relatórios</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">📚</div>
+      <div class="mod-name">Sense Learning</div>
+      <div class="mod-desc">Trilhas de desenvolvimento personalizadas por IA. Liderança, saúde mental, comunicação e produtividade.</div>
+      <div class="mod-tags"><span class="mod-tag">Trilhas</span><span class="mod-tag">Personalizado</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">💬</div>
+      <div class="mod-name">Assistente IA RH</div>
+      <div class="mod-desc">Chat especializado em CLT, DISC, NR-1 e clima. Cria PDI, feedbacks e relatórios automaticamente.</div>
+      <div class="mod-tags"><span class="mod-tag">Chat IA</span><span class="mod-tag">Automação</span></div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-icon">👤</div>
+      <div class="mod-name">App do Colaborador</div>
+      <div class="mod-desc">Área exclusiva com check-in, reconhecimento, metas, trilhas e histórico. Experiência premium para o time.</div>
+      <div class="mod-tags"><span class="mod-tag">Mobile</span><span class="mod-tag">Engajamento</span></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="diffs" id="diferenciais">
+  <div class="diffs-inner">
+    <div class="section-tag">Por que o Essencial Sense AI</div>
+    <h2 class="section-title">Não é um sistema de RH.<br>É inteligência humana.</h2>
+    <div class="diffs-grid">
+      <div class="diff-card">
+        <div class="diff-num">13</div>
+        <div class="diff-label">Módulos integrados</div>
+        <div class="diff-text">Do check-in emocional ao coach de liderança, tudo conectado em uma plataforma.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">ISHO</div>
+        <div class="diff-label">Índice exclusivo</div>
+        <div class="diff-text">Índice de Saúde Humana Organizacional — de 0 a 100, com semáforo por equipe.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">NR-1</div>
+        <div class="diff-label">Conformidade automática</div>
+        <div class="diff-text">Identifica riscos psicossociais e gera relatório de conformidade com a NR-1.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">IA</div>
+        <div class="diff-label">Preditiva e proativa</div>
+        <div class="diff-text">Avisa antes do problema acontecer. Burnout, turnover e conflitos identificados com antecedência.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="contato">
+  <h2>Pronto para enxergar os sinais?</h2>
+  <p>Agende uma demonstração gratuita e veja como o Essencial Sense AI pode transformar a gestão de pessoas da sua empresa.</p>
+  <button class="btn-primary" style="font-size:16px;padding:16px 40px">Solicitar demonstração gratuita</button>
+</section>
+
+<footer>
+  <div class="foot-logo">essencial<span>sense</span> AI</div>
+  <div class="foot-text">© 2026 Essencial Digital · LGPD compliant</div>
+  <div class="foot-text">essencialdigital2@gmail.com</div>
+</footer>
+
+</body>
+</html>
