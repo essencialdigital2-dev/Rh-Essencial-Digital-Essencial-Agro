@@ -3454,7 +3454,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Desenvolva habilidades de liderança com foco em pessoas, empatia e resultados.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">8 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -3464,7 +3464,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Aprenda a reconhecer e gerenciar emoções no ambiente de trabalho.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">5 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -3474,7 +3474,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Comunique-se com clareza, respeito e impacto.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">6 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -3484,7 +3484,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Técnicas práticas para resolver conflitos de forma construtiva.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">4 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -3494,7 +3494,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Prevenção do burnout, equilíbrio emocional e bem-estar.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">7 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -3504,7 +3504,7 @@
           <div style="font-size:12px;color:var(--text-muted);line-height:1.6;flex:1;">Organize o tempo, defina prioridades e entregue resultados sustentáveis.</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <span style="font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);padding:3px 10px;border-radius:99px;">5 módulos</span>
-            <button class="btn-secondary btn-sm" onclick="alert('Trilha disponível após cadastro na plataforma')">Ver trilha</button>
+            <button class="btn-secondary btn-sm" onclick="abrirTrilha(this)">Ver trilha</button>
           </div>
         </div>
 
@@ -5324,7 +5324,6 @@
   });
 
   // ===== CHAT — GEMINI AI REAL =====
-  var GEMINI_KEY = 'AIzaSyB-COLOQUE-SUA-CHAVE-AQUI'; // substitua pela sua chave Gemini
   var chatHistory = [];
 
   var SENSE_SYSTEM_PROMPT = `Você é o Assistente Sense AI, especialista em:
@@ -5368,22 +5367,14 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
     chatHistory.push({ role: 'user', parts: [{ text: text }] });
 
     try {
-      var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + GEMINI_KEY;
-
-      var body = {
-        system_instruction: { parts: [{ text: SENSE_SYSTEM_PROMPT }] },
-        contents: chatHistory,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
-      };
-
-      var res = await fetch(endpoint, {
+      var res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) })
       });
 
       var json = await res.json();
-      var resposta = json?.candidates?.[0]?.content?.parts?.[0]?.text || 'Não consegui processar. Tente novamente.';
+      var resposta = json?.text || json?.error || 'Não consegui processar. Tente novamente.';
 
       // Adiciona resposta ao histórico
       chatHistory.push({ role: 'model', parts: [{ text: resposta }] });
@@ -5856,6 +5847,197 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
     window.location.href = '/sense-login';
   };
 
+  // ===== LEARNING — TRILHAS COM CONTEÚDO REAL =====
+  var TRILHAS = {
+    'Liderança Humanizada': {
+      icon: '🏆', cor: '#8B5CF6',
+      modulos: [
+        { titulo: 'O que é liderança humanizada?', tempo: '8 min', conteudo: 'Liderança humanizada coloca as pessoas no centro das decisões. Não se trata de ser "bonzinho" — é sobre criar condições para que cada pessoa dê o seu melhor.\n\n• Reconheça individualidades: cada colaborador tem motivações, medos e potenciais únicos\n• Feedback frequente e honesto é ato de cuidado, não de confronto\n• Resultados sustentáveis vêm de equipes saudáveis, não de pressão excessiva\n• Segurança psicológica é pré-requisito para inovação e alto desempenho' },
+        { titulo: 'Escuta ativa e presença', tempo: '10 min', conteudo: 'A maioria dos líderes ouve para responder. Líderes humanizados ouvem para compreender.\n\n• Faça perguntas abertas: "Como você está se sentindo com esse projeto?"\n• Não interrompa — deixe a pessoa concluir o pensamento\n• Repita o que ouviu para confirmar entendimento: "Entendo que você sente..."\n• Observe a linguagem não-verbal: postura, tom de voz, expressão\n• Reserve tempo real para conversas 1:1 sem agenda fixa' },
+        { titulo: 'Feedback que desenvolve', tempo: '12 min', conteudo: 'Feedback é o presente mais valioso que um líder pode dar. Mas precisa ser dado da forma certa.\n\n• Seja específico: "Na reunião de terça, quando você interrompeu o colega..." em vez de "você é impaciente"\n• Foque em comportamentos, não em personalidade\n• Use o modelo SBI: Situação → Comportamento → Impacto\n• Equilibre feedbacks positivos e de desenvolvimento (3:1 é um bom começo)\n• Feedback deve ser dado logo após o evento, não meses depois' },
+        { titulo: 'Gestão por propósito', tempo: '9 min', conteudo: 'Pessoas engajadas trabalham pelo propósito, não apenas pelo salário.\n\n• Conecte o trabalho de cada pessoa ao impacto maior da organização\n• Mostre como a tarefa mais simples contribui para o resultado coletivo\n• Compartilhe a visão e os porquês das decisões — não apenas os o quês\n• Celebre pequenas conquistas — reconhecimento imediato é mais poderoso que bônus anual\n• Pergunte periodicamente: "O que poderia fazer esse trabalho mais significativo para você?"' },
+        { titulo: 'Inteligência emocional na liderança', tempo: '11 min', conteudo: 'Líderes com alta IE tomam decisões melhores e constroem equipes mais saudáveis.\n\n• Autoconhecimento: reconheça suas emoções antes de reagir\n• Autorregulação: pause 6 segundos antes de responder em situações de tensão\n• Empatia: valide o sentimento do outro mesmo que não concorde com ele\n• Habilidades sociais: construa pontes, não muros — mesmo em conflitos\n• Motivação intrínseca: líderes com propósito claro inspiram pelo exemplo' },
+        { titulo: 'Delegação eficaz', tempo: '10 min', conteudo: 'Delegar não é abandonar — é desenvolver e multiplicar.\n\n• Delegue responsabilidade E autoridade — sem autoridade, não há responsabilidade real\n• Combine claramente: prazo, entregável e critério de sucesso\n• Acompanhe sem microgerenciar: checkpoints definidos, não vigilância constante\n• Aceite que a pessoa fará diferente de você — diferente não é errado\n• Use erros como oportunidade de aprendizado, não de punição' },
+        { titulo: 'Cultura de alto desempenho', tempo: '13 min', conteudo: 'Alto desempenho sustentável é resultado de cultura, não de pressão.\n\n• Defina expectativas claras: o que significa "bom trabalho" aqui?\n• Crie rituais de time: reuniões que conectam, não apenas informam\n• Invista em desenvolvimento: cursos, mentorias, projetos desafiadores\n• Proteja o time de sobrecarga excessiva — burnout destrói equipes\n• Reconheça publicamente, corrija privatamente' },
+        { titulo: 'Liderança em tempos de crise', tempo: '14 min', conteudo: 'A crise revela o líder. É quando a humanização mais importa.\n\n• Seja transparente sobre o que sabe e o que não sabe\n• Demonstre calma — sua emoção contamina o grupo (para o bem e para o mal)\n• Tome decisões com as informações disponíveis — não paralise esperando certeza\n• Cuide das pessoas antes dos processos\n• Após a crise: faça retrospectiva honesta e reconheça o esforço coletivo' }
+      ]
+    },
+    'Inteligência Emocional': {
+      icon: '🧠', cor: '#EC4899',
+      modulos: [
+        { titulo: 'Os 5 pilares da IE', tempo: '8 min', conteudo: 'Inteligência Emocional é a capacidade de reconhecer, entender e gerenciar emoções — suas e dos outros.\n\n• Autoconhecimento: saber o que sente e por quê\n• Autorregulação: controlar impulsos e adaptar comportamentos\n• Motivação: agir por valores, não apenas por recompensas\n• Empatia: perceber e compreender as emoções alheias\n• Habilidades sociais: construir relacionamentos saudáveis e produtivos' },
+        { titulo: 'Reconhecendo suas emoções', tempo: '10 min', conteudo: 'A maioria das pessoas sente emoções sem nomeá-las. Nomear é o primeiro passo para gerenciar.\n\n• Pratique o "check-in" emocional diário: pare e pergunte "como estou agora?"\n• Amplie seu vocabulário emocional: além de "bem" e "mal", existe ansioso, entusiasmado, frustrado, esperançoso...\n• Identifique gatilhos: quais situações costumam gerar reações intensas em você?\n• Perceba como a emoção se manifesta no corpo: tensão no peito, jaw clenching, frio no estômago\n• Diário emocional: 5 minutos por dia registrando emoções e contextos' },
+        { titulo: 'Gerenciando emoções difíceis', tempo: '12 min', conteudo: 'Emoções difíceis não devem ser suprimidas — devem ser processadas de forma saudável.\n\n• A regra dos 90 segundos: uma emoção dura 90s biologicamente. O que persiste é o pensamento sobre ela\n• Técnica STOP: Stop, Take a breath, Observe, Proceed\n• Reframing cognitivo: "o que mais posso interpretar dessa situação?"\n• Não tome decisões importantes em estado emocional intenso — aguarde a janela passar\n• Exercício físico, respiração e sono são reguladores emocionais poderosos' },
+        { titulo: 'Empatia no ambiente de trabalho', tempo: '11 min', conteudo: 'Empatia não é concordar com tudo — é entender genuinamente a perspectiva do outro.\n\n• Empatia cognitiva: entender o ponto de vista do outro\n• Empatia emocional: sentir o que o outro sente\n• Empatia compasiva: querer e agir para ajudar\n• Pratique: "Se eu estivesse na posição dessa pessoa, como me sentiria?"\n• Cuidado com a empatia seletiva: oferecemos mais empatia a quem é parecido conosco' },
+        { titulo: 'IE nas relações profissionais', tempo: '13 min', conteudo: 'Relacionamentos profissionais saudáveis são construídos com IE aplicada.\n\n• Conflito bem gerenciado fortalece relacionamentos — conflito evitado os deteriora\n• Antes de criticar, pergunte: "Há informação que não tenho sobre essa situação?"\n• Reconheça o trabalho alheio genuinamente e com frequência\n• Cuide do seu estado emocional antes de conversas difíceis\n• Construa conta bancária emocional: depósitos (reconhecimento, apoio) antes de saques (pedidos, críticas)' }
+      ]
+    },
+    'Comunicação Assertiva': {
+      icon: '💬', cor: '#06B6D4',
+      modulos: [
+        { titulo: 'O que é comunicação assertiva?', tempo: '7 min', conteudo: 'Assertividade é comunicar o que pensa e sente com clareza e respeito — sem agressividade nem passividade.\n\n• Passivo: cede sempre, não exprime necessidades, resente\n• Agressivo: impõe, desrespeita, gera conflito\n• Assertivo: fala com clareza, ouve com abertura, respeita limites próprios e alheios\n• Assertividade é habilidade — não é traço de personalidade. Pode ser desenvolvida\n• O objetivo não é "ganhar" a conversa, mas ser compreendido e compreender' },
+        { titulo: 'Comunicação não-violenta (CNV)', tempo: '12 min', conteudo: 'A CNV (Marshall Rosenberg) é um dos frameworks mais poderosos para comunicação assertiva.\n\n• 4 passos da CNV:\n  1. Observação: descreva fatos, sem julgamento ("Na reunião de hoje...")\n  2. Sentimento: expresse como você se sentiu ("...eu me senti ignorado")\n  3. Necessidade: identifique a necessidade por trás do sentimento ("...porque preciso que minhas ideias sejam consideradas")\n  4. Pedido: faça um pedido concreto ("Você poderia me ouvir até o final antes de responder?")\n• Evite "você sempre", "você nunca" — são julgamentos, não observações' },
+        { titulo: 'Dizer não com respeito', tempo: '10 min', conteudo: 'Dizer não é um ato de integridade, não de egoísmo.\n\n• Identifique seus valores e limites antes — fica mais fácil defender\n• Use o "não sanduíche": reconheça o pedido → diga não com clareza → ofereça alternativa quando possível\n• Exemplo: "Entendo a urgência. Não consigo entregar amanhã, pois tenho entregas prioritárias. Posso fazer até sexta-feira — funciona?"\n• Você não precisa se justificar extensamente — uma razão honesta é suficiente\n• Dizer não a algo é dizer sim a outra coisa (seus valores, sua capacidade, seu tempo)' },
+        { titulo: 'Conversas difíceis', tempo: '14 min', conteudo: 'Conversas difíceis evitadas viram problemas maiores. Enfrente-as com preparo.\n\n• Prepare-se: o que você quer que aconteça ao final dessa conversa?\n• Escolha o momento certo: não no calor da emoção, não às pressas\n• Comece com intenção positiva: "Quero conversar sobre algo porque me importo com nosso trabalho juntos"\n• Foque em comportamentos específicos, não em caráter\n• Escute a versão da outra pessoa com abertura genuína — pode haver informação que você não tem\n• Termine com um acordo concreto: o que cada um vai fazer diferente?' },
+        { titulo: 'Comunicação escrita assertiva', tempo: '9 min', conteudo: 'E-mails e mensagens mal escritos geram conflitos desnecessários.\n\n• Seja claro sobre o que precisa: "Preciso de uma decisão até quinta. Pode me confirmar?"\n• Evite ambiguidade: releia antes de enviar imaginando como quem não tem seu contexto vai interpretar\n• Tom escrito parece mais frio que o falado — adicione contexto quando necessário\n• Para assuntos sensíveis, prefira conversa ao vivo ou videochamada\n• Responda no prazo prometido — silêncio também comunica' },
+        { titulo: 'Feedback assertivo', tempo: '11 min', conteudo: 'Dar e receber feedback com assertividade é habilidade essencial no trabalho.\n\n• Dar feedback: seja específico, oportuno e focado em impacto (não em intenção)\n• Receber feedback: ouça completamente antes de responder. Agradeça mesmo que discorde\n• Se discordar do feedback: "Obrigado. Minha perspectiva é diferente — posso compartilhar?"\n• Peça feedback regularmente — não espere a avaliação anual\n• Feedback não pedido raramente é bem recebido — pergunte antes: "Posso te dar um feedback?"' }
+      ]
+    },
+    'Gestão de Conflitos': {
+      icon: '🤝', cor: '#10B981',
+      modulos: [
+        { titulo: 'Conflito como oportunidade', tempo: '8 min', conteudo: 'Conflito não é o problema — é o sintoma. Gerenciado bem, ele fortalece relações e melhora resultados.\n\n• Conflito evitado vira ressentimento. Conflito enfrentado vira crescimento\n• Tipos de conflito: de tarefa (sobre o quê fazer), de processo (sobre como fazer), de relacionamento (sobre quem somos)\n• Conflitos de tarefa e processo, quando bem gerenciados, melhoram decisões\n• Conflitos de relacionamento raramente se resolvem sozinhos — precisam de intervenção\n• Sua primeira tarefa: identifique qual tipo de conflito está diante de você' },
+        { titulo: 'Mapeando o conflito', tempo: '10 min', conteudo: 'Antes de resolver, entenda. Conflitos mal compreendidos são mal resolvidos.\n\n• Perguntas para mapear:\n  - Qual é o interesse real de cada parte? (não a posição, mas o interesse subjacente)\n  - Há informação que está faltando para alguma das partes?\n  - Esse conflito é sobre fatos, valores ou necessidades?\n  - Há histórico que está alimentando o conflito atual?\n• Ouça cada parte separadamente antes de reunir os dois\n• Não tome partido antes de ouvir todos os lados' },
+        { titulo: 'Técnicas de mediação', tempo: '13 min', conteudo: 'O mediador facilita — não decide. O objetivo é que as partes encontrem a solução.\n\n• Crie ambiente seguro: local neutro, sem interrupções\n• Estabeleça regras: falar um de cada vez, sem ataques pessoais\n• Reformule o que ouviu: "O que estou ouvindo é... Estou entendendo certo?"\n• Identifique pontos em comum: sempre há algo em que as duas partes concordam\n• Mova da posição para o interesse: "O que você precisa que isso resolva?"\n• Construa acordos concretos: quem vai fazer o quê, até quando, e como vão verificar' },
+        { titulo: 'Prevenindo conflitos desnecessários', tempo: '11 min', conteudo: 'A melhor gestão de conflito é a preventiva.\n\n• Clareza de papéis e expectativas elimina grande parte dos conflitos\n• Rituais de comunicação (reuniões 1:1, retrospectivas) ventilam tensões antes que virem conflito\n• Diversidade bem gerenciada reduz conflito — todos sabem que perspectivas diferentes são bem-vindas\n• Feedbacks frequentes evitam acúmulo de frustrações\n• Cultura de segurança psicológica: pessoas falam logo, não deixam acumular\n• Documente acordos importantes — memórias diferentes criam conflitos diferentes' }
+      ]
+    },
+    'Saúde Mental no Trabalho': {
+      icon: '💚', cor: '#10B981',
+      modulos: [
+        { titulo: 'Saúde mental é responsabilidade coletiva', tempo: '8 min', conteudo: 'Saúde mental no trabalho não é pauta de RH apenas — é responsabilidade de toda a liderança.\n\n• 1 em cada 4 trabalhadores brasileiros sofre de ansiedade ou depressão (OMS)\n• Custo do adoecimento mental: absenteísmo, presenteísmo, turnover, erros\n• Prevenção custa 5x menos que tratamento\n• NR-1 (2024): empregadores têm obrigação legal de mapear e gerenciar riscos psicossociais\n• Cultura saudável começa pelo topo — líderes que cuidam de si inspiram times que cuidam de si' },
+        { titulo: 'Reconhecendo sinais de alerta', tempo: '10 min', conteudo: 'Identificar precocemente evita crises maiores.\n\n• Sinais individuais: irritabilidade aumentada, isolamento, queda de produtividade, erros frequentes, faltas\n• Sinais de time: conflitos frequentes, comunicação truncada, alta rotatividade, desmotivação coletiva\n• Burnout tem 3 dimensões: exaustão emocional, despersonalização, redução da eficácia\n• Ponto de atenção: quando alguém muito produtivo para de se importar\n• Nunca ignore: "estou bem" dito sem convicção. Pergunte de novo, com presença.' },
+        { titulo: 'Prevenção do burnout', tempo: '12 min', conteudo: 'Burnout é uma síndrome ocupacional reconhecida pela OMS. Prevenção é melhor que cura.\n\n• Causas organizacionais (não individuais): sobrecarga, falta de controle, injustiça, ausência de reconhecimento\n• Reveja a carga: quantidade de trabalho é gerenciável? Prazos são reais?\n• Autonomia protege: pessoas com mais controle sobre seu trabalho são mais resilientes\n• Reconhecimento frequente é protetor de burnout — não precisa ser financeiro\n• Descanso é produtivo — estimule pausas, férias reais e desconexão fora do horário\n• Crie canais seguros para falar sobre sobrecarga — sem punição' },
+        { titulo: 'Comunicando sobre saúde mental', tempo: '11 min', conteudo: 'Falar sobre saúde mental ainda é tabu em muitas organizações. Quebrá-lo salva vidas.\n\n• Líderes que compartilham vulnerabilidades humanizam o ambiente\n• Você não precisa ser terapeuta — precisa saber ouvir e encaminhar\n• Como perguntar: "Tenho notado que você parece diferente. Como você está de verdade?"\n• Se alguém se abre: não minimize ("isso vai passar"), não dê conselhos não pedidos, não mude de assunto\n• Conheça os recursos da empresa: plano de saúde, EAP, CVV (188)\n• Encaminhar ao profissional correto é cuidado, não abandono' },
+        { titulo: 'Limites saudáveis no trabalho', tempo: '9 min', conteudo: 'Limites não são falta de comprometimento — são condição para sustentabilidade.\n\n• Defina e comunique seu horário de disponibilidade\n• Desative notificações fora do horário — ou comunique que responderá no próximo dia útil\n• Aprenda a dizer não para demandas que excedam sua capacidade real\n• Identifique atividades que restauram sua energia e proteja esse tempo\n• Modelo para o time: quando o líder tem limites, o time aprende que pode ter também\n• Sobrecarga crônica destrói criatividade, relacionamentos e saúde' },
+        { titulo: 'Criando ambiente psicologicamente seguro', tempo: '13 min', conteudo: 'Segurança psicológica (Amy Edmondson) é a crença de que é seguro arriscar, falar e ser vulnerável no grupo.\n\n• Times com alta segurança psicológica têm 27% menos rotatividade e 76% mais engajamento (Google)\n• Como construir: modele vulnerabilidade, celebre erros como aprendizado, agradeça quem discorda\n• Destruidores de segurança psicológica: humilhação pública, punição por erros, ignorar ideias\n• Faça perguntas genuínas nas reuniões: "O que estou perdendo?" "Alguém tem perspectiva diferente?"\n• Feedback anônimo periódico revela o que as pessoas não dizem diretamente' },
+        { titulo: 'Plano de bem-estar organizacional', tempo: '14 min', conteudo: 'Bem-estar no trabalho precisa de estrutura, não de ações pontuais.\n\n• Mapeamento: use dados do Sense Health para identificar padrões e riscos\n• Diagnóstico NR-1: fatores psicossociais devem ser mapeados anualmente\n• Ações estruturais: carga de trabalho realista, comunicação clara, reconhecimento sistemático\n• Ações de suporte: EAP, acesso a psicólogo, espaço para conversa\n• Medição: acompanhe eNPS, absenteísmo, rotatividade e resultados do Sense Health\n• Revisão: plano precisa ser vivo — revise a cada 6 meses com os dados reais' }
+      ]
+    },
+    'Produtividade com Propósito': {
+      icon: '⚡', cor: '#F59E0B',
+      modulos: [
+        { titulo: 'Produtividade não é quantidade', tempo: '7 min', conteudo: 'Produtividade real é entregar o que importa, não fazer muita coisa.\n\n• A ilusão do ocupado: estar sempre ocupado não é sinal de produtividade — pode ser sinal de falta de prioridade\n• 80/20: 20% das atividades geram 80% dos resultados. Qual é o seu 20%?\n• Propósito aumenta produtividade: quando sabemos o porquê, fazemos melhor e com mais energia\n• Defina o que significa "ser produtivo" no seu contexto — não use padrões genéricos\n• Avalie por resultado, não por tempo — horas trabalhadas não são métricas de entrega' },
+        { titulo: 'Gestão de energia, não de tempo', tempo: '10 min', conteudo: 'Você tem 24 horas por dia. Mas sua energia varia. Alinhe tarefas ao seu pico energético.\n\n• Identifique seu cronotipo: você é mais focado de manhã, tarde ou noite?\n• Tarefas cognitivas pesadas: execute no pico de energia\n• Tarefas rotineiras e reuniões: execute no vale energético\n• Renove energia: pausas de 5-10 min a cada 90 minutos (ciclos ultradianos)\n• 4 dimensões de energia: física (sono, alimentação, movimento), emocional (relações, propósito), mental (foco, clareza) e espiritual (valores, sentido)\n• Cuide das 4 — déficit em qualquer uma contamina as outras' },
+        { titulo: 'Priorização com método', tempo: '11 min', conteudo: 'Sem priorização, tudo é urgente. Com priorização, o que importa avança.\n\n• Matriz de Eisenhower:\n  - Urgente + Importante → Faça agora\n  - Não urgente + Importante → Planeje (aqui ficam a maioria das coisas que realmente importam)\n  - Urgente + Não importante → Delegue\n  - Não urgente + Não importante → Elimine\n• Regra das 3 tarefas: defina as 3 entregas mais importantes do dia antes de abrir e-mail\n• MITs (Most Important Tasks): máximo 3 por dia — mais do que isso é planejamento de ansiedade, não de produtividade' },
+        { titulo: 'Foco profundo e gestão da atenção', tempo: '12 min', conteudo: 'A atenção é o recurso mais escasso do século 21. Proteja-a ativamente.\n\n• Deep work (Cal Newport): blocos de 90-120 min de foco total, sem interrupção\n• Cada interrupção custa 23 minutos de retorno ao foco (estudo da University of California)\n• Técnica Pomodoro: 25 min de foco → 5 min de pausa → repete 4x → pausa longa\n• Ambiente: notificações desligadas, telefone fora do campo visual, aba única aberta\n• Comunique disponibilidade: "Estou em bloco de foco até 11h — respondo depois"\n• Multitarefa é mito — o cérebro alterna, não paraleliza. Custo de troca é alto' },
+        { titulo: 'Rotinas que sustentam resultados', tempo: '10 min', conteudo: 'Rotinas bem desenhadas economizam energia de decisão e criam consistência.\n\n• Ritual matinal: 15-30 min antes de qualquer tela. Defina intenção do dia\n• Planejamento semanal: reserve 30 min às segundas para ver a semana inteira\n• Revisão semanal: reserve 20 min às sextas para fechar ciclos e ajustar\n• Batching: agrupe tarefas similares (responder e-mails em 2 blocos, não o dia todo)\n• Automatize decisões repetitivas para liberar energia mental para o que importa\n• Rotinas precisam ser testadas e ajustadas — não há fórmula universal' }
+      ]
+    }
+  };
+
+  var trilhaAtual = null;
+  var moduloAtual = 0;
+
+  function getLearningProgress() {
+    try { return JSON.parse(localStorage.getItem('sense_learning') || '{}'); } catch(e) { return {}; }
+  }
+
+  function saveLearningProgress(data) {
+    localStorage.setItem('sense_learning', JSON.stringify(data));
+  }
+
+  window.abrirTrilha = function(btn) {
+    var card = btn.closest('[style*="background:#13131F"]') || btn.closest('div[style]');
+    var titulo = card ? (card.querySelector('[style*="font-size:14px"]') || card.querySelector('div:nth-child(2)')).textContent.trim() : '';
+    var trilha = TRILHAS[titulo];
+    if (!trilha) { showToast('Trilha não encontrada.'); return; }
+    trilhaAtual = titulo;
+    var progress = getLearningProgress();
+    var done = progress[titulo] || [];
+    moduloAtual = done.length < trilha.modulos.length ? done.length : 0;
+    renderTrilhaModal(titulo, trilha, done);
+  };
+
+  function renderTrilhaModal(titulo, trilha, done) {
+    var existing = document.getElementById('trilha-modal');
+    if (existing) existing.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'trilha-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(8,8,15,0.92);display:flex;align-items:center;justify-content:center;padding:20px;';
+
+    var modIdx = moduloAtual;
+    var mod = trilha.modulos[modIdx];
+    var pct = Math.round((done.length / trilha.modulos.length) * 100);
+
+    var linhasConteudo = mod.conteudo.split('\n').map(function(l){
+      return l.trim() ? '<p style="margin-bottom:8px;color:' + (l.startsWith('•') || l.startsWith('-') ? 'rgba(248,248,255,0.85)' : 'rgba(248,248,255,0.65)') + ';font-size:13px;line-height:1.7;">' + l + '</p>' : '';
+    }).join('');
+
+    modal.innerHTML = '<div style="background:#0E0E1A;border:1px solid rgba(139,92,246,0.3);border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;">'
+      + '<div style="padding:24px 28px;border-bottom:1px solid rgba(139,92,246,0.15);">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'
+      + '<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:24px;">' + trilha.icon + '</span><span style="font-size:16px;font-weight:700;color:#F8F8FF;">' + titulo + '</span></div>'
+      + '<button onclick="document.getElementById(\'trilha-modal\').remove()" style="background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.5);cursor:pointer;border-radius:8px;padding:6px 12px;font-size:18px;">×</button>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:10px;">'
+      + '<div style="flex:1;height:4px;background:rgba(139,92,246,0.15);border-radius:2px;"><div style="height:100%;width:' + pct + '%;background:' + trilha.cor + ';border-radius:2px;transition:width .4s;"></div></div>'
+      + '<span style="font-size:11px;color:rgba(248,248,255,0.4);white-space:nowrap;">' + done.length + '/' + trilha.modulos.length + ' concluídos</span>'
+      + '</div></div>'
+      + '<div style="padding:24px 28px;">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">'
+      + '<span style="font-size:11px;font-weight:700;color:' + trilha.cor + ';text-transform:uppercase;letter-spacing:.05em;">Módulo ' + (modIdx+1) + ' de ' + trilha.modulos.length + '</span>'
+      + '<span style="font-size:11px;color:rgba(248,248,255,0.4);">⏱ ' + mod.tempo + '</span>'
+      + '</div>'
+      + '<div style="font-size:18px;font-weight:700;color:#F8F8FF;margin-bottom:20px;">' + mod.titulo + '</div>'
+      + '<div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.15);border-radius:12px;padding:20px;margin-bottom:20px;">' + linhasConteudo + '</div>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+      + (modIdx > 0 ? '<button onclick="navModulo(' + (modIdx-1) + ')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(248,248,255,0.6);border-radius:10px;padding:10px 20px;font-size:13px;cursor:pointer;">← Anterior</button>' : '')
+      + (done.includes(modIdx)
+          ? '<span style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#10B981;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;">✓ Concluído</span>'
+          : '<button onclick="concluirModulo(' + modIdx + ')" style="background:linear-gradient(135deg,' + trilha.cor + ',rgba(139,92,246,0.7));border:none;color:#fff;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;">Concluir módulo ✓</button>')
+      + (modIdx < trilha.modulos.length - 1 ? '<button onclick="navModulo(' + (modIdx+1) + ')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(248,248,255,0.6);border-radius:10px;padding:10px 20px;font-size:13px;cursor:pointer;">Próximo →</button>' : '')
+      + '</div>'
+      + '</div>'
+      + '<div style="padding:16px 28px;border-top:1px solid rgba(139,92,246,0.1);display:flex;gap:8px;flex-wrap:wrap;">'
+      + trilha.modulos.map(function(m, i){
+          var isDone = done.includes(i);
+          var isActive = i === modIdx;
+          return '<button onclick="navModulo(' + i + ')" style="width:28px;height:28px;border-radius:50%;border:2px solid ' + (isActive ? trilha.cor : isDone ? 'rgba(16,185,129,0.5)' : 'rgba(139,92,246,0.2)') + ';background:' + (isDone ? 'rgba(16,185,129,0.15)' : isActive ? 'rgba(139,92,246,0.15)' : 'transparent') + ';color:' + (isDone ? '#10B981' : isActive ? trilha.cor : 'rgba(248,248,255,0.3)') + ';font-size:11px;font-weight:700;cursor:pointer;" title="' + m.titulo + '">' + (isDone ? '✓' : (i+1)) + '</button>';
+        }).join('')
+      + '</div></div>';
+
+    document.body.appendChild(modal);
+  }
+
+  window.navModulo = function(idx) {
+    moduloAtual = idx;
+    var trilha = TRILHAS[trilhaAtual];
+    var done = getLearningProgress()[trilhaAtual] || [];
+    renderTrilhaModal(trilhaAtual, trilha, done);
+  };
+
+  window.concluirModulo = function(idx) {
+    var progress = getLearningProgress();
+    if (!progress[trilhaAtual]) progress[trilhaAtual] = [];
+    if (!progress[trilhaAtual].includes(idx)) progress[trilhaAtual].push(idx);
+    saveLearningProgress(progress);
+    showToast('Módulo concluído! ✓');
+    var trilha = TRILHAS[trilhaAtual];
+    if (idx < trilha.modulos.length - 1) {
+      moduloAtual = idx + 1;
+    }
+    renderTrilhaModal(trilhaAtual, trilha, progress[trilhaAtual]);
+    atualizarProgressoCards();
+  };
+
+  function atualizarProgressoCards() {
+    var progress = getLearningProgress();
+    document.querySelectorAll('#panel-learning [style*="border-radius:14px"]').forEach(function(card){
+      var tituloEl = card.querySelector('[style*="font-size:14px"][style*="font-weight:700"]');
+      if (!tituloEl) return;
+      var titulo = tituloEl.textContent.trim();
+      var trilha = TRILHAS[titulo];
+      if (!trilha) return;
+      var done = (progress[titulo] || []).length;
+      var total = trilha.modulos.length;
+      var existing = card.querySelector('.progress-bar-mini');
+      if (!existing && done > 0) {
+        var bar = document.createElement('div');
+        bar.className = 'progress-bar-mini';
+        bar.style.cssText = 'height:3px;background:rgba(139,92,246,0.15);border-radius:2px;margin-top:4px;overflow:hidden;';
+        bar.innerHTML = '<div style="height:100%;width:' + Math.round(done/total*100) + '%;background:' + trilha.cor + ';border-radius:2px;"></div>';
+        tituloEl.parentNode.insertBefore(bar, tituloEl.nextSibling);
+      } else if (existing) {
+        existing.querySelector('div').style.width = Math.round(done/total*100) + '%';
+      }
+    });
+  }
+
+  // Inicializa barras de progresso ao carregar
+  setTimeout(atualizarProgressoCards, 500);
+
   // ===== SALVAR CHECK-IN EMOCIONAL =====
   var _registrarCheckinOriginal = window.registrarCheckin;
   window.registrarCheckin = async function() {
@@ -5867,6 +6049,8 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
     var fonteEl = document.querySelector('#health-fonte .health-option.selected');
     var sonoEl = document.querySelector('#health-sono .health-option.selected');
     var conexaoEl = document.querySelector('#health-conexao .health-option.selected');
+    var enpsEl = document.querySelector('#health-enps .health-scale.selected');
+    var sintomasSel = Array.from(document.querySelectorAll('#health-sintomas .health-tag.selected')).map(function(b){ return b.textContent.trim(); }).join(', ');
     var comentario = document.getElementById('health-comentario') ? document.getElementById('health-comentario').value : '';
 
     if (senseUser && senseEmpresa) {
@@ -5879,7 +6063,9 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
             intensidadeEl ? 'Intensidade: ' + intensidadeEl.textContent.trim() : '',
             fonteEl ? 'Fonte: ' + fonteEl.textContent.trim() : '',
             sonoEl ? 'Sono: ' + sonoEl.textContent.trim() : '',
+            sintomasSel ? 'Sintomas: ' + sintomasSel : '',
             conexaoEl ? 'Trabalho: ' + conexaoEl.textContent.trim() : '',
+            enpsEl ? 'eNPS: ' + enpsEl.textContent.trim() : '',
             comentario ? 'Obs: ' + comentario : ''
           ].filter(Boolean).join(' | ')
         });
