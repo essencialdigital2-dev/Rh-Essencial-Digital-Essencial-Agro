@@ -1,6 +1,12 @@
 {
   "framework": "nextjs",
   "outputDirectory": ".next",
+  "crons": [
+    {
+      "path": "/api/cron/insights",
+      "schedule": "0 10 * * 1"
+    }
+  ],
   "headers": [
     {
       "source": "/alana",
