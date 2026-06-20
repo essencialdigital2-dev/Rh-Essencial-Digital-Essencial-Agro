@@ -1524,6 +1524,10 @@
       <span class="nav-icon">📖</span>
       <span>Manual do Gestor</span>
     </div>
+    <div class="nav-item" data-panel="nexo" onclick="showPanel('nexo', this)">
+      <span class="nav-icon">🧬</span><span class="nav-label">NexoPerform</span>
+      <span style="font-size:9px;background:linear-gradient(90deg,#8B5CF6,#EC4899);color:#fff;padding:2px 6px;border-radius:20px;margin-left:auto;font-weight:700;">NOVO</span>
+    </div>
     <div class="nav-item" data-panel="convite" onclick="showPanel('convite', this)">
       <span class="nav-icon">✉️</span>
       <span>Convidar Colaboradores</span>
@@ -6370,6 +6374,175 @@
   </div>
 </div>
 
+<!-- ===== PANEL: NEXOPERFORM ===== -->
+<div class="panel" id="panel-nexo">
+<div style="max-width:860px;margin:0 auto;">
+
+  <!-- CAPA INICIAL -->
+  <div id="nexo-capa" style="display:block;">
+    <div style="background:linear-gradient(135deg,#1a0533,#2d1054,#1a0533);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:48px;text-align:center;margin-bottom:28px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.2),transparent);border-radius:50%;"></div>
+      <div style="position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(236,72,153,.15),transparent);border-radius:50%;"></div>
+      <div style="font-size:48px;margin-bottom:16px;">🧬</div>
+      <div style="font-size:11px;font-weight:700;color:#A78BFA;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">Essencial Sense AI</div>
+      <div style="font-size:32px;font-weight:900;color:#F8F8FF;margin-bottom:8px;">NexoPerform</div>
+      <div style="font-size:15px;color:rgba(248,248,255,.6);line-height:1.7;max-width:520px;margin:0 auto 32px;">A ferramenta que vai além do comportamento. Revela o sistema operacional por trás de quem você é — unindo DISC, neurociência e psicologia organizacional em um só mapa.</div>
+      <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:36px;">
+        <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px 20px;text-align:center;">
+          <div style="font-size:20px;font-weight:900;color:#A78BFA;">30</div>
+          <div style="font-size:11px;color:rgba(248,248,255,.4);margin-top:2px;">perguntas</div>
+        </div>
+        <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px 20px;text-align:center;">
+          <div style="font-size:20px;font-weight:900;color:#A78BFA;">~12</div>
+          <div style="font-size:11px;color:rgba(248,248,255,.4);margin-top:2px;">minutos</div>
+        </div>
+        <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px 20px;text-align:center;">
+          <div style="font-size:20px;font-weight:900;color:#A78BFA;">4</div>
+          <div style="font-size:11px;color:rgba(248,248,255,.4);margin-top:2px;">dimensões</div>
+        </div>
+        <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px 20px;text-align:center;">
+          <div style="font-size:20px;font-weight:900;color:#A78BFA;">16</div>
+          <div style="font-size:11px;color:rgba(248,248,255,.4);margin-top:2px;">arquétipos</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:36px;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(248,248,255,.5);">
+          <span style="color:#10B981;">✓</span> DISC avançado
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(248,248,255,.5);">
+          <span style="color:#10B981;">✓</span> Neurociência aplicada
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(248,248,255,.5);">
+          <span style="color:#10B981;">✓</span> Psicologia organizacional
+        </div>
+        <div style="display:flex;align-items:center;gap=6px;font-size:12px;color:rgba(248,248,255,.5);">
+          <span style="color:#10B981;">✓</span> Plano de performance
+        </div>
+      </div>
+      <button onclick="nexoIniciar()" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;border-radius:14px;padding:16px 40px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.02em;">Iniciar meu mapeamento →</button>
+      <div style="margin-top:16px;font-size:12px;color:rgba(248,248,255,.3);">Não existe resposta certa. Seja honesto — o mapa é seu.</div>
+    </div>
+
+    <!-- O QUE REVELA -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px;">
+        <div style="font-size:24px;margin-bottom:10px;">🔥</div>
+        <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Ignição</div>
+        <div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.6;">O que te ativa, o que te apaga e onde sua energia performa no pico</div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px;">
+        <div style="font-size:24px;margin-bottom:10px;">⏱️</div>
+        <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Tempo</div>
+        <div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.6;">Sua relação com urgência, ritmo, paciência e como você processa o futuro</div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px;">
+        <div style="font-size:24px;margin-bottom:10px;">🗺️</div>
+        <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Território</div>
+        <div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.6;">Sua relação com controle, autonomia e como responde a limites e hierarquia</div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px;">
+        <div style="font-size:24px;margin-bottom:10px;">🤝</div>
+        <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Vínculo</div>
+        <div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.6;">Como você se conecta em profundidade real e o que te aproxima ou afasta das pessoas</div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:20px;">
+        <div style="font-size:24px;margin-bottom:10px;">🌑</div>
+        <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Sombra</div>
+        <div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.6;">O que você não vê em si mas que dirige seu comportamento — e seus pontos cegos de performance</div>
+      </div>
+    </div>
+
+    <div style="background:#13131F;border:1px solid rgba(139,92,246,.15);border-radius:16px;padding:20px;text-align:center;">
+      <div style="font-size:12px;color:rgba(248,248,255,.35);line-height:1.7;">Metodologia desenvolvida por Alana Carvalho — Especialista em Psicologia Organizacional, Essencial Digital. Os dados são tratados com total confidencialidade conforme a LGPD.</div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT -->
+  <div id="nexo-assessment" style="display:none;">
+    <!-- Progresso -->
+    <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+      <div style="flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:12px;font-weight:700;color:#A78BFA;" id="nexo-bloco-label">Bloco 1 de 5 — Ignição</div>
+          <div style="font-size:12px;color:rgba(248,248,255,.4);" id="nexo-q-label">Pergunta 1 de 30</div>
+        </div>
+        <div style="height:4px;background:rgba(139,92,246,.15);border-radius:99px;">
+          <div id="nexo-progresso-bar" style="height:4px;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:99px;width:3%;transition:width .4s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pergunta atual -->
+    <div id="nexo-pergunta-box" style="background:#13131F;border:1px solid rgba(139,92,246,.25);border-radius:20px;padding:36px;margin-bottom:20px;min-height:320px;">
+      <div style="font-size:11px;font-weight:700;color:#A78BFA;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;" id="nexo-tipo-label">Complete a frase</div>
+      <div style="font-size:18px;font-weight:700;color:#F8F8FF;line-height:1.5;margin-bottom:28px;" id="nexo-pergunta-texto"></div>
+      <div id="nexo-opcoes" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+
+    <!-- Navegação -->
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <button onclick="nexoAnterior()" id="nexo-btn-ant" style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#A78BFA;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;">← Anterior</button>
+      <div style="font-size:12px;color:rgba(248,248,255,.3);" id="nexo-hint">Selecione uma opção para continuar</div>
+      <button onclick="nexoProximo()" id="nexo-btn-prox" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;opacity:.4;" disabled>Próxima →</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="nexo-resultado" style="display:none;">
+
+    <!-- Header resultado -->
+    <div style="background:linear-gradient(135deg,#1a0533,#2d1054);border:1px solid rgba(139,92,246,.3);border-radius:24px;padding:40px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(139,92,246,.25),transparent);border-radius:50%;"></div>
+      <div style="font-size:11px;font-weight:700;color:#A78BFA;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;">Seu mapa NexoPerform</div>
+      <div style="font-size:36px;font-weight:900;color:#F8F8FF;margin-bottom:6px;" id="nexo-arquetipo-nome"></div>
+      <div style="font-size:14px;color:rgba(248,248,255,.6);margin-bottom:24px;" id="nexo-arquetipo-sub"></div>
+      <div style="font-size:64px;margin-bottom:0;" id="nexo-arquetipo-emoji"></div>
+    </div>
+
+    <!-- Scores por dimensão -->
+    <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:20px;padding:28px;margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:20px;">Mapa de dimensões</div>
+      <div id="nexo-scores-bars" style="display:flex;flex-direction:column;gap:16px;"></div>
+    </div>
+
+    <!-- Perfil detalhado -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:24px;">
+        <div style="font-size:12px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">⚡ Sua zona de performance</div>
+        <div style="font-size:13px;color:rgba(248,248,255,.7);line-height:1.7;" id="nexo-zona-performance"></div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:24px;">
+        <div style="font-size:12px;font-weight:700;color:#EF4444;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">🌑 Seu ponto cego</div>
+        <div style="font-size:13px;color:rgba(248,248,255,.7);line-height:1.7;" id="nexo-ponto-cego"></div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:24px;">
+        <div style="font-size:12px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">🧠 Padrão neurológico</div>
+        <div style="font-size:13px;color:rgba(248,248,255,.7);line-height:1.7;" id="nexo-neuro"></div>
+      </div>
+      <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:24px;">
+        <div style="font-size:12px;font-weight:700;color:#A78BFA;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">🤝 Como você lidera</div>
+        <div style="font-size:13px;color:rgba(248,248,255,.7);line-height:1.7;" id="nexo-lideranca"></div>
+      </div>
+    </div>
+
+    <!-- Plano de performance -->
+    <div style="background:#13131F;border:1px solid rgba(139,92,246,.2);border-radius:20px;padding:28px;margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:6px;">Plano de performance — próximos 30 dias</div>
+      <div style="font-size:13px;color:rgba(248,248,255,.4);margin-bottom:20px;">3 ações concretas baseadas no seu perfil</div>
+      <div id="nexo-plano" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+
+    <!-- Ações -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button onclick="nexoReiniciar()" style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#A78BFA;border-radius:10px;padding:12px 24px;font-size:13px;font-weight:600;cursor:pointer;">Refazer assessment</button>
+      <button onclick="nexoExportar()" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;">📄 Exportar relatório</button>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- /panel-nexo -->
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -6395,6 +6568,7 @@
     culturemap: 'Sense Culture Map™ — Mapa Cultural em Tempo Real',
     prevent: 'Sense Prevent — Prevenção Ativa de Crises',
     leadershipai: 'Sense Leadership AI — Coach de Liderança',
+    nexo: 'NexoPerform — Inteligência Humana e Performance',
     benchmark: 'Benchmark Setorial — Como voce esta em relacao ao mercado',
     convite: 'Convidar Colaboradores — Acesso a plataforma',
     'plano-acao': 'Plano de Acao — Recomendacoes da IA',
@@ -6480,6 +6654,368 @@
     const emoji = selected.querySelector('.emoji-icon').textContent;
     const label = selected.querySelector('.emoji-label').textContent;
     showToast('Check-in registrado: ' + emoji + ' ' + label);
+  }
+
+  // ===== NEXOPERFORM =====
+  var _nexo = {
+    qAtual: 0,
+    respostas: {},
+    perguntas: [
+      // BLOCO 1 — IGNIÇÃO
+      { bloco:'Ignição', tipo:'Complete a frase', texto:'Eu me sinto mais vivo profundamente quando...', opcoes:[
+        {t:'Estou no centro de algo que ainda não existe e precisa ser criado',D:5,I:3,S:1,C:2},
+        {t:'Estou conectado com pessoas que acreditam no mesmo propósito',D:2,I:5,S:3,C:1},
+        {t:'Estou entregando algo com qualidade dentro do que foi combinado',D:1,I:2,S:5,C:4},
+        {t:'Estou resolvendo um problema que ninguém ainda conseguiu decifrar',D:3,I:1,S:2,C:5}
+      ]},
+      { bloco:'Ignição', tipo:'Metáfora', texto:'Se o seu modo de trabalhar fosse um elemento da natureza, qual seria?', opcoes:[
+        {t:'🔥 Fogo — rápido, intenso, transforma tudo que toca',D:5,I:3,S:1,C:2},
+        {t:'💨 Ar — conecta tudo, invisível mas presente em todo lugar',D:2,I:5,S:2,C:1},
+        {t:'🌍 Terra — sustenta, constante, cresce devagar mas dura',D:1,I:2,S:5,C:3},
+        {t:'💧 Água — encontra sempre o caminho mais preciso e eficiente',D:2,I:2,S:3,C:5}
+      ]},
+      { bloco:'Ignição', tipo:'Complete a frase', texto:'O que me apaga mais rápido em um trabalho é...', opcoes:[
+        {t:'Ter que pedir permissão para tudo e não ter autonomia real',D:5,I:2,S:1,C:2},
+        {t:'Estar em um ambiente frio onde ninguém se importa com ninguém',D:1,I:5,S:3,C:1},
+        {t:'Nunca saber o que vai acontecer — instabilidade constante',D:1,I:2,S:5,C:3},
+        {t:'Trabalhar em algo feito pela metade, sem padrão e sem rigor',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Ignição', tipo:'Cenário', texto:'Você está diante de um projeto ambicioso com prazo apertado e equipe incompleta. O que acontece dentro de você?', opcoes:[
+        {t:'Uma aceleração — o desafio te convoca e você entra no modo ação',D:5,I:3,S:1,C:2},
+        {t:'Você começa a pensar em quem pode chamar e como engajar pessoas',D:2,I:5,S:2,C:1},
+        {t:'Uma tensão real — você precisa de estrutura para performar bem',D:1,I:2,S:5,C:3},
+        {t:'Você mapeia o que é possível e o que vai comprometer a qualidade',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Ignição', tipo:'Complete a frase', texto:'Quando estou no meu melhor estado, as pessoas ao meu redor sentem...', opcoes:[
+        {t:'Uma energia que move — as coisas acontecem quando estou presente',D:5,I:3,S:1,C:2},
+        {t:'Um calor humano que abre espaço para todos contribuírem',D:2,I:5,S:3,C:1},
+        {t:'Uma estabilidade que tranquiliza — sabem que podem contar comigo',D:1,I:2,S:5,C:3},
+        {t:'Uma precisão que eleva o padrão — tudo fica mais sólido',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Ignição', tipo:'Imagem', texto:'Qual imagem representa melhor como você enfrenta um obstáculo?', opcoes:[
+        {t:'🐂 Um touro — vai de frente, com força e sem desviar',D:5,I:2,S:1,C:1},
+        {t:'🦅 Um pássaro — encontra uma rota diferente pelo alto',D:2,I:5,S:2,C:2},
+        {t:'🌳 Uma raiz — se aprofunda até encontrar o que sustenta',D:1,I:2,S:5,C:3},
+        {t:'🔪 Um bisturi — preciso, cirúrgico, corta onde precisa',D:2,I:1,S:2,C:5}
+      ]},
+      // BLOCO 2 — TEMPO
+      { bloco:'Tempo', tipo:'Complete a frase', texto:'Para mim, perder tempo significa...', opcoes:[
+        {t:'Estar em reuniões sem pauta que não chegam a lugar nenhum',D:5,I:2,S:1,C:2},
+        {t:'Trabalhar sem conexão real com as pessoas ao redor',D:1,I:5,S:2,C:1},
+        {t:'Ter que refazer algo por falta de planejamento inicial',D:2,I:2,S:5,C:4},
+        {t:'Entregar algo abaixo do padrão por falta de tempo para revisar',D:2,I:1,S:3,C:5}
+      ]},
+      { bloco:'Tempo', tipo:'Cenário', texto:'Quando você ainda não tem uma resposta mas alguém precisa de uma agora, você:', opcoes:[
+        {t:'Dá uma direção com o que tem — ajusta depois se precisar',D:5,I:2,S:1,C:1},
+        {t:'Compra tempo com naturalidade — transforma a conversa',D:2,I:5,S:2,C:1},
+        {t:'Prefere ser honesto e dizer que precisa de mais tempo',D:1,I:2,S:5,C:3},
+        {t:'Pede um prazo claro — não entrega sem ter certeza',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Tempo', tipo:'Escolha de frase', texto:'Qual frase ressoa mais com a forma como você vive o trabalho?', opcoes:[
+        {t:'"Feito é melhor que perfeito — ajusta no caminho"',D:5,I:3,S:1,C:1},
+        {t:'"O mais importante é que as pessoas estejam juntas"',D:2,I:5,S:3,C:1},
+        {t:'"Devagar e sempre — consistência é o que dura"',D:1,I:2,S:5,C:3},
+        {t:'"Se vale a pena fazer, vale a pena fazer bem feito"',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Tempo', tipo:'Cenário', texto:'Você está esperando uma resposta importante que está atrasada. Como você se comporta?', opcoes:[
+        {t:'Já foi atrás — não espera, age',D:5,I:2,S:1,C:2},
+        {t:'Mantém o relacionamento aquecido enquanto aguarda',D:2,I:5,S:3,C:1},
+        {t:'Espera com desconforto mas sem pressionar — tem seu processo',D:1,I:2,S:5,C:3},
+        {t:'Documenta o atraso e cria um plano B enquanto aguarda',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Tempo', tipo:'Complete a frase', texto:'Quando sinto que estou desperdiçando meu potencial, o que mais dói é...', opcoes:[
+        {t:'Saber que poderia estar construindo algo maior e não estou',D:5,I:2,S:1,C:2},
+        {t:'Não estar gerando impacto real nas pessoas ao meu redor',D:2,I:5,S:2,C:1},
+        {t:'Sentir que minha lealdade e entrega não estão sendo valorizadas',D:1,I:2,S:5,C:3},
+        {t:'Ver que meu conhecimento e cuidado não estão sendo aproveitados',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Tempo', tipo:'Reflexão', texto:'Como você se relaciona com o futuro?', opcoes:[
+        {t:'Eu o construo — é o resultado das decisões que tomo agora',D:5,I:2,S:2,C:2},
+        {t:'Eu o sonho — tenho uma visão clara e inspiro outros nessa direção',D:3,I:5,S:2,C:1},
+        {t:'Eu o cuido — construo com consistência para que ele seja sólido',D:1,I:2,S:5,C:3},
+        {t:'Eu o planejo — mapeio cenários e me preparo para o que pode vir',D:2,I:1,S:2,C:5}
+      ]},
+      // BLOCO 3 — TERRITÓRIO
+      { bloco:'Território', tipo:'Complete a frase', texto:'Quando alguém muda algo no meu espaço de trabalho sem me avisar, eu...', opcoes:[
+        {t:'Reestabeleço minha direção rapidamente — não deixo perder o controle',D:5,I:2,S:1,C:2},
+        {t:'Converso para entender a intenção — pode ser uma oportunidade',D:2,I:5,S:3,C:2},
+        {t:'Sinto um incômodo real — preciso de estabilidade para trabalhar bem',D:1,I:2,S:5,C:3},
+        {t:'Reviso o que foi alterado e avalio se prejudicou a qualidade',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Território', tipo:'Cenário', texto:'O que acontece em você quando recebe uma tarefa sem nenhuma explicação do porquê?', opcoes:[
+        {t:'Executa — se precisar do porquê, pergunta depois',D:5,I:2,S:2,C:1},
+        {t:'Precisa entender o propósito para se engajar de verdade',D:2,I:5,S:2,C:2},
+        {t:'Cumpre com cuidado mas fica com a sensação de algo incompleto',D:1,I:2,S:5,C:3},
+        {t:'Precisa do contexto completo para garantir que entregará certo',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Território', tipo:'Cenário', texto:'Você está em um ambiente onde as regras mudam constantemente sem explicação. Como responde?', opcoes:[
+        {t:'Cria suas próprias regras — vai na direção que faz sentido',D:5,I:2,S:1,C:2},
+        {t:'Usa as relações para navegar — as pessoas são o mapa',D:2,I:5,S:3,C:1},
+        {t:'Sente um custo real — instabilidade drena sua energia',D:1,I:2,S:5,C:3},
+        {t:'Documenta as inconsistências e busca padrão no caos',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Território', tipo:'Complete a frase', texto:'Eu me sinto mais competente quando tenho...', opcoes:[
+        {t:'Autonomia total para decidir e executar do meu jeito',D:5,I:2,S:1,C:2},
+        {t:'Liberdade para conectar pessoas e criar junto',D:2,I:5,S:2,C:1},
+        {t:'Um ambiente estável onde posso me aprofundar com consistência',D:1,I:2,S:5,C:3},
+        {t:'Tempo e acesso às informações certas para fazer bem feito',D:2,I:1,S:3,C:5}
+      ]},
+      { bloco:'Território', tipo:'Reflexão', texto:'Como você lida com erros que acontecem no seu território de responsabilidade?', opcoes:[
+        {t:'Assume, corrige e segue — não fica ruminando',D:5,I:2,S:2,C:2},
+        {t:'Sente o impacto emocional e busca reparar a relação afetada',D:2,I:5,S:3,C:1},
+        {t:'Carrega com responsabilidade — sente profundamente quando falha',D:1,I:2,S:5,C:3},
+        {t:'Analisa onde falhou no processo para não repetir',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Território', tipo:'Cenário', texto:'Quando você percebe que está sendo microgerenciado, o que acontece?', opcoes:[
+        {t:'Uma resistência imediata — precisa de confiança para performar',D:5,I:2,S:1,C:2},
+        {t:'Tenta transformar a relação — prefere ter um líder parceiro',D:2,I:5,S:3,C:2},
+        {t:'Adapta com desconforto — mas respeita a hierarquia',D:1,I:2,S:5,C:3},
+        {t:'Entende como desnecessário se o trabalho tem qualidade comprovada',D:2,I:1,S:2,C:5}
+      ]},
+      // BLOCO 4 — VÍNCULO
+      { bloco:'Vínculo', tipo:'Complete a frase', texto:'Para mim, confiar em alguém profissionalmente significa...', opcoes:[
+        {t:'Saber que essa pessoa entrega o que promete sem precisar cobrar',D:5,I:2,S:3,C:3},
+        {t:'Saber que posso ser autêntico e que ela vai sustentar a relação',D:2,I:5,S:4,C:1},
+        {t:'Saber que ela estará lá quando precisar — constante e presente',D:1,I:2,S:5,C:3},
+        {t:'Saber que é tecnicamente competente e não vai me expor',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Vínculo', tipo:'Reflexão', texto:'O que mais te aproxima de uma pessoa em um contexto de trabalho?', opcoes:[
+        {t:'Ela age — faz acontecer, não fica só falando',D:5,I:2,S:2,C:2},
+        {t:'Ela conecta — tem qualidade humana que cria abertura real',D:2,I:5,S:3,C:1},
+        {t:'Ela entrega — pode confiar que o combinado será cumprido',D:2,I:2,S:5,C:3},
+        {t:'Ela sabe — tem profundidade e rigor que elevam o trabalho',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Vínculo', tipo:'Cenário', texto:'Você acabou de entrar em um grupo novo. Como você naturalmente se posiciona?', opcoes:[
+        {t:'Observa rapidamente e toma posição clara quando vê oportunidade',D:5,I:2,S:1,C:2},
+        {t:'Cria vínculos desde o início — precisa se conectar para contribuir',D:2,I:5,S:3,C:1},
+        {t:'Observa com cuidado — entra quando sente que é o momento certo',D:1,I:2,S:5,C:3},
+        {t:'Mapeia as competências do grupo antes de se expor',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Vínculo', tipo:'Complete a frase', texto:'O que me faz sentir realmente reconhecido é...', opcoes:[
+        {t:'Ter minha capacidade de decisão e liderança valorizada',D:5,I:2,S:1,C:2},
+        {t:'Ser visto como alguém que inspira e conecta as pessoas',D:2,I:5,S:2,C:1},
+        {t:'Saber que as pessoas contam comigo e confiam na minha entrega',D:1,I:2,S:5,C:3},
+        {t:'Ter minha competência e cuidado com a qualidade reconhecidos',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Vínculo', tipo:'Cenário', texto:'Quando alguém que você respeita age de forma que você considera errada, você:', opcoes:[
+        {t:'Fala diretamente — o respeito pela pessoa não muda o que é certo',D:5,I:2,S:1,C:3},
+        {t:'Encontra uma forma cuidadosa de colocar sem romper a relação',D:2,I:5,S:3,C:2},
+        {t:'Processa internamente por um tempo antes de decidir se fala',D:1,I:2,S:5,C:3},
+        {t:'Apresenta sua perspectiva com argumentos sólidos e factuais',D:3,I:1,S:2,C:5}
+      ]},
+      { bloco:'Vínculo', tipo:'Reflexão', texto:'O que mais te distancia de uma pessoa no trabalho?', opcoes:[
+        {t:'Ela fala muito e entrega pouco',D:5,I:1,S:2,C:2},
+        {t:'Ela é fechada, fria e não cria nenhuma conexão real',D:1,I:5,S:2,C:1},
+        {t:'Ela é imprevisível — nunca sabe o que vai vir',D:1,I:2,S:5,C:3},
+        {t:'Ela é descuidada — faz por fazer sem nenhum padrão',D:2,I:1,S:2,C:5}
+      ]},
+      // BLOCO 5 — SOMBRA
+      { bloco:'Sombra', tipo:'Espelho', texto:'O que as pessoas mais erram quando tentam te descrever?', opcoes:[
+        {t:'Acham que sou agressivo ou insensível quando sou apenas direto',D:5,I:1,S:1,C:2},
+        {t:'Acham que sou superficial quando sou profundo nas relações',D:1,I:5,S:2,C:1},
+        {t:'Acham que sou passivo quando estou apenas processando',D:1,I:2,S:5,C:3},
+        {t:'Acham que sou frio quando estou sendo cuidadoso e preciso',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Sombra', tipo:'Espelho', texto:'Qual comportamento alheio te tira do sério com mais facilidade?', opcoes:[
+        {t:'Pessoas que não decidem, que ficam em cima do muro por medo',D:5,I:2,S:1,C:2},
+        {t:'Pessoas que não se conectam com nada — trabalham no automático',D:1,I:5,S:2,C:1},
+        {t:'Pessoas que mudam de posição o tempo todo sem consistência',D:2,I:2,S:5,C:3},
+        {t:'Pessoas que agem sem pensar e erram por puro descuido',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Sombra', tipo:'Complete a frase', texto:'Quando estou no meu pior estado, eu tendo a...', opcoes:[
+        {t:'Atropelar as pessoas, agir por impulso e ignorar o impacto',D:5,I:2,S:1,C:1},
+        {t:'Exagerar nas emoções, precisar de validação e perder o foco',D:1,I:5,S:2,C:1},
+        {t:'Fechar, calar e absorver tudo sem colocar o que sinto para fora',D:1,I:2,S:5,C:3},
+        {t:'Paralisar na análise, evitar decidir e me perder nos detalhes',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Sombra', tipo:'Coragem', texto:'O que você mais evita admitir sobre si mesmo no trabalho?', opcoes:[
+        {t:'Que às vezes passo por cima das pessoas na busca por resultado',D:5,I:1,S:1,C:2},
+        {t:'Que às vezes priorizo ser querido em vez de ser honesto',D:1,I:5,S:2,C:1},
+        {t:'Que às vezes evito conflitos que precisariam ser enfrentados',D:1,I:2,S:5,C:3},
+        {t:'Que às vezes minha busca por perfeição paralisa a entrega',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Sombra', tipo:'Complete a frase', texto:'O medo que mais me move sem que eu perceba é...', opcoes:[
+        {t:'O medo de perder o controle — de que as coisas escapem das minhas mãos',D:5,I:2,S:2,C:2},
+        {t:'O medo de ser ignorado — de não importar para as pessoas ao redor',D:1,I:5,S:2,C:1},
+        {t:'O medo de perder o chão — de que tudo mude sem aviso',D:1,I:2,S:5,C:3},
+        {t:'O medo de errar — de que algo que fiz exponha minha incompetência',D:2,I:1,S:2,C:5}
+      ]},
+      { bloco:'Sombra', tipo:'Legado', texto:'Quando você imagina sua pior versão profissional — aquela que não quer ser — o que vê?', opcoes:[
+        {t:'Alguém que passou por cima de tudo e chegou ao topo vazio',D:5,I:1,S:1,C:2},
+        {t:'Alguém que agradou todo mundo e nunca foi autêntico de verdade',D:1,I:5,S:2,C:1},
+        {t:'Alguém que nunca se arriscou e nunca saiu da zona segura',D:2,I:2,S:5,C:1},
+        {t:'Alguém que sabia tudo mas não entregou nada de concreto',D:2,I:1,S:2,C:5}
+      ]}
+    ],
+
+    arquétipos: {
+      DC: { nome:'O Executor Estratégico', sub:'Alta dominância com precisão analítica', emoji:'⚔️',
+        zona:'Você performa no pico quando tem autonomia para decidir com dados sólidos. Ambientes de alta complexidade e pressão por resultados são onde você brilha.',
+        cego:'Tende a subestimar o impacto emocional das suas decisões nas pessoas. Velocidade e precisão podem criar distância.',
+        neuro:'Seu sistema de ativação é orientado para recompensa e resultado. Alta tolerância ao estresse de curto prazo com baixa tolerância à incerteza prolongada.',
+        lideranca:'Lidera por competência e direção. As pessoas te seguem quando confiam na sua capacidade — e se distanciam quando sentem que são peças e não parceiros.',
+        plano:['Escolha uma decisão importante da semana e apresente o raciocínio antes de executar — não para pedir permissão, mas para criar aliados.','Identifique uma pessoa da equipe que você tende a atropelar e agende 20 minutos só para ouvir.','Defina uma métrica de impacto humano para o mês — além das métricas de resultado.']
+      },
+      DI: { nome:'O Catalisador Visionário', sub:'Energia de movimento com poder de engajamento', emoji:'🚀',
+        zona:'Você performa no pico quando está abrindo caminho novo e consegue mobilizar pessoas em torno de uma visão. Início de projetos e momentos de virada são seu território.',
+        cego:'A excitação com o novo pode fazer você abandonar o que ainda não terminou. A equipe sente a instabilidade antes que você perceba.',
+        neuro:'Alta ativação dopaminérgica — seu cérebro responde fortemente a novidade e possibilidade. O risco é a fadiga de projetos pela metade.',
+        lideranca:'Lidera pela visão e pela energia. Cria seguidores com facilidade, mas precisa desenvolver a capacidade de sustentar o ritmo após o entusiasmo inicial.',
+        plano:['Escolha um projeto que você iniciou e não concluiu — e o termine esta semana antes de abrir algo novo.','Crie um ritual de fechamento para cada entrega: reconheça o fim antes de celebrar o começo.','Identifique quem na equipe sustenta a consistência enquanto você abre caminhos — e reconheça isso explicitamente.']
+      },
+      DS: { nome:'O Construtor Resiliente', sub:'Força de resultado com profundidade de raiz', emoji:'🏗️',
+        zona:'Você performa no pico em projetos de longo prazo que exigem tanto resultado quanto consistência. Sua combinação de drive e estabilidade é rara e valiosa.',
+        cego:'A necessidade de controle pode criar tensão quando o ambiente muda rápido. Você resiste à mudança mesmo quando ela é necessária.',
+        neuro:'Sistema de ativação equilibrado entre recompensa e segurança. Você suporta pressão bem mas tem um custo emocional real quando o chão muda sob seus pés.',
+        lideranca:'Lidera pela confiabilidade e pelo resultado. As pessoas sabem que você entrega — o desafio é deixá-las crescer sem precisar de você.',
+        plano:['Identifique uma mudança no seu ambiente que você está resistindo — e dê um passo em direção a ela esta semana.','Delegue uma responsabilidade que você ainda segura por dificuldade em confiar — com prazo e critério claro.','Defina o que "feito bom o suficiente" significa para uma tarefa atual — e pare aí.']
+      },
+      IC: { nome:'O Arquiteto de Relacionamentos', sub:'Profundidade humana com rigor analítico', emoji:'🌐',
+        zona:'Você performa no pico quando pode construir relações de confiança profunda enquanto entrega com qualidade. Consultoria, liderança de times especializados e projetos complexos com muitos stakeholders são seu território.',
+        cego:'A busca por aprovação pode atrasar decisões difíceis. Você às vezes sabe a resposta mas espera consenso que nunca vem.',
+        neuro:'Alta sensibilidade ao ambiente social combinada com sistema analítico ativo. Seu processamento emocional e racional competem por recursos cognitivos em momentos de pressão.',
+        lideranca:'Lidera pela relação e pela qualidade. As pessoas confiam em você porque sentem que você se importa — e confiam em seu trabalho porque é impecável.',
+        plano:['Tome uma decisão que você está adiando por falta de consenso — e comunique com clareza e cuidado.','Defina um padrão mínimo aceitável para uma entrega atual — a perfeição é inimiga do avanço.','Identifique alguém com quem você tem evitado uma conversa difícil — e marque essa conversa.']
+      },
+      SC: { nome:'O Guardião da Excelência', sub:'Consistência profunda com padrão elevado', emoji:'🛡️',
+        zona:'Você performa no pico em ambientes que valorizam qualidade, processo e entrega confiável. Sua combinação é a base que mantém times de alta performance funcionando.',
+        cego:'Pode ser invisível para lideranças que valorizam quem se autoproclama. Sua entrega fala — mas às vezes precisa ser mais vocal sobre ela.',
+        neuro:'Sistema nervoso orientado para segurança e precisão. Alta ativação do sistema de inibição — você pensa antes de agir, o que é uma força e pode ser uma âncora.',
+        lideranca:'Lidera pelo exemplo e pela qualidade. As pessoas aprendem observando você. O desafio é traduzir seu padrão interno em comunicação que inspire.',
+        plano:['Escolha uma conquista recente e comunique ela proativamente para alguém relevante — sem esperar ser perguntado.','Identifique um processo que você poderia simplificar sem perder qualidade — e implemente.','Arrisque uma ideia nova antes de ter certeza absoluta que funcionará.']
+      },
+      IS: { nome:'O Conector Presente', sub:'Energia humana com profundidade de vínculo', emoji:'🌿',
+        zona:'Você performa no pico quando está dentro de um ambiente de confiança e colaboração genuína. Mediação, desenvolvimento de pessoas e culturas organizacionais saudáveis são onde você é insubstituível.',
+        cego:'Evita conflito necessário. Prefere harmonia a uma verdade difícil — e isso às vezes prolonga problemas que precisariam ser enfrentados.',
+        neuro:'Alta atividade no sistema límbico e nas redes de empatia. Você processa o estado emocional do ambiente antes de processar o conteúdo — o que é um superpoder e um custo.',
+        lideranca:'Lidera pela presença e pelo cuidado. As pessoas se abrem com você porque sentem que são seguras. O desafio é sustentar direção quando as relações puxam para todos os lados.',
+        plano:['Identifique um conflito que você está evitando — e dê o primeiro passo para nomeá-lo esta semana.','Pratique dizer não para uma demanda que não deveria ser sua — com gentileza e firmeza.','Defina uma meta pessoal de performance desconectada de como as pessoas ao redor vão se sentir com ela.']
+      }
+    }
+  };
+
+  function nexoIniciar() {
+    _nexo.qAtual = 0;
+    _nexo.respostas = {};
+    document.getElementById('nexo-capa').style.display = 'none';
+    document.getElementById('nexo-resultado').style.display = 'none';
+    document.getElementById('nexo-assessment').style.display = 'block';
+    nexoRenderPergunta();
+  }
+
+  function nexoRenderPergunta() {
+    var q = _nexo.perguntas[_nexo.qAtual];
+    var total = _nexo.perguntas.length;
+    var blocos = ['Ignição','Tempo','Território','Vínculo','Sombra'];
+    var bIdx = blocos.indexOf(q.bloco) + 1;
+
+    document.getElementById('nexo-bloco-label').textContent = 'Bloco ' + bIdx + ' de 5 — ' + q.bloco;
+    document.getElementById('nexo-q-label').textContent = 'Pergunta ' + (_nexo.qAtual + 1) + ' de ' + total;
+    document.getElementById('nexo-progresso-bar').style.width = ((_nexo.qAtual + 1) / total * 100) + '%';
+    document.getElementById('nexo-tipo-label').textContent = q.tipo;
+    document.getElementById('nexo-pergunta-texto').textContent = q.texto;
+
+    var container = document.getElementById('nexo-opcoes');
+    container.innerHTML = '';
+    q.opcoes.forEach(function(op, i) {
+      var sel = _nexo.respostas[_nexo.qAtual] === i;
+      var div = document.createElement('div');
+      div.style.cssText = 'padding:14px 18px;border-radius:12px;border:1px solid ' + (sel ? '#8B5CF6' : 'rgba(139,92,246,.2)') + ';background:' + (sel ? 'rgba(139,92,246,.15)' : '#0E0E1A') + ';cursor:pointer;font-size:14px;color:' + (sel ? '#F8F8FF' : 'rgba(248,248,255,.65)') + ';line-height:1.5;transition:all .2s;display:flex;align-items:flex-start;gap:12px;';
+      div.innerHTML = '<div style="width:20px;height:20px;border-radius:50%;border:2px solid ' + (sel ? '#8B5CF6' : 'rgba(139,92,246,.3)') + ';background:' + (sel ? '#8B5CF6' : 'transparent') + ';flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;">' + (sel ? '<div style="width:8px;height:8px;border-radius:50%;background:#fff;"></div>' : '') + '</div><span>' + op.t + '</span>';
+      div.onclick = (function(idx) { return function() { nexoSelecionar(idx); }; })(i);
+      container.appendChild(div);
+    });
+
+    var temResposta = _nexo.respostas[_nexo.qAtual] !== undefined;
+    var btnProx = document.getElementById('nexo-btn-prox');
+    btnProx.disabled = !temResposta;
+    btnProx.style.opacity = temResposta ? '1' : '.4';
+    document.getElementById('nexo-hint').textContent = temResposta ? '' : 'Selecione uma opção para continuar';
+    document.getElementById('nexo-btn-ant').style.opacity = _nexo.qAtual === 0 ? '.3' : '1';
+
+    var isUltima = _nexo.qAtual === total - 1;
+    btnProx.textContent = isUltima ? 'Ver meu perfil →' : 'Próxima →';
+  }
+
+  function nexoSelecionar(idx) {
+    _nexo.respostas[_nexo.qAtual] = idx;
+    nexoRenderPergunta();
+  }
+
+  function nexoProximo() {
+    if (_nexo.respostas[_nexo.qAtual] === undefined) return;
+    if (_nexo.qAtual < _nexo.perguntas.length - 1) {
+      _nexo.qAtual++;
+      nexoRenderPergunta();
+    } else {
+      nexoCalcular();
+    }
+  }
+
+  function nexoAnterior() {
+    if (_nexo.qAtual > 0) {
+      _nexo.qAtual--;
+      nexoRenderPergunta();
+    }
+  }
+
+  function nexoCalcular() {
+    var scores = { D:0, I:0, S:0, C:0 };
+    _nexo.perguntas.forEach(function(q, qi) {
+      var resp = _nexo.respostas[qi];
+      if (resp !== undefined) {
+        var op = q.opcoes[resp];
+        scores.D += op.D; scores.I += op.I; scores.S += op.S; scores.C += op.C;
+      }
+    });
+
+    var max = 150;
+    var pct = { D: Math.round(scores.D/max*100), I: Math.round(scores.I/max*100), S: Math.round(scores.S/max*100), C: Math.round(scores.C/max*100) };
+
+    var sorted = Object.keys(scores).sort(function(a,b){ return scores[b]-scores[a]; });
+    var prim = sorted[0], sec = sorted[1];
+    var chave = prim + sec;
+    var chaveRev = sec + prim;
+
+    var arq = _nexo.arquétipos[chave] || _nexo.arquétipos[chaveRev] || _nexo.arquétipos['DC'];
+
+    document.getElementById('nexo-assessment').style.display = 'none';
+    document.getElementById('nexo-resultado').style.display = 'block';
+
+    document.getElementById('nexo-arquetipo-nome').textContent = arq.nome;
+    document.getElementById('nexo-arquetipo-sub').textContent = arq.sub;
+    document.getElementById('nexo-arquetipo-emoji').textContent = arq.emoji;
+
+    var cores = { D:'#EF4444', I:'#F59E0B', S:'#10B981', C:'#8B5CF6' };
+    var labels = { D:'Dominância', I:'Influência', S:'Estabilidade', C:'Consciência' };
+    var barsEl = document.getElementById('nexo-scores-bars');
+    barsEl.innerHTML = '';
+    sorted.forEach(function(dim) {
+      var p = pct[dim];
+      barsEl.innerHTML += '<div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;color:#F8F8FF;">' + labels[dim] + '</span><span style="font-size:13px;font-weight:700;color:' + cores[dim] + ';">' + p + '%</span></div><div style="height:8px;background:rgba(255,255,255,.06);border-radius:99px;"><div style="height:8px;background:' + cores[dim] + ';border-radius:99px;width:' + p + '%;transition:width .8s ease;"></div></div></div>';
+    });
+
+    document.getElementById('nexo-zona-performance').textContent = arq.zona;
+    document.getElementById('nexo-ponto-cego').textContent = arq.cego;
+    document.getElementById('nexo-neuro').textContent = arq.neuro;
+    document.getElementById('nexo-lideranca').textContent = arq.lideranca;
+
+    var planoEl = document.getElementById('nexo-plano');
+    planoEl.innerHTML = '';
+    arq.plano.forEach(function(acao, i) {
+      planoEl.innerHTML += '<div style="display:flex;align-items:flex-start;gap:14px;padding:16px;background:#0E0E1A;border:1px solid rgba(139,92,246,.15);border-radius:12px;"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;">' + (i+1) + '</div><div style="font-size:13px;color:rgba(248,248,255,.7);line-height:1.6;">' + acao + '</div></div>';
+    });
+
+    window.scrollTo(0,0);
+  }
+
+  function nexoReiniciar() {
+    document.getElementById('nexo-resultado').style.display = 'none';
+    document.getElementById('nexo-capa').style.display = 'block';
+  }
+
+  function nexoExportar() {
+    showToast('Relatório completo em breve — funcionalidade em desenvolvimento');
   }
 
   // ===== DISC =====
