@@ -26,9 +26,10 @@
     color: var(--text);
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    overflow: hidden;
+    overflow-y: auto;
+    padding: 32px 0;
   }
 
   /* Background orbs */
@@ -440,8 +441,8 @@
 
 <script>
   // ── Supabase init ──────────────────────────────────────
-  const SUPABASE_URL = 'https://feivfptwfbcftyhaypov.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlaXZmcHR3ZmJjZnR5aGF5cG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NDIyMjMsImV4cCI6MjA5NTIxODIyM30.rx23t7QlrdIc411jxhVpnvg3fOV-Iy08vKopGUcFyQU';
+  const SUPABASE_URL = 'https://uysmvziehlpugmgssibs.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5c212emllaGxwdWdtZ3NzaWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzU5MDUsImV4cCI6MjA5NTY1MTkwNX0.iuhDiTQCoIZSfSccURAITwnuejEmWABG8KW7RtGH9-8';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // ── Tab switching ──────────────────────────────────────
@@ -496,7 +497,7 @@
     }
 
     showAlert('login', 'Login realizado! Redirecionando...', 'success');
-    setTimeout(() => { window.location.href = '/sense-app'; }, 1200);
+    setTimeout(() => { window.location.href = '/sense-app.html'; }, 1200);
   }
 
   // ── REGISTER ───────────────────────────────────────────

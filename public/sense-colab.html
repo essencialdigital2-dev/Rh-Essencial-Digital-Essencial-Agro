@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essencial Sense AI — Colaborador</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#08080f;color:#f8f8ff;font-family:system-ui,-apple-system,sans-serif;min-height:100vh}
+  :root{--purple:#8b5cf6;--pink:#ec4899;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--card:#13131f;--border:rgba(139,92,246,.2);--muted:rgba(248,248,255,.4)}
+
+  /* HEADER */
+  .header{background:#0d0d1a;border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .logo{font-size:15px;font-weight:700;background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .user-info{display:flex;align-items:center;gap:10px}
+  .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+  .user-name{font-size:13px;color:var(--muted)}
+  .btn-sair{background:none;border:1px solid rgba(255,255,255,.1);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+
+  /* TABS */
+  .tabs{display:flex;background:#0d0d1a;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{flex:1;min-width:80px;padding:14px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:inherit}
+  .tab.active{color:#fff;border-bottom-color:var(--purple)}
+  .tab-icon{font-size:18px;display:block;margin-bottom:3px}
+
+  /* PANELS */
+  .panel{display:none;padding:20px;max-width:600px;margin:0 auto}
+  .panel.active{display:block}
+
+  /* CARDS */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+  .card-title{font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+  .section-title{font-size:16px;font-weight:700;color:#f8f8ff;margin-bottom:16px}
+
+  /* CHECK-IN EMOTIONS */
+  .emocoes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+  .emocao-btn{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit}
+  .emocao-btn:hover{border-color:var(--purple);background:rgba(139,92,246,.1)}
+  .emocao-btn.selected{border-color:var(--purple);background:rgba(139,92,246,.15)}
+  .emocao-emoji{font-size:28px;display:block;margin-bottom:6px}
+  .emocao-label{font-size:11px;font-weight:600;color:rgba(248,248,255,.7)}
+
+  /* INTENSIDADE */
+  .intensidade-wrap{display:flex;gap:8px;margin-bottom:20px}
+  .int-btn{flex:1;padding:10px 6px;border-radius:10px;border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:rgba(248,248,255,.6);font-size:12px;font-weight:600;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s}
+  .int-btn.selected,.int-btn:hover{border-color:var(--purple);background:rgba(139,92,246,.15);color:#fff}
+
+  /* INPUTS */
+  .input-field{width:100%;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:12px 14px;color:#f8f8ff;font-size:13px;outline:none;font-family:inherit;resize:none}
+  .label{font-size:12px;font-weight:600;color:rgba(248,248,255,.5);display:block;margin-bottom:8px}
+
+  /* BUTTON */
+  .btn-primary{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;transition:opacity .2s}
+  .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+  .btn-secondary{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);color:#a78bfa;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+
+  /* DISC */
+  .disc-q{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;margin-bottom:12px}
+  .disc-q-text{font-size:13px;color:#f8f8ff;margin-bottom:12px;line-height:1.5}
+  .disc-opts{display:flex;flex-direction:column;gap:7px}
+  .disc-opt{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:13px;color:rgba(248,248,255,.7);cursor:pointer;text-align:left;font-family:inherit;transition:all .2s}
+  .disc-opt.selected{background:rgba(139,92,246,.15);border-color:var(--purple);color:#fff}
+  .disc-progress{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:20px;overflow:hidden}
+  .disc-progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#ec4899);border-radius:2px;transition:width .4s}
+
+  /* HISTORY */
+  .history-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .history-row:last-child{border-bottom:none}
+  .history-day{font-size:13px;color:var(--muted)}
+  .history-estado{font-size:13px;font-weight:600}
+
+  /* INSPIRE */
+  .inspire-card{background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(236,72,153,.1));border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:28px 24px;text-align:center;margin-bottom:20px}
+  .inspire-emoji{font-size:48px;margin-bottom:16px}
+  .inspire-msg{font-size:17px;font-weight:600;color:#f8f8ff;line-height:1.5;margin-bottom:10px}
+  .inspire-sub{font-size:13px;color:rgba(248,248,255,.5);line-height:1.5}
+
+  /* PERFIL */
+  .perfil-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;margin:0 auto 16px}
+  .disc-badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-top:8px}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#8b5cf6;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+  #toast.show{opacity:1}
+
+  /* LOADING */
+  .loading-screen{position:fixed;inset:0;background:#08080f;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:999}
+  .loading-logo{font-size:48px}
+  .loading-text{font-size:14px;color:var(--muted)}
+  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+  .pulse{animation:pulse 1.5s infinite}
+</style>
+</head>
+<body>
+
+<div id="loading-screen" class="loading-screen">
+  <div class="loading-logo">🧠</div>
+  <div class="loading-text pulse">Carregando sua area...</div>
+</div>
+
+<div id="app" style="display:none">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">Essencial Sense AI</div>
+    <div class="user-info">
+      <div class="user-avatar" id="hdr-avatar">--</div>
+      <span class="user-name" id="hdr-nome">Colaborador</span>
+      <button class="btn-sair" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('checkin',this)"><span class="tab-icon">💚</span>Check-in</button>
+    <button class="tab" onclick="showTab('historico',this)"><span class="tab-icon">📊</span>Historico</button>
+    <button class="tab" onclick="showTab('disc',this)"><span class="tab-icon">🎯</span>DISC</button>
+    <button class="tab" onclick="showTab('inspire',this)"><span class="tab-icon">✨</span>Inspire</button>
+    <button class="tab" onclick="showTab('perfil',this)"><span class="tab-icon">👤</span>Perfil</button>
+  </div>
+
+  <!-- CHECK-IN -->
+  <div class="panel active" id="panel-checkin">
+    <div class="section-title" style="margin-top:4px">Como voce esta hoje?</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">Seu check-in e confidencial. Ele ajuda a empresa a cuidar melhor das pessoas.</p>
+
+    <div class="card-title">Estado emocional</div>
+    <div class="emocoes">
+      <button class="emocao-btn" onclick="selEstado(this,'excelente')"><span class="emocao-emoji">😄</span><span class="emocao-label">Excelente</span></button>
+      <button class="emocao-btn" onclick="selEstado(this,'bem')"><span class="emocao-emoji">🙂</span><span class="emocao-label">Bem</span></button>
+      <button class="emocao-btn" onclick="selEstado(this,'cansado')"><span class="emocao-emoji">😐</span><span class="emocao-label">Cansado</span></button>
+      <button class="emocao-btn" onclick="selEstado(this,'ansioso')"><span class="emocao-emoji">😟</span><span class="emocao-label">Ansioso</span></button>
+      <button class="emocao-btn" onclick="selEstado(this,'desmotivado')"><span class="emocao-emoji">😔</span><span class="emocao-label">Desmotivado</span></button>
+      <button class="emocao-btn" onclick="selEstado(this,'sobrecarregado')"><span class="emocao-emoji">😫</span><span class="emocao-label">Sobrecarregado</span></button>
+    </div>
+
+    <div class="card-title">Intensidade</div>
+    <div class="intensidade-wrap">
+      <button class="int-btn" onclick="selInt(this,1)">1<br><span style="font-size:10px;font-weight:400">Leve</span></button>
+      <button class="int-btn" onclick="selInt(this,2)">2</button>
+      <button class="int-btn" onclick="selInt(this,3)">3<br><span style="font-size:10px;font-weight:400">Medio</span></button>
+      <button class="int-btn" onclick="selInt(this,4)">4</button>
+      <button class="int-btn" onclick="selInt(this,5)">5<br><span style="font-size:10px;font-weight:400">Forte</span></button>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <label class="label">Como foi seu sono? (opcional)</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="int-btn" style="flex:unset;padding:8px 14px" onclick="selSono(this,'otimo')">Otimo</button>
+        <button class="int-btn" style="flex:unset;padding:8px 14px" onclick="selSono(this,'bom')">Bom</button>
+        <button class="int-btn" style="flex:unset;padding:8px 14px" onclick="selSono(this,'irregular')">Irregular</button>
+        <button class="int-btn" style="flex:unset;padding:8px 14px" onclick="selSono(this,'ruim')">Ruim</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <label class="label">Quer compartilhar algo? (anonimo para o gestor)</label>
+      <textarea id="ci-comentario" class="input-field" rows="3" placeholder="Como esta sendo seu dia? O que poderia ser melhor?"></textarea>
+    </div>
+
+    <button class="btn-primary" id="btn-registrar" onclick="registrarCheckin()">Registrar check-in</button>
+
+    <div id="checkin-feito" style="display:none;margin-top:20px;text-align:center;padding:24px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:16px">
+      <div style="font-size:36px;margin-bottom:10px">✅</div>
+      <div style="font-size:15px;font-weight:700;color:#4ade80">Check-in registrado!</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">Obrigado por compartilhar como esta. Isso faz diferenca.</div>
+    </div>
+  </div>
+
+  <!-- HISTORICO -->
+  <div class="panel" id="panel-historico">
+    <div class="section-title" style="margin-top:4px">Seus ultimos 7 dias</div>
+    <div class="card" id="hist-lista">
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:20px">Carregando...</div>
+    </div>
+
+    <div class="section-title">Resumo do mes</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--green)" id="hist-positivos">--</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Dias positivos</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--purple)" id="hist-total">--</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Check-ins totais</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISC -->
+  <div class="panel" id="panel-disc">
+    <div id="disc-intro">
+      <div class="section-title" style="margin-top:4px">Mapeamento DISC</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">Descubra seu perfil comportamental. Sao 12 perguntas rapidas. Nao ha respostas certas ou erradas.</p>
+      <button class="btn-primary" onclick="iniciarDISC()">Iniciar avaliacao DISC</button>
+      <div id="disc-resultado-anterior" style="display:none;margin-top:20px"></div>
+    </div>
+
+    <div id="disc-quiz" style="display:none">
+      <div class="disc-progress"><div class="disc-progress-fill" id="disc-prog" style="width:0%"></div></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px" id="disc-num">Pergunta 1 de 12</div>
+      <div id="disc-pergunta" class="disc-q">
+        <div class="disc-q-text" id="disc-q-text"></div>
+        <div class="disc-opts" id="disc-opts"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:16px">
+        <button class="btn-secondary" id="disc-prox" onclick="proxDiscQ()" disabled>Proxima</button>
+      </div>
+    </div>
+
+    <div id="disc-fim" style="display:none">
+      <div class="inspire-card">
+        <div class="inspire-emoji" id="disc-emoji">🎯</div>
+        <div class="inspire-msg" id="disc-perfil-nome">Perfil DISC</div>
+        <div class="inspire-sub" id="disc-perfil-desc"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Suas pontuacoes</div>
+        <div style="display:flex;flex-direction:column;gap:12px" id="disc-barras"></div>
+      </div>
+      <button class="btn-primary" style="margin-top:4px" onclick="reiniciarDISC()">Refazer avaliacao</button>
+    </div>
+  </div>
+
+  <!-- INSPIRE -->
+  <div class="panel" id="panel-inspire">
+    <div class="section-title" style="margin-top:4px">Sense Inspire</div>
+    <div id="inspire-content">
+      <div style="text-align:center;color:var(--muted);font-size:13px;padding:40px">Carregando mensagem...</div>
+    </div>
+    <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="carregarInspire()">Nova mensagem</button>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="panel" id="panel-perfil">
+    <div style="text-align:center;padding:24px 0 16px">
+      <div class="perfil-avatar" id="perf-avatar">--</div>
+      <div style="font-size:18px;font-weight:700" id="perf-nome">Carregando...</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px" id="perf-cargo"></div>
+      <div id="perf-disc-badge"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Informacoes</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--muted)">Email</span><span id="perf-email" style="color:#f8f8ff">--</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--muted)">Equipe</span><span id="perf-equipe" style="color:#f8f8ff">--</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--muted)">Perfil DISC</span><span id="perf-disc" style="color:#f8f8ff">--</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px">
+          <span style="color:var(--muted)">Check-ins este mes</span><span id="perf-checkins" style="color:#f8f8ff">--</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-secondary" style="width:100%" onclick="sair()">Sair da conta</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const sb = supabase.createClient(
+  'https://uysmvziehlpugmgssibs.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5c212emllaGxwdWdtZ3NzaWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzU5MDUsImV4cCI6MjA5NTY1MTkwNX0.iuhDiTQCoIZSfSccURAITwnuejEmWABG8KW7RtGH9-8'
+);
+
+var sUser = null, sUsuario = null;
+var ciEstado = null, ciIntensidade = null, ciSono = null;
+
+// AUTH CHECK
+async function init() {
+  var { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '/sense-login'; return; }
+  sUser = session.user;
+
+  var { data: u } = await sb.from('sense_usuarios').select('*').eq('id', sUser.id).single();
+  sUsuario = u;
+
+  var nome = (u && u.nome) || sUser.email.split('@')[0];
+  var ini = nome.split(' ').map(function(w){ return w[0]; }).join('').substring(0,2).toUpperCase();
+  document.getElementById('hdr-avatar').textContent = ini;
+  document.getElementById('hdr-nome').textContent = nome;
+  document.getElementById('perf-avatar').textContent = ini;
+  document.getElementById('perf-nome').textContent = nome;
+  document.getElementById('perf-email').textContent = sUser.email;
+  document.getElementById('perf-equipe').textContent = (u && u.equipe) || 'Geral';
+  document.getElementById('perf-cargo').textContent = (u && u.cargo) || '';
+
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  carregarHistorico();
+  carregarDiscAnterior();
+  carregarInspire();
+}
+
+function showTab(id, el) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'historico') carregarHistorico();
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+function sair() {
+  sb.auth.signOut().then(function(){ window.location.href = '/sense-login'; });
+}
+
+// ===== CHECK-IN =====
+function selEstado(el, v) {
+  document.querySelectorAll('.emocao-btn').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected'); ciEstado = v;
+}
+function selInt(el, v) {
+  document.querySelectorAll('.int-btn[onclick^="selInt"]').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected'); ciIntensidade = v;
+}
+function selSono(el, v) {
+  document.querySelectorAll('.int-btn[onclick^="selSono"]').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected'); ciSono = v;
+}
+
+async function registrarCheckin() {
+  if (!ciEstado) { showToast('Selecione como voce esta hoje.'); return; }
+  var btn = document.getElementById('btn-registrar');
+  btn.textContent = 'Registrando...'; btn.disabled = true;
+  try {
+    var comentario = document.getElementById('ci-comentario').value.trim();
+    var empresa_id = sUsuario ? sUsuario.empresa_id : null;
+    await sb.from('sense_checkins').insert({
+      usuario_id: sUser.id,
+      empresa_id: empresa_id,
+      estado: ciEstado,
+      dados_extras: { intensidade: ciIntensidade, sono: ciSono },
+      texto_livre: comentario || null
+    });
+    document.getElementById('checkin-feito').style.display = 'block';
+    btn.style.display = 'none';
+    showToast('Check-in registrado!');
+    carregarInspire();
+  } catch(e) {
+    showToast('Erro ao registrar. Tente novamente.');
+    btn.textContent = 'Registrar check-in'; btn.disabled = false;
+  }
+}
+
+// ===== HISTORICO =====
+async function carregarHistorico() {
+  if (!sUser) return;
+  try {
+    var set = new Date(); set.setDate(set.getDate() - 6);
+    var mes = new Date(); mes.setDate(1);
+    var emojis = { excelente:'😄 Excelente', bem:'🙂 Bem', cansado:'😐 Cansado', ansioso:'😟 Ansioso', desmotivado:'😔 Desmotivado', sobrecarregado:'😫 Sobrecarregado' };
+    var cores = { excelente:'#10b981', bem:'#10b981', cansado:'#6b7280', ansioso:'#ef4444', desmotivado:'#ef4444', sobrecarregado:'#ef4444' };
+    var dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+
+    var { data: h7 } = await sb.from('sense_checkins').select('estado,criado_em').eq('usuario_id', sUser.id).gte('criado_em', set.toISOString()).order('criado_em', { ascending: false });
+    var { data: hmes } = await sb.from('sense_checkins').select('estado').eq('usuario_id', sUser.id).gte('criado_em', mes.toISOString());
+
+    var lista = document.getElementById('hist-lista');
+    if (!h7 || h7.length === 0) {
+      lista.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px">Nenhum check-in nos ultimos 7 dias.</div>';
+    } else {
+      var hoje = new Date();
+      var html = '';
+      for (var d = 6; d >= 0; d--) {
+        var dia = new Date(hoje); dia.setDate(hoje.getDate() - d);
+        var dStr = dia.toISOString().split('T')[0];
+        var reg = h7.find(function(c){ return c.criado_em.startsWith(dStr); });
+        html += '<div class="history-row"><span class="history-day">' + dias[dia.getDay()] + ' ' + dia.getDate() + '</span>'
+          + '<span class="history-estado" style="color:' + (reg ? (cores[reg.estado]||'#6b7280') : 'var(--muted)') + '">'
+          + (reg ? (emojis[reg.estado]||reg.estado) : 'Sem registro') + '</span></div>';
+      }
+      lista.innerHTML = html;
+    }
+
+    var total = hmes ? hmes.length : 0;
+    var positivos = hmes ? hmes.filter(function(c){ return ['excelente','bem'].includes(c.estado); }).length : 0;
+    document.getElementById('hist-total').textContent = total;
+    document.getElementById('hist-positivos').textContent = positivos;
+    if (sUsuario) {
+      document.getElementById('perf-checkins').textContent = total;
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ===== DISC =====
+var discPerguntas = [
+  { texto: 'Quando tenho um objetivo, eu prefiro:', opts: [
+    { label: 'Agir rapidamente e de forma decisiva', tipo: 'D' },
+    { label: 'Entusiasmar e engajar as pessoas', tipo: 'I' },
+    { label: 'Planejar com cuidado antes de agir', tipo: 'S' },
+    { label: 'Analisar todos os dados antes de decidir', tipo: 'C' }
+  ]},
+  { texto: 'Em situacoes de pressao, eu costumo:', opts: [
+    { label: 'Assumir o controle e liderar a solucao', tipo: 'D' },
+    { label: 'Buscar apoio e motivar o grupo', tipo: 'I' },
+    { label: 'Manter a calma e a estabilidade', tipo: 'S' },
+    { label: 'Revisar os processos e encontrar o erro', tipo: 'C' }
+  ]},
+  { texto: 'Meu ponto mais forte e:', opts: [
+    { label: 'Determinacao e foco em resultados', tipo: 'D' },
+    { label: 'Comunicacao e capacidade de persuasao', tipo: 'I' },
+    { label: 'Paciencia e consistencia', tipo: 'S' },
+    { label: 'Precisao e atencao aos detalhes', tipo: 'C' }
+  ]},
+  { texto: 'No trabalho em equipe, eu prefiro:', opts: [
+    { label: 'Liderar e tomar decisoes', tipo: 'D' },
+    { label: 'Criar conexoes e motivar o time', tipo: 'I' },
+    { label: 'Apoiar e colaborar com todos', tipo: 'S' },
+    { label: 'Garantir qualidade e precisao', tipo: 'C' }
+  ]},
+  { texto: 'Quando enfrento um conflito, eu:', opts: [
+    { label: 'Enfrento diretamente e busco resolucao rapida', tipo: 'D' },
+    { label: 'Converso e tento convencer com emocao', tipo: 'I' },
+    { label: 'Evito confronto e busco harmonia', tipo: 'S' },
+    { label: 'Analiso os fatos e apresento dados', tipo: 'C' }
+  ]},
+  { texto: 'As pessoas me descrevem como:', opts: [
+    { label: 'Direto, assertivo e competitivo', tipo: 'D' },
+    { label: 'Entusiasmado, sociavel e otimista', tipo: 'I' },
+    { label: 'Calmo, confiavel e paciente', tipo: 'S' },
+    { label: 'Cuidadoso, analitico e organizado', tipo: 'C' }
+  ]},
+  { texto: 'No trabalho, o que mais me motiva e:', opts: [
+    { label: 'Desafios, autonomia e resultados rapidos', tipo: 'D' },
+    { label: 'Reconhecimento, interacao e criatividade', tipo: 'I' },
+    { label: 'Estabilidade, cooperacao e rotina previsivel', tipo: 'S' },
+    { label: 'Excelencia, qualidade e processos claros', tipo: 'C' }
+  ]},
+  { texto: 'Ao tomar decisoes, eu:', opts: [
+    { label: 'Decido rapido com base na intuicao', tipo: 'D' },
+    { label: 'Consulto as pessoas e busco consenso', tipo: 'I' },
+    { label: 'Prefiro decidir com calma e consenso', tipo: 'S' },
+    { label: 'Analiso todas as opcoes antes de decidir', tipo: 'C' }
+  ]},
+  { texto: 'Meu maior desafio e:', opts: [
+    { label: 'Paciencia e escutar os outros', tipo: 'D' },
+    { label: 'Manter o foco e organizar as ideias', tipo: 'I' },
+    { label: 'Ser mais assertivo e tomar iniciativa', tipo: 'S' },
+    { label: 'Ser mais flexivel e aceitar mudancas', tipo: 'C' }
+  ]},
+  { texto: 'Em relacao a mudancas, eu:', opts: [
+    { label: 'Abraco mudancas e as provoco quando necessario', tipo: 'D' },
+    { label: 'Fico entusiasmado com novas possibilidades', tipo: 'I' },
+    { label: 'Prefiro mudancas graduais e planejadas', tipo: 'S' },
+    { label: 'Preciso entender o impacto antes de aceitar', tipo: 'C' }
+  ]},
+  { texto: 'Minha forma de comunicar e:', opts: [
+    { label: 'Direta, objetiva e sem rodeios', tipo: 'D' },
+    { label: 'Expressiva, animada e envolvente', tipo: 'I' },
+    { label: 'Calma, cuidadosa e diplomatica', tipo: 'S' },
+    { label: 'Precisa, detalhada e fundamentada', tipo: 'C' }
+  ]},
+  { texto: 'Para mim, sucesso significa:', opts: [
+    { label: 'Atingir metas e superar desafios', tipo: 'D' },
+    { label: 'Ser reconhecido e influenciar positivamente', tipo: 'I' },
+    { label: 'Ter harmonia, seguranca e boas relacoes', tipo: 'S' },
+    { label: 'Fazer tudo com qualidade e precisao', tipo: 'C' }
+  ]}
+];
+
+var discQ = 0, discScores = { D:0, I:0, S:0, C:0 }, discSel = null;
+
+function iniciarDISC() {
+  discQ = 0; discScores = { D:0, I:0, S:0, C:0 }; discSel = null;
+  document.getElementById('disc-intro').style.display = 'none';
+  document.getElementById('disc-quiz').style.display = 'block';
+  mostrarDiscQ();
+}
+function reiniciarDISC() {
+  document.getElementById('disc-fim').style.display = 'none';
+  document.getElementById('disc-intro').style.display = 'block';
+}
+
+function mostrarDiscQ() {
+  var q = discPerguntas[discQ];
+  document.getElementById('disc-num').textContent = 'Pergunta ' + (discQ+1) + ' de ' + discPerguntas.length;
+  document.getElementById('disc-prog').style.width = ((discQ / discPerguntas.length) * 100) + '%';
+  document.getElementById('disc-q-text').textContent = q.texto;
+  document.getElementById('disc-prox').disabled = true;
+  discSel = null;
+  var html = '';
+  q.opts.forEach(function(o, i) {
+    html += '<button class="disc-opt" onclick="selDiscOpt(this,\'' + o.tipo + '\')">' + o.label + '</button>';
+  });
+  document.getElementById('disc-opts').innerHTML = html;
+}
+
+function selDiscOpt(el, tipo) {
+  document.querySelectorAll('.disc-opt').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected');
+  discSel = tipo;
+  document.getElementById('disc-prox').disabled = false;
+}
+
+function proxDiscQ() {
+  if (!discSel) return;
+  discScores[discSel]++;
+  discQ++;
+  if (discQ >= discPerguntas.length) {
+    finalizarDISC();
+  } else {
+    mostrarDiscQ();
+  }
+}
+
+async function finalizarDISC() {
+  document.getElementById('disc-quiz').style.display = 'none';
+  document.getElementById('disc-fim').style.display = 'block';
+
+  var perfil = Object.keys(discScores).reduce(function(a,b){ return discScores[a]>discScores[b]?a:b });
+  var nomes = { D:'Dominancia', I:'Influencia', S:'Estabilidade', C:'Conformidade' };
+  var emojis = { D:'🔥', I:'⚡', S:'🌿', C:'🔬' };
+  var descs = {
+    D: 'Voce e direto, decisivo e orientado a resultados. Lida bem com desafios e busca autonomia.',
+    I: 'Voce e comunicativo, entusiasmado e influente. Inspira as pessoas e cria conexoes facilmente.',
+    S: 'Voce e paciente, confiavel e colaborativo. Traz estabilidade e consistencia ao time.',
+    C: 'Voce e analitico, preciso e criterioso. Entrega qualidade e cuida dos detalhes.'
+  };
+
+  document.getElementById('disc-emoji').textContent = emojis[perfil];
+  document.getElementById('disc-perfil-nome').textContent = perfil + ' - ' + nomes[perfil];
+  document.getElementById('disc-perfil-desc').textContent = descs[perfil];
+
+  var total = discPerguntas.length;
+  var html = Object.entries(discScores).map(function(e) {
+    var pct = Math.round((e[1]/total)*100);
+    var cor = { D:'#ef4444', I:'#f59e0b', S:'#10b981', C:'#3b82f6' }[e[0]];
+    return '<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span><strong style="color:' + cor + '">' + e[0] + '</strong> - ' + nomes[e[0]] + '</span><span style="color:var(--muted)">' + e[1] + '/' + total + '</span></div>'
+      + '<div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px"><div style="height:100%;width:' + pct + '%;background:' + cor + ';border-radius:3px"></div></div></div>';
+  }).join('');
+  document.getElementById('disc-barras').innerHTML = html;
+
+  document.getElementById('perf-disc').textContent = perfil + ' - ' + nomes[perfil];
+  document.getElementById('perf-disc-badge').innerHTML = '<span class="disc-badge" style="background:rgba(139,92,246,.2);color:#a78bfa">' + perfil + ' - ' + nomes[perfil] + '</span>';
+
+  try {
+    await sb.from('sense_disc').upsert({
+      usuario_id: sUser.id,
+      empresa_id: sUsuario ? sUsuario.empresa_id : null,
+      perfil_predominante: perfil,
+      pontuacoes: discScores,
+      respondido_em: new Date().toISOString()
+    }, { onConflict: 'usuario_id' });
+    showToast('Perfil DISC salvo!');
+  } catch(e) { console.error(e); }
+}
+
+async function carregarDiscAnterior() {
+  if (!sUser) return;
+  try {
+    var { data } = await sb.from('sense_disc').select('perfil_predominante,pontuacoes').eq('usuario_id', sUser.id).single();
+    if (!data) return;
+    var nomes = { D:'Dominancia', I:'Influencia', S:'Estabilidade', C:'Conformidade' };
+    var p = data.perfil_predominante;
+    document.getElementById('disc-resultado-anterior').style.display = 'block';
+    document.getElementById('disc-resultado-anterior').innerHTML =
+      '<div class="card" style="text-align:center"><div class="card-title">Seu perfil atual</div>'
+      + '<div style="font-size:24px;font-weight:800;color:var(--purple)">' + p + '</div>'
+      + '<div style="font-size:14px;color:var(--muted);margin-top:4px">' + (nomes[p]||p) + '</div></div>';
+    document.getElementById('perf-disc').textContent = p + ' - ' + (nomes[p]||p);
+    document.getElementById('perf-disc-badge').innerHTML = '<span class="disc-badge" style="background:rgba(139,92,246,.2);color:#a78bfa">' + p + ' - ' + (nomes[p]||p) + '</span>';
+  } catch(e) {}
+}
+
+// ===== INSPIRE =====
+async function carregarInspire() {
+  var msgs = {
+    excelente: { emoji:'🌟', msg:'Voce esta brilhando hoje. Esse estado positivo e contagiante. Use isso para impactar quem esta ao seu redor.', sub:'Continue cuidando do que te faz bem.' },
+    bem: { emoji:'🙂', msg:'Estar bem e uma base solida para fazer coisas boas. Aproveite esse equilibrio.', sub:'Voce esta no caminho certo.' },
+    cansado: { emoji:'🌙', msg:'Cansaco e sinal de que voce se entregou. Permita-se descansar sem culpa.', sub:'Recuperar energia e parte do processo.' },
+    ansioso: { emoji:'🌊', msg:'A ansiedade aparece quando nos importamos. Respire fundo. Voce ja enfrentou dias assim antes.', sub:'Um passo de cada vez. So um.' },
+    desmotivado: { emoji:'🔦', msg:'Nem todo dia e de brilho. Alguns sao so de persistencia. Isso tambem e coragem.', sub:'Voce nao precisa estar em chamas para ser valioso.' },
+    sobrecarregado: { emoji:'🧘', msg:'Quando tudo pesa, e hora de soltar o que nao e urgente. Voce nao precisa carregar tudo sozinho.', sub:'Pedir ajuda e sabedoria, nao fraqueza.'},
+    default: { emoji:'✨', msg:'Cada dia e uma nova oportunidade de cuidar de si e entregar o melhor de voce.', sub:'Voce esta exatamente onde precisa estar agora.' }
+  };
+
+  var estado = ciEstado;
+  if (!estado && sUser) {
+    try {
+      var { data } = await sb.from('sense_checkins').select('estado').eq('usuario_id', sUser.id).order('criado_em', { ascending: false }).limit(1).single();
+      if (data) estado = data.estado;
+    } catch(e) {}
+  }
+
+  var m = msgs[estado] || msgs.default;
+  document.getElementById('inspire-content').innerHTML =
+    '<div class="inspire-card">'
+    + '<div class="inspire-emoji">' + m.emoji + '</div>'
+    + '<div class="inspire-msg">' + m.msg + '</div>'
+    + '<div class="inspire-sub">' + m.sub + '</div>'
+    + '</div>'
+    + '<div style="text-align:center;margin-top:12px"><p style="font-size:12px;color:rgba(248,248,255,.3)">Alana Carvalho · Essencial Sense AI</p></div>';
+}
+
+init();
+</script>
+</body>
+</html>

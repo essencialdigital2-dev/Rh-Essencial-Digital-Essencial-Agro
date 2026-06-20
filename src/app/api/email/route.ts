@@ -157,6 +157,26 @@ export async function POST(req: NextRequest) {
         </div>
       `);
 
+    } else if (tipo === 'convite_colaborador') {
+      const empresa = dados?.empresa || 'sua empresa'
+      const senha = dados?.senha || ''
+      subject = `Voce foi convidado para o Essencial Sense AI - ${empresa}`
+      html = htmlBase('Voce tem um convite!', `
+        <div class="card">
+          <h3>Bem-vindo ao Essencial Sense AI</h3>
+          <p>Ola, <strong>${nome || 'colaborador'}</strong>! ${empresa} te convidou para a plataforma de bem-estar e desenvolvimento humano.</p>
+        </div>
+        <div class="card">
+          <h3>Seus dados de acesso</h3>
+          <p><strong>E-mail:</strong> ${to}<br>
+             <strong>Senha temporaria:</strong> ${senha}</p>
+          <p style="margin-top:10px;font-size:12px;color:#64748b">Recomendamos trocar a senha apos o primeiro acesso.</p>
+        </div>
+        <div class="card">
+          <h3>O que voce vai encontrar</h3>
+          <p>Check-in emocional diario, mapeamento DISC, mensagens de inspiracao e acompanhamento do seu bem-estar. Tudo de forma confidencial.</p>
+        </div>
+      `)
     } else {
       return NextResponse.json({ error: 'tipo não reconhecido' }, { status: 400 });
     }

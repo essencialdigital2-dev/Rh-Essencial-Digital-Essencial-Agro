@@ -1,7 +1,7 @@
-export default function SenseAppPage() {
+export default function SensePrecosPage() {
   return (
     <iframe
-      src="/sense-app.html"
+      src="/sense-precos.html"
       style={{
         position: 'fixed',
         top: 0,

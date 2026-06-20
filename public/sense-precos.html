@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos e Precos — Essencial Sense AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#7B3FF2;
+  --purple-light:#9B6CF5;
+  --purple-dim:#EDE8FD;
+  --lilac:#C4B0FA;
+  --gray:#F5F5F7;
+  --gray-mid:#D1D1D6;
+  --gray-dark:#6E6E73;
+  --text:#1D1D1F;
+  --white:#FFFFFF;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.nav-logo span{color:var(--purple)}
+.nav-cta{background:var(--purple);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block}
+.nav-cta:hover{opacity:.85}
+
+.hero{padding:120px 5% 60px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--purple-dim);color:var(--purple);font-size:12px;font-weight:600;padding:6px 16px;border-radius:99px;margin-bottom:24px;letter-spacing:.04em}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:700;letter-spacing:-1.5px;margin-bottom:16px}
+.hero h1 span{color:var(--purple)}
+.hero p{font-size:17px;color:var(--gray-dark);max-width:520px;margin:0 auto;line-height:1.7}
+
+/* toggle anual/mensal */
+.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin:40px 0 20px}
+.toggle-label{font-size:14px;color:var(--gray-dark)}
+.toggle-label.active{color:var(--text);font-weight:600}
+.toggle{width:48px;height:26px;background:var(--purple);border-radius:99px;position:relative;cursor:pointer;transition:background .2s}
+.toggle-knob{width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.desconto-badge{background:#DCFCE7;color:#16A34A;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+
+/* cards */
+.plans{max-width:1100px;margin:0 auto;padding:0 5% 80px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.plan-card{border:1.5px solid #EBEBEB;border-radius:20px;padding:32px 28px;position:relative;transition:all .25s}
+.plan-card:hover{border-color:var(--purple);box-shadow:0 8px 32px rgba(123,63,242,.1)}
+.plan-card.destaque{border-color:var(--purple);background:linear-gradient(180deg,#FAF8FF 0%,#fff 100%)}
+.plan-card.destaque::before{content:'Mais escolhido';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:0 0 10px 10px;letter-spacing:.05em;white-space:nowrap}
+.plan-name{font-size:13px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.plan-desc{font-size:13px;color:var(--gray-dark);margin-bottom:24px;line-height:1.5}
+.plan-price{margin-bottom:6px}
+.plan-price .value{font-size:40px;font-weight:800;letter-spacing:-1px;color:var(--text)}
+.plan-price .period{font-size:13px;color:var(--gray-dark);font-weight:400}
+.plan-sub{font-size:12px;color:var(--gray-dark);margin-bottom:28px}
+.plan-btn{display:block;width:100%;padding:13px;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer;border:none;text-align:center;transition:all .2s;text-decoration:none}
+.plan-btn.primary{background:var(--purple);color:#fff}
+.plan-btn.primary:hover{opacity:.85}
+.plan-btn.outline{background:transparent;color:var(--text);border:1.5px solid var(--gray-mid)}
+.plan-btn.outline:hover{border-color:var(--purple);color:var(--purple)}
+.plan-divider{border:none;border-top:1px solid #EBEBEB;margin:24px 0}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px}
+.plan-features li{font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.plan-features li::before{content:'✓';color:var(--purple);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-features li.off{color:var(--gray-mid)}
+.plan-features li.off::before{content:'—';color:var(--gray-mid)}
+
+/* comparativo */
+.compare{max-width:960px;margin:0 auto;padding:0 5% 80px}
+.compare h2{font-size:28px;font-weight:700;letter-spacing:-1px;text-align:center;margin-bottom:40px}
+table.comp-table{width:100%;border-collapse:collapse}
+.comp-table th{padding:12px 20px;text-align:left;font-size:13px;font-weight:600;border-bottom:2px solid #EBEBEB}
+.comp-table th:first-child{width:40%}
+.comp-table th:not(:first-child){text-align:center;color:var(--purple)}
+.comp-table td{padding:12px 20px;font-size:13px;border-bottom:1px solid #F5F5F7}
+.comp-table td:not(:first-child){text-align:center}
+.comp-table tr:last-child td{border-bottom:none}
+.check{color:var(--purple);font-weight:700;font-size:16px}
+.dash{color:var(--gray-mid)}
+
+/* faq */
+.faq{max-width:720px;margin:0 auto;padding:0 5% 80px}
+.faq h2{font-size:28px;font-weight:700;letter-spacing:-1px;text-align:center;margin-bottom:40px}
+.faq-item{border-bottom:1px solid #EBEBEB;padding:20px 0}
+.faq-q{font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q::after{content:'+';font-size:20px;color:var(--purple);font-weight:400;flex-shrink:0}
+.faq-a{font-size:14px;color:var(--gray-dark);line-height:1.7;margin-top:12px;display:none}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-item.open .faq-a{display:block}
+
+/* cta final */
+.cta-wrap{background:linear-gradient(135deg,#4c1d95,#7c3aed);padding:80px 5%;text-align:center;color:#fff}
+.cta-wrap h2{font-size:clamp(24px,4vw,40px);font-weight:700;letter-spacing:-1px;margin-bottom:16px}
+.cta-wrap p{font-size:16px;color:rgba(255,255,255,.75);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+.cta-wrap .btn{background:#fff;color:var(--purple);border:none;padding:15px 40px;border-radius:99px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block}
+.cta-wrap .btn:hover{opacity:.9}
+.cta-wrap .btn-wa{background:rgba(255,255,255,0.15);color:#fff;border:1.5px solid rgba(255,255,255,0.3);margin-left:12px}
+
+footer{border-top:1px solid #EBEBEB;padding:28px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-logo{font-size:14px;font-weight:700}
+.foot-logo span{color:var(--purple)}
+.foot-text{font-size:12px;color:var(--gray-dark)}
+
+@media(max-width:640px){
+  .plans{grid-template-columns:1fr}
+  .comp-table{font-size:12px}
+  .comp-table th,.comp-table td{padding:10px 12px}
+  .cta-wrap .btn-wa{margin-left:0;margin-top:10px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">essencial<span>sense</span> <span style="font-weight:400;font-size:12px;color:var(--gray-dark)">AI</span></div>
+  <a class="nav-cta" href="/sense-apresentacao">Ver apresentacao</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Planos</div>
+  <h1>O plano certo para<br>o <span>tamanho da sua empresa</span></h1>
+  <p>Cada empresa e diferente. Fale com a Alana e receba uma proposta personalizada para o seu numero de colaboradores e necessidades.</p>
+</div>
+
+<!-- PLANOS -->
+<div class="plans">
+
+  <!-- STARTER -->
+  <div class="plan-card">
+    <div class="plan-name">Starter</div>
+    <div class="plan-desc">Para empresas que estao comecando a estruturar o RH</div>
+    <div class="plan-price">
+      <span class="value" style="font-size:24px;color:var(--purple)">Sob consulta</span>
+    </div>
+    <div class="plan-sub">Ate 30 colaboradores · proposta personalizada</div>
+    <a href="https://wa.me/5561985272681?text=Ola%20Alana%2C%20tenho%20interesse%20no%20plano%20Starter%20do%20Sense%20AI" target="_blank" class="plan-btn outline">Solicitar proposta</a>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li>Ate 30 colaboradores</li>
+      <li>Check-in emocional diario</li>
+      <li>Avaliacao DISC completa</li>
+      <li>Dashboard de analytics</li>
+      <li>Relatorio NR-1 basico</li>
+      <li>App do colaborador</li>
+      <li>Suporte por e-mail</li>
+      <li class="off">Feedback 360°</li>
+      <li class="off">PDI e avaliacao de desempenho</li>
+      <li class="off">Recrutamento DISC</li>
+      <li class="off">Integracao TOTVS/ADP/SAP</li>
+    </ul>
+  </div>
+
+  <!-- PROFISSIONAL -->
+  <div class="plan-card destaque">
+    <div class="plan-name">Profissional</div>
+    <div class="plan-desc">Para empresas que querem RH preditivo completo</div>
+    <div class="plan-price">
+      <span class="value" style="font-size:24px;color:var(--purple)">Sob consulta</span>
+    </div>
+    <div class="plan-sub">Ate 100 colaboradores · proposta personalizada</div>
+    <a href="https://wa.me/5561985272681?text=Ola%20Alana%2C%20tenho%20interesse%20no%20plano%20Profissional%20do%20Sense%20AI" target="_blank" class="plan-btn primary">Solicitar proposta</a>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li>Ate 100 colaboradores</li>
+      <li>Check-in emocional diario</li>
+      <li>Avaliacao DISC completa</li>
+      <li>Dashboard de analytics avancado</li>
+      <li>Relatorio NR-1 completo</li>
+      <li>Assinatura digital de documentos</li>
+      <li>Feedback 360° e Clima</li>
+      <li>PDI e avaliacao de desempenho</li>
+      <li>Recrutamento com DISC</li>
+      <li>IA preditiva de turnover</li>
+      <li>Suporte via WhatsApp</li>
+      <li class="off">Integracao TOTVS/ADP/SAP</li>
+      <li class="off">Plano de Sucessao</li>
+    </ul>
+  </div>
+
+  <!-- ENTERPRISE -->
+  <div class="plan-card">
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-desc">Para empresas medias e redes com necessidades avancadas</div>
+    <div class="plan-price">
+      <span class="value" style="font-size:24px;color:var(--purple)">Sob consulta</span>
+    </div>
+    <div class="plan-sub">Acima de 100 colaboradores · contrato personalizado</div>
+    <a href="https://wa.me/5561985272681?text=Ola%20Alana%2C%20tenho%20interesse%20no%20plano%20Enterprise%20do%20Sense%20AI" target="_blank" class="plan-btn outline">Falar com a Alana</a>
+    <div class="plan-divider"></div>
+    <ul class="plan-features">
+      <li>Colaboradores ilimitados</li>
+      <li>Todos os modulos incluidos</li>
+      <li>Integracao TOTVS, ADP, SAP</li>
+      <li>Plano de Sucessao com IA</li>
+      <li>Human Twin AI por colaborador</li>
+      <li>Relatorios e laudos personalizados</li>
+      <li>Onboarding presencial ou online</li>
+      <li>Gerente de conta dedicado</li>
+      <li>SLA de suporte prioritario</li>
+      <li>API REST para integracao propria</li>
+      <li>Treinamento para toda a equipe RH</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- COMPARATIVO -->
+<div class="compare">
+  <h2>Comparativo completo</h2>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Funcionalidade</th>
+        <th>Starter</th>
+        <th>Profissional</th>
+        <th>Enterprise</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Check-in emocional diario</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Avaliacao DISC completa</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Dashboard de analytics</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Relatorio NR-1</td><td>Basico</td><td>Completo</td><td>Personalizado</td></tr>
+      <tr><td>App do colaborador</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Alertas de risco psicossocial</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Feedback 360°</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Pesquisa de clima e eNPS</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>PDI — Plano Desenvolvimento</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Avaliacao de desempenho</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Recrutamento com DISC</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>IA preditiva de turnover</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Assinatura digital</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Human Twin AI</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Plano de Sucessao</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Integracao TOTVS / ADP / SAP</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>API REST propria</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Gerente de conta dedicado</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Suporte</td><td>E-mail</td><td>WhatsApp</td><td>Prioritario</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Perguntas frequentes</h2>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">O que acontece se minha empresa crescer e ultrapassar o limite de colaboradores?</div>
+    <div class="faq-a">Voce pode fazer upgrade de plano a qualquer momento, sem perder dados nem historico. O valor e ajustado proporcionalmente ao periodo restante do contrato.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">O Sense AI garante conformidade com a NR-1?</div>
+    <div class="faq-a">Sim. O modulo Sense Risk foi desenhado especificamente para a NR-1 (revisada em 2025). Ele identifica riscos psicossociais, gera o laudo tecnico e permite a assinatura digital. Recomendamos validacao com o SESMT da empresa para adequacao especifica ao setor.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Existe periodo de teste gratuito?</div>
+    <div class="faq-a">Oferecemos uma demonstracao gratuita guiada com os dados reais da sua empresa. Durante a demo voce ve o sistema funcionando com sua estrutura, sem compromisso de contratacao.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Como funciona o onboarding?</div>
+    <div class="faq-a">Todos os planos incluem onboarding assistido: configuramos as areas, importamos os colaboradores e treinamos a equipe de RH. O processo leva entre 3 e 7 dias uteis dependendo do porte da empresa.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Os dados dos colaboradores sao protegidos?</div>
+    <div class="faq-a">Sim. O Sense AI e 100% conforme com a LGPD. Dados individuais de check-in nunca sao expostos a gestores diretos. A plataforma usa criptografia em transito e em repouso, com audit trail completo de acessos.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Posso cancelar a qualquer momento?</div>
+    <div class="faq-a">Contratos anuais tem fidelidade de 12 meses. No plano mensal (disponivel no Starter) o cancelamento pode ser feito a qualquer momento com aviso previo de 30 dias.</div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<div class="cta-wrap">
+  <h2>Pronto para comecar?</h2>
+  <p>Agende uma demonstracao gratuita e veja o Sense AI funcionando com os dados da sua empresa.</p>
+  <a href="https://wa.me/5561985272681?text=Ola%20Alana%2C%20quero%20agendar%20uma%20demonstracao%20do%20Sense%20AI" target="_blank" class="btn">Agendar demonstracao gratuita</a>
+  <a href="/sense-apresentacao" class="btn btn-wa" style="margin-left:12px;">Ver apresentacao</a>
+</div>
+
+<footer>
+  <div class="foot-logo">essencial<span>sense</span> AI</div>
+  <div class="foot-text">© 2026 Essencial Digital · CNPJ 58.062.495/0001-63</div>
+  <div class="foot-text">contato: essencialdigital2@gmail.com</div>
+</footer>
+
+<script>
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const SYSTEM_PROMPT = `Você é o Assistente Sense AI, especialista em:
+const SYSTEM_PROMPT = `Você é a Sense AI, especialista em:
 - Gestão de Pessoas e RH estratégico
 - Psicologia Organizacional e Comportamental
 - CLT, legislação trabalhista brasileira e NR-1
@@ -39,11 +39,22 @@ export async function POST(req: NextRequest) {
     )
 
     const json = await res.json()
-    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text
-    if (!text) return NextResponse.json({ error: 'Sem resposta da IA.' }, { status: 502 })
 
-    return NextResponse.json({ text, role: 'model' })
-  } catch (e) {
-    return NextResponse.json({ error: 'Erro interno.' }, { status: 500 })
+    if (!res.ok) {
+      const msg = json?.error?.message || 'Chave invalida ou limite atingido.'
+      return NextResponse.json({ error: msg }, { status: 502 })
+    }
+
+    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text
+    if (!text) {
+      const reason = json?.candidates?.[0]?.finishReason || 'desconhecido'
+      return NextResponse.json({ error: `Resposta bloqueada (${reason}). Tente reformular a pergunta.` }, { status: 502 })
+    }
+
+    const clean = text.replace(/—/g, '-').replace(/–/g, '-')
+    return NextResponse.json({ text: clean, role: 'model' })
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Erro interno.'
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
