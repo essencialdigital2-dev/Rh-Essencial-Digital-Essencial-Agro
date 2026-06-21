@@ -30,7 +30,7 @@ export default function LandingSenseAI() {
       {/* HERO */}
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '90px 24px 80px', textAlign: 'center' }}>
         <div style={{ display: 'inline-block', background: 'rgba(16,185,129,.12)', border: '1px solid rgba(16,185,129,.3)', borderRadius: 30, padding: '6px 18px', fontSize: 12, fontWeight: 700, color: '#10B981', marginBottom: 28, letterSpacing: '.06em' }}>
-          ⚠️ NR-1 vigente desde 26/05/2025 — sua empresa está em conformidade?
+          ⚠️ NR-1 vigente desde 26/05/2025sua empresa está em conformidade?
         </div>
         <h1 style={{ fontSize: 'clamp(32px,5vw,62px)', fontWeight: 900, lineHeight: 1.1, marginBottom: 24 }}>
           Saúde emocional e{' '}
@@ -40,7 +40,7 @@ export default function LandingSenseAI() {
           {' '}com IA
         </h1>
         <p style={{ fontSize: 'clamp(15px,2vw,20px)', color: 'rgba(240,240,255,.6)', maxWidth: 620, margin: '0 auto 40px', lineHeight: 1.7 }}>
-          A única plataforma no Brasil que monitora saúde emocional, burnout, DISC comportamental e conformidade NR-1 em tempo real — com diagnóstico gerado por Inteligência Artificial.
+          A única plataforma no Brasil que monitora saúde emocional, burnout, DISC comportamental e conformidade NR-1 em tempo realcom diagnóstico gerado por Inteligência Artificial.
         </p>
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="/empresa/criar" style={{ background: 'linear-gradient(135deg,#10B981,#A855F7)', color: '#fff', textDecoration: 'none', padding: '16px 36px', borderRadius: 14, fontSize: 16, fontWeight: 800, letterSpacing: '.02em' }}>
@@ -76,7 +76,7 @@ export default function LandingSenseAI() {
             A NR-1 obriga sua empresa a monitorar riscos psicossociais
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(240,240,255,.6)', lineHeight: 1.8, marginBottom: 28 }}>
-            A <strong style={{ color: '#10B981' }}>Portaria MTE nº 1.419/2024</strong> entrou em vigor em <strong style={{ color: '#F59E0B' }}>26 de maio de 2025</strong> e exige que toda empresa gerencie ativamente os fatores de risco psicossocial — estresse, burnout, assédio e pressão excessiva. O não cumprimento pode resultar em <strong style={{ color: '#EF4444' }}>autuação, multa e ação judicial</strong>.
+            A <strong style={{ color: '#10B981' }}>Portaria MTE nº 1.419/2024</strong> entrou em vigor em <strong style={{ color: '#F59E0B' }}>26 de maio de 2025</strong> e exige que toda empresa gerencie ativamente os fatores de risco psicossocialestresse, burnout, assédio e pressão excessiva. O não cumprimento pode resultar em <strong style={{ color: '#EF4444' }}>autuação, multa e ação judicial</strong>.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
             {[
@@ -112,7 +112,7 @@ export default function LandingSenseAI() {
               cor: '#F59E0B', badge: 'Crítico'
             },
             {
-              emoji: '📊', titulo: 'ISHO — Índice de Saúde Organizacional',
+              emoji: '📊', titulo: 'ISHOÍndice de Saúde Organizacional',
               desc: 'Score 0-100 da saúde do time como um todo. Histórico semanal, comparação entre departamentos e metas de melhoria com IA.',
               cor: '#06B6D4', badge: 'Exclusivo'
             },
@@ -177,7 +177,7 @@ export default function LandingSenseAI() {
               {[
                 '🧬 Único com ISHO + DISC + Burnout integrados',
                 '⚖️ Relatório NR-1 juridicamente válido',
-                '🤖 IA Gemini 2.0 Flash — diagnóstico em linguagem humana',
+                '🤖 IA Gemini 2.0 Flashdiagnóstico em linguagem humana',
                 '🎯 Alertas proativos antes de problemas graves',
                 '🔒 Dados anonimizados e conformidade LGPD',
               ].map(d => (
@@ -260,7 +260,7 @@ export default function LandingSenseAI() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <a href="/lgpd" style={{ fontSize: 13, color: 'rgba(240,240,255,.4)', textDecoration: 'none' }}>🔒 Política de Privacidade (LGPD)</a>
                 <a href="/lgpd" style={{ fontSize: 13, color: 'rgba(240,240,255,.4)', textDecoration: 'none' }}>📋 Termos de Uso</a>
-                <div style={{ fontSize: 12, color: 'rgba(240,240,255,.25)', marginTop: 6, lineHeight: 1.6 }}>Dados tratados conforme<br />Lei nº 13.709/2018 — LGPD</div>
+                <div style={{ fontSize: 12, color: 'rgba(240,240,255,.25)', marginTop: 6, lineHeight: 1.6 }}>Dados tratados conforme<br />Lei nº 13.709/2018LGPD</div>
               </div>
             </div>
           </div>

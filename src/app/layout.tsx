@@ -3,25 +3,25 @@ import './globals.css'
 import Monitor from '@/components/monitor'
 
 export const metadata: Metadata = {
-  title: 'RH Essencial Digital',
-  description: 'Gestao de Pessoas, Psicologia Organizacional e IA Preditiva para empresas brasileiras.',
-  metadataBase: new URL('https://rhessencialdigital.com.br'),
+  title: 'Essencial Sense AI',
+  description: 'Saúde emocional, burnout, DISC comportamental e conformidade NR-1 com Inteligência Artificial. Por Alana Carvalho — Gestão de Pessoas e Psicologia Organizacional.',
+  metadataBase: new URL('https://rh-essencial-digital-essencial-agro.vercel.app'),
   manifest: '/manifest.json',
-  themeColor: '#8B5CF6',
+  themeColor: '#10B981',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Sense AI' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Essencial Sense AI' },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    siteName: 'RH Essencial Digital',
-    title: 'RH Essencial Digital',
-    description: 'Gestao de Pessoas, Psicologia Organizacional e IA Preditiva para empresas brasileiras.',
-    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'RH Essencial Digital' }],
+    siteName: 'Essencial Sense AI',
+    title: 'Essencial Sense AI — Saúde Organizacional com IA',
+    description: 'Saúde emocional, burnout, DISC e conformidade NR-1 com IA. Por Alana Carvalho.',
+    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'Essencial Sense AI' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RH Essencial Digital',
-    description: 'Gestao de Pessoas, Psicologia Organizacional e IA Preditiva.',
+    title: 'Essencial Sense AI',
+    description: 'Saúde emocional, burnout, DISC e conformidade NR-1 com IA.',
     images: ['/api/og'],
   },
 }
