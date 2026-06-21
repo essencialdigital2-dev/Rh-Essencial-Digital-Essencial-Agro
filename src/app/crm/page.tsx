@@ -175,6 +175,64 @@ export default function CRMSenseAI() {
               </div>
             </div>
           </div>
+
+            {/* TABELA DE PREÇOS — visível apenas no CRM interno */}
+            <div className="bg-[#0E0E1A] border border-white/7 rounded-2xl p-6">
+              <div className="text-sm font-bold mb-1">💰 Tabela de Preços — Essencial Digital</div>
+              <div className="text-[11px] text-white/35 mb-5">Visível apenas no painel interno · Não exibida no site público</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Sense AI */}
+                <div>
+                  <div className="text-xs font-bold text-emerald-400 mb-3">🧠 Essencial Sense AI</div>
+                  <div className="space-y-2">
+                    {[
+                      { plano: 'Starter', preco: 'R$ 800/mês', limite: 'até 30 colaboradores', cor: '#6B7280' },
+                      { plano: 'Growth', preco: 'R$ 1.990/mês', limite: 'até 100 colaboradores', cor: '#06B6D4' },
+                      { plano: 'Scale', preco: 'R$ 5.000/mês', limite: '100+ ilimitado', cor: '#10B981' },
+                    ].map(p => (
+                      <div key={p.plano} className="flex items-center justify-between bg-white/3 rounded-xl px-4 py-3">
+                        <div>
+                          <span className="text-xs font-bold" style={{ color: p.cor }}>{p.plano}</span>
+                          <span className="text-[10px] text-white/30 ml-2">{p.limite}</span>
+                        </div>
+                        <span className="text-sm font-black text-white">{p.preco}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* NexoPerform */}
+                <div>
+                  <div className="text-xs font-bold text-purple-400 mb-3">🧬 NexoPerform</div>
+                  <div className="space-y-2">
+                    {[
+                      { plano: 'Starter', preco: 'R$ 800/mês', limite: 'até 20 pessoas', cor: '#6B7280' },
+                      { plano: 'Growth', preco: 'R$ 1.990/mês', limite: 'até 50 pessoas', cor: '#A855F7' },
+                      { plano: 'Scale', preco: 'R$ 5.000/mês', limite: '50+ ilimitado', cor: '#EC4899' },
+                    ].map(p => (
+                      <div key={p.plano} className="flex items-center justify-between bg-white/3 rounded-xl px-4 py-3">
+                        <div>
+                          <span className="text-xs font-bold" style={{ color: p.cor }}>{p.plano}</span>
+                          <span className="text-[10px] text-white/30 ml-2">{p.limite}</span>
+                        </div>
+                        <span className="text-sm font-black text-white">{p.preco}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Bundle */}
+              <div className="mt-4 flex items-center justify-between bg-gradient-to-r from-emerald-900/20 to-purple-900/20 border border-white/10 rounded-xl px-4 py-3">
+                <div>
+                  <span className="text-xs font-bold text-amber-400">🔥 Bundle — Sense AI + NexoPerform</span>
+                  <span className="text-[10px] text-white/30 ml-2">Ambos os produtos · Ilimitado</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-black text-white">R$ 8.000/mês</div>
+                  <div className="text-[10px] text-emerald-400">economia R$ 2.000/mês</div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* PIPELINE */}
