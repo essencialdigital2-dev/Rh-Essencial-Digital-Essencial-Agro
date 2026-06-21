@@ -5,6 +5,14 @@
     {
       "path": "/api/cron/insights",
       "schedule": "0 10 * * 1"
+    },
+    {
+      "path": "/api/cron/score-risco",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/isho",
+      "schedule": "0 9 * * 1"
     }
   ],
   "headers": [

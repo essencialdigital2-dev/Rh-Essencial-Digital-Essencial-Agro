@@ -1,10 +1,15 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Monitor from '@/components/monitor'
 
 export const metadata: Metadata = {
   title: 'RH Essencial Digital',
   description: 'Gestao de Pessoas, Psicologia Organizacional e IA Preditiva para empresas brasileiras.',
   metadataBase: new URL('https://rhessencialdigital.com.br'),
+  manifest: '/manifest.json',
+  themeColor: '#8B5CF6',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Sense AI' },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
@@ -24,7 +29,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Monitor />
+      </body>
     </html>
   )
 }
