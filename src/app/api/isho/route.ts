@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { calcularISHO } from '@/lib/calcularISHO'
+import { empresaPertenceAoUsuario } from '@/lib/verificarEmpresa'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const empresaId = searchParams.get('empresa_id')
   if (!empresaId) return NextResponse.json({ error: 'empresa_id obrigatório' }, { status: 400 })
+  if (!(await empresaPertenceAoUsuario(empresaId))) return NextResponse.json({ error: 'nao autorizado' }, { status: 403 })
 
   const { data } = await sb()
     .from('isho_semanal')
@@ -27,6 +29,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const { empresa_id } = await req.json()
   if (!empresa_id) return NextResponse.json({ error: 'empresa_id obrigatório' }, { status: 400 })
+  if (!(await empresaPertenceAoUsuario(empresa_id))) return NextResponse.json({ error: 'nao autorizado' }, { status: 403 })
   const resultado = await calcularISHO(empresa_id)
   return NextResponse.json(resultado)
 }

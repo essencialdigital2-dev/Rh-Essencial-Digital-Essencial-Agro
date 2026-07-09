@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -7,26 +7,30 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --purple:#7B3FF2;
-  --purple-light:#9B6CF5;
-  --purple-dim:#EDE8FD;
+  --purple:#8B5CF6;
+  --purple-light:#A78BFA;
+  --purple-dim:rgba(139,92,246,0.12);
+  --cyan:#06B6D4;
+  --green:#10B981;
   --lilac:#C4B0FA;
-  --gray:#F5F5F7;
-  --gray-mid:#D1D1D6;
-  --gray-dark:#6E6E73;
-  --text:#1D1D1F;
-  --white:#FFFFFF;
+  --gray:rgba(255,255,255,0.04);
+  --gray-mid:rgba(255,255,255,0.1);
+  --gray-dark:rgba(248,248,255,0.45);
+  --text:#F8F8FF;
+  --white:#F8F8FF;
+  --bg:#06060F;
+  --bg2:#08080F;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(139,92,246,0.15);padding:0 5%;height:60px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
 .nav-logo span{color:var(--purple)}
 .nav-links{display:flex;gap:28px;list-style:none}
 .nav-links a{font-size:14px;color:var(--gray-dark);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--text)}
-.nav-cta{background:var(--purple);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.nav-cta{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s}
 .nav-cta:hover{opacity:.85}
 
 /* HERO */
@@ -38,9 +42,9 @@ h1{font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.05;letter-spacin
 h1 span{color:var(--purple)}
 .hero-sub{font-size:clamp(16px,2vw,20px);color:var(--gray-dark);line-height:1.6;max-width:600px;margin:0 auto 48px}
 .hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:var(--purple);color:#fff;border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary:hover{opacity:.85;transform:translateY(-1px)}
-.btn-secondary{background:transparent;color:var(--text);border:1.5px solid var(--gray-mid);padding:14px 32px;border-radius:99px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-secondary{background:transparent;color:var(--text);border:1.5px solid rgba(139,92,246,0.4);padding:14px 32px;border-radius:99px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
 .btn-secondary:hover{border-color:var(--purple);color:var(--purple)}
 
 /* ISHO INDICATOR */
@@ -62,47 +66,47 @@ h1 span{color:var(--purple)}
 .badge-red{background:rgba(248,113,113,.15);color:#F87171}
 
 /* INSIGHT TICKER */
-.insights{background:var(--gray);padding:20px 5%;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none}
+.insights{background:rgba(139,92,246,0.05);border-top:1px solid rgba(139,92,246,0.1);border-bottom:1px solid rgba(139,92,246,0.1);padding:20px 5%;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none}
 .insights::-webkit-scrollbar{display:none}
-.insight-chip{background:#fff;border:1px solid var(--gray-mid);border-radius:99px;padding:8px 16px;font-size:12px;color:var(--gray-dark);white-space:nowrap;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.insight-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:99px;padding:8px 16px;font-size:12px;color:rgba(248,248,255,0.6);white-space:nowrap;display:flex;align-items:center;gap:6px;flex-shrink:0}
 .insight-chip i{font-size:14px}
-.chip-purple{border-color:var(--purple-dim);color:var(--purple)}
-.chip-red{border-color:#FFE4E4;color:#D00}
-.chip-amber{border-color:#FEF3C7;color:#92400E}
+.chip-purple{border-color:rgba(139,92,246,0.3);color:var(--purple-light)}
+.chip-red{border-color:rgba(239,68,68,0.3);color:#FCA5A5}
+.chip-amber{border-color:rgba(245,158,11,0.3);color:#FDE68A}
 
 /* MODULES */
 .modules{padding:80px 5%;max-width:1100px;margin:0 auto}
-.section-tag{font-size:12px;font-weight:600;color:var(--purple);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.section-tag{font-size:12px;font-weight:600;color:var(--purple-light);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
 .section-title{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-1px;margin-bottom:8px}
 .section-sub{font-size:16px;color:var(--gray-dark);margin-bottom:48px;line-height:1.6}
 .modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.mod-card{border:1px solid #EBEBEB;border-radius:16px;padding:24px;transition:all .25s;cursor:default}
-.mod-card:hover{border-color:var(--purple);box-shadow:0 4px 24px rgba(123,63,242,.08)}
-.mod-icon{width:40px;height:40px;border-radius:10px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
-.mod-name{font-size:15px;font-weight:700;margin-bottom:6px}
-.mod-desc{font-size:13px;color:var(--gray-dark);line-height:1.6}
+.mod-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all .25s;cursor:default}
+.mod-card:hover{border-color:rgba(139,92,246,0.4);box-shadow:0 4px 32px rgba(139,92,246,0.12)}
+.mod-icon{width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.mod-name{font-size:15px;font-weight:700;margin-bottom:6px;color:#F8F8FF}
+.mod-desc{font-size:13px;color:rgba(248,248,255,0.5);line-height:1.6}
 .mod-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.mod-tag{font-size:11px;background:var(--purple-dim);color:var(--purple);padding:2px 8px;border-radius:99px}
+.mod-tag{font-size:11px;background:rgba(139,92,246,0.12);color:var(--purple-light);padding:2px 8px;border-radius:99px}
 
 /* DIFFERENTIALS */
-.diffs{background:var(--gray);padding:80px 5%}
+.diffs{background:rgba(139,92,246,0.04);border-top:1px solid rgba(139,92,246,0.12);border-bottom:1px solid rgba(139,92,246,0.12);padding:80px 5%}
 .diffs-inner{max-width:1100px;margin:0 auto}
 .diffs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:48px}
-.diff-card{background:#fff;border-radius:16px;padding:24px}
-.diff-num{font-size:40px;font-weight:800;color:var(--purple);letter-spacing:-1px;margin-bottom:8px}
-.diff-label{font-size:15px;font-weight:600;margin-bottom:6px}
-.diff-text{font-size:13px;color:var(--gray-dark);line-height:1.6}
+.diff-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:24px}
+.diff-num{font-size:40px;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px;margin-bottom:8px}
+.diff-label{font-size:15px;font-weight:600;margin-bottom:6px;color:#F8F8FF}
+.diff-text{font-size:13px;color:rgba(248,248,255,0.5);line-height:1.6}
 
 /* CTA FINAL */
 .cta-final{padding:100px 5%;text-align:center;max-width:700px;margin:0 auto}
-.cta-final h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1.5px;margin-bottom:16px}
-.cta-final p{font-size:16px;color:var(--gray-dark);margin-bottom:40px;line-height:1.7}
+.cta-final h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-1.5px;margin-bottom:16px;color:#F8F8FF}
+.cta-final p{font-size:16px;color:rgba(248,248,255,0.5);margin-bottom:40px;line-height:1.7}
 
 /* FOOTER */
-footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.foot-logo{font-size:14px;font-weight:700}
-.foot-logo span{color:var(--purple)}
-.foot-text{font-size:12px;color:var(--gray-dark)}
+footer{background:rgba(8,8,15,0.8);border-top:1px solid rgba(255,255,255,0.06);padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-logo{font-size:14px;font-weight:700;color:#F8F8FF}
+.foot-logo span{color:var(--purple-light)}
+.foot-text{font-size:12px;color:rgba(248,248,255,0.35)}
 
 @media(max-width:640px){
   .nav-links{display:none}
@@ -127,11 +131,11 @@ footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content
 
 <section class="hero">
   <div class="hero-badge">Plataforma de Inteligência Humana</div>
-  <h1>As pessoas sempre dão <span>sinais.</span><br>Nós ajudamos você a enxergá-los.</h1>
-  <p class="hero-sub">Transforme o RH tradicional em um RH preditivo. Identifique riscos humanos antes que se tornem problemas.</p>
+  <h1 style="color:#F8F8FF">As pessoas sempre dão <span style="color:var(--purple-light)">sinais.</span><br>Nós ajudamos você a enxergá-los.</h1>
+  <p class="hero-sub" style="color:rgba(248,248,255,0.55)">Transforme o RH tradicional em um RH preditivo. Identifique riscos humanos antes que se tornem problemas.</p>
   <div class="hero-ctas">
-    <button class="btn-primary">Solicitar demonstração</button>
-    <button class="btn-secondary">Conhecer os módulos</button>
+    <a href="https://wa.me/5561985272681?text=Ola%20Alana!%20Quero%20agendar%20uma%20demonstracao%20do%20Essencial%20Sense%20AI." target="_blank" class="btn-primary" style="text-decoration:none">Solicitar demonstração</a>
+    <a href="#modulos" class="btn-secondary" style="text-decoration:none">Conhecer os módulos</a>
   </div>
 </section>
 
@@ -270,6 +274,35 @@ footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content
       <div class="mod-tags"><span class="mod-tag">Mobile</span><span class="mod-tag">Engajamento</span></div>
     </div>
 
+    <div class="mod-card" style="border-color:rgba(6,182,212,0.3);background:rgba(6,182,212,0.04)">
+      <div class="mod-icon" style="background:rgba(6,182,212,0.15)">🧩</div>
+      <div class="mod-name" style="color:#67E8F9">Sensi Neuro</div>
+      <div class="mod-desc">Módulo exclusivo para colaboradores neurodivergentes. Avaliação de perfil, trilhas adaptadas, comunicação personalizada e suporte para TDAH, autismo e dislexia.</div>
+      <div class="mod-tags">
+        <span class="mod-tag" style="background:rgba(6,182,212,0.12);color:#67E8F9">Neurodivergência</span>
+        <span class="mod-tag" style="background:rgba(6,182,212,0.12);color:#67E8F9">Inclusão</span>
+        <span class="mod-tag" style="background:rgba(6,182,212,0.12);color:#67E8F9;font-weight:800">NOVO</span>
+      </div>
+    </div>
+
+    <div class="mod-card" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.04)">
+      <div class="mod-icon" style="background:rgba(139,92,246,0.15)">🧬</div>
+      <div class="mod-name" style="color:#C4B5FD">NexoPerform</div>
+      <div class="mod-desc">Revela o sistema operacional por trás de cada pessoa. Une DISC, neurociência e psicologia organizacional em um mapa único de potencial humano.</div>
+      <div class="mod-tags">
+        <span class="mod-tag" style="background:rgba(139,92,246,0.12);color:#C4B5FD">Neurociência</span>
+        <span class="mod-tag" style="background:rgba(139,92,246,0.12);color:#C4B5FD">Performance</span>
+        <span class="mod-tag" style="background:rgba(139,92,246,0.12);color:#C4B5FD;font-weight:800">EXCLUSIVO</span>
+      </div>
+    </div>
+
+    <!-- e muito mais -->
+    <div class="mod-card" style="border-color:rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:160px;gap:12px;">
+      <div style="font-size:32px;opacity:.4;">+</div>
+      <div style="font-size:15px;font-weight:700;color:rgba(248,248,255,0.5);">E muito mais...</div>
+      <div style="font-size:12px;color:rgba(248,248,255,0.3);line-height:1.6;">28 painéis funcionais.<br>Um ecossistema em evolução contínua.</div>
+    </div>
+
   </div>
 </section>
 
@@ -279,9 +312,9 @@ footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content
     <h2 class="section-title">Não é um sistema de RH.<br>É inteligência humana.</h2>
     <div class="diffs-grid">
       <div class="diff-card">
-        <div class="diff-num">13</div>
+        <div class="diff-num">28+</div>
         <div class="diff-label">Módulos integrados</div>
-        <div class="diff-text">Do check-in emocional ao coach de liderança, tudo conectado em uma plataforma.</div>
+        <div class="diff-text">Do check-in emocional ao NexoPerform — e muito mais. Um ecossistema em evolução contínua.</div>
       </div>
       <div class="diff-card">
         <div class="diff-num">ISHO</div>
@@ -305,7 +338,7 @@ footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content
 <section class="cta-final" id="contato">
   <h2>Pronto para enxergar os sinais?</h2>
   <p>Agende uma demonstração gratuita e veja como o Essencial Sense AI pode transformar a gestão de pessoas da sua empresa.</p>
-  <button class="btn-primary" style="font-size:16px;padding:16px 40px">Solicitar demonstração gratuita</button>
+  <a href="https://wa.me/5561985272681?text=Ola%20Alana!%20Quero%20agendar%20uma%20demonstracao%20gratuita%20do%20Essencial%20Sense%20AI." target="_blank" class="btn-primary" style="text-decoration:none;font-size:16px;padding:16px 40px">Solicitar demonstração gratuita</a>
 </section>
 
 <footer>
@@ -316,3 +349,4 @@ footer{border-top:1px solid #EBEBEB;padding:32px 5%;display:flex;justify-content
 
 </body>
 </html>
+

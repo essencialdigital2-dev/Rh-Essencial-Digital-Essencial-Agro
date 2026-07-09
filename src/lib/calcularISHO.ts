@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+﻿import { createClient } from '@supabase/supabase-js'
 
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,7 +45,7 @@ export async function calcularISHO(empresaId: string) {
     (engajamento / 100) * 15
   )
   const score = Math.max(0, Math.min(100, scoreBase))
-  const nivel = score >= 75 ? 'saudavel' : score >= 55 ? 'atencao' : 'critico'
+  const nivel = score >= 75 ? 'saudavel' : score >= 55 ? 'atenção' : 'critico'
 
   const semanaAnterior = new Date(); semanaAnterior.setDate(semanaAnterior.getDate() - 7)
   const { data: anterior } = await client
@@ -105,6 +105,6 @@ Responda apenas o diagnóstico, sem título, sem markdown.`
 
 function fallback(nivel: string): string {
   if (nivel === 'critico') return 'A equipe apresenta sinais críticos de esgotamento. Intervenção imediata é necessária para evitar saídas e queda de produtividade.'
-  if (nivel === 'atencao') return 'A saúde organizacional está em zona de atenção. Monitorar de perto e agir proativamente com as pessoas em risco.'
+  if (nivel === 'atenção') return 'A saúde organizacional está em zona de atenção. Monitorar de perto e agir proativamente com as pessoas em risco.'
   return 'A equipe apresenta boa saúde emocional e engajamento consistente. Manter as práticas atuais e reconhecer o desempenho coletivo.'
 }

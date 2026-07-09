@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -174,11 +174,10 @@ export default function CRMSenseAI() {
                 })}
               </div>
             </div>
-          </div>
 
-            {/* TABELA DE PREÇOS — visível apenas no CRM interno */}
+            {/* TABELA DE PREÇOS - visível apenas no CRM interno */}
             <div className="bg-[#0E0E1A] border border-white/7 rounded-2xl p-6">
-              <div className="text-sm font-bold mb-1">💰 Tabela de Preços — Essencial Digital</div>
+              <div className="text-sm font-bold mb-1">💰 Tabela de Preços - Essencial Digital</div>
               <div className="text-[11px] text-white/35 mb-5">Visível apenas no painel interno · Não exibida no site público</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sense AI */}
@@ -223,7 +222,7 @@ export default function CRMSenseAI() {
               {/* Bundle */}
               <div className="mt-4 flex items-center justify-between bg-gradient-to-r from-emerald-900/20 to-purple-900/20 border border-white/10 rounded-xl px-4 py-3">
                 <div>
-                  <span className="text-xs font-bold text-amber-400">🔥 Bundle — Sense AI + NexoPerform</span>
+                  <span className="text-xs font-bold text-amber-400">🔥 Bundle - Sense AI + NexoPerform</span>
                   <span className="text-[10px] text-white/30 ml-2">Ambos os produtos · Ilimitado</span>
                 </div>
                 <div className="text-right">

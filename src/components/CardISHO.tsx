@@ -1,9 +1,9 @@
-'use client'
+﻿'use client'
 import { useEffect, useState } from 'react'
 
 type ISHOData = {
   score: number
-  nivel: 'saudavel' | 'atencao' | 'critico'
+  nivel: 'saudavel' | 'atenção' | 'critico'
   tendencia: 'subindo' | 'estavel' | 'caindo'
   engajamento: number
   diagnostico: string
@@ -20,7 +20,7 @@ type ISHOData = {
 
 const NIVEL_CONFIG = {
   saudavel: { cor: '#059669', bg: '#F0FDF4', borda: '#BBF7D0', label: 'Saudável', emoji: '🟢' },
-  atencao:  { cor: '#d97706', bg: '#FFFBEB', borda: '#FDE68A', label: 'Atenção',  emoji: '🟡' },
+  atenção:  { cor: '#d97706', bg: '#FFFBEB', borda: '#FDE68A', label: 'Atenção',  emoji: '🟡' },
   critico:  { cor: '#dc2626', bg: '#FEF2F2', borda: '#FECACA', label: 'Crítico',  emoji: '🔴' },
 }
 
@@ -67,7 +67,7 @@ export default function CardISHO({ empresaId }: { empresaId: string }) {
     </div>
   )
 
-  const nivel = isho?.nivel || 'atencao'
+  const nivel = isho?.nivel || 'atenção'
   const cfg = NIVEL_CONFIG[nivel]
   const score = isho?.score ?? 0
   const circunf = 2 * Math.PI * 36

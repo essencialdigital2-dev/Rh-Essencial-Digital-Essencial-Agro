@@ -10,7 +10,7 @@ export async function calcularRiscoIndividual(colaboradorId: string, empresaId: 
   const dias30 = new Date(); dias30.setDate(dias30.getDate() - 30)
   const dias30Str = dias30.toISOString()
 
-  const [{ data: checkins }, { data: profile }, { data: ishoEmpresa }] = await Promise.all([
+  const [{ data: checkins }, { data: profile }, { data: ishoEmpresa }, { data: disc }] = await Promise.all([
     client.from('health_checkins')
       .select('humor, energia, foco, stresse, criado_em')
       .eq('colaborador_id', colaboradorId)
@@ -27,6 +27,12 @@ export async function calcularRiscoIndividual(colaboradorId: string, empresaId: 
       .order('semana', { ascending: false })
       .limit(1)
       .single(),
+    client.from('disc_resultados')
+      .select('perfil_principal')
+      .eq('user_id', colaboradorId)
+      .order('data', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ])
 
   if (!checkins?.length) return { ok: false, msg: 'Sem check-ins suficientes' }
@@ -56,14 +62,16 @@ export async function calcularRiscoIndividual(colaboradorId: string, empresaId: 
     (frequencia     < 4   ? 15 : 0)
   ))
 
-  const nivel = riscoBurnout >= 70 ? 'critico' : riscoBurnout >= 45 ? 'atencao' : 'saudavel'
+  const nivel = riscoBurnout >= 70 ? 'critico' : riscoBurnout >= 45 ? 'atenção' : 'saudavel'
+  const perfilDisc = (disc as any)?.perfil_principal || null
 
-  const recomendacao = await gerarRecomendacao({
+  const { recomendacao, comportamentoSobPressao } = await gerarRecomendacao({
     nome: (profile as any)?.nome || 'Colaborador',
     cargo: (profile as any)?.cargo,
     mediaHumor, mediaEnergia, mediaFoco, mediaStresse,
     tendenciaHumor, frequencia, riscoBurnout, riscoSaida, nivel,
     ishoEmpresa: (ishoEmpresa as any)?.score || 60,
+    perfilDisc,
   })
 
   const semana = new Date().toISOString().split('T')[0]
@@ -76,40 +84,61 @@ export async function calcularRiscoIndividual(colaboradorId: string, empresaId: 
     risco_saida: riscoSaida,
     nivel,
     recomendacao,
+    comportamento_sob_pressao: comportamentoSobPressao,
     metricas: { mediaHumor, mediaEnergia, mediaFoco, mediaStresse, frequencia, tendenciaHumor },
     calculado_em: new Date().toISOString(),
   }, { onConflict: 'colaborador_id,semana' })
 
-  return { ok: true, risco_burnout: riscoBurnout, risco_saida: riscoSaida, nivel, recomendacao }
+  return { ok: true, risco_burnout: riscoBurnout, risco_saida: riscoSaida, nivel, recomendacao, comportamento_sob_pressao: comportamentoSobPressao }
 }
 
 async function gerarRecomendacao(p: {
   nome: string; cargo: string | null; mediaHumor: number; mediaEnergia: number
   mediaFoco: number; mediaStresse: number; tendenciaHumor: number; frequencia: number
   riscoBurnout: number; riscoSaida: number; nivel: string; ishoEmpresa: number
-}): Promise<string> {
-  const prompt = `Você é um consultor de saúde organizacional. Gere UMA recomendação concreta (máx 2 frases) para o gestor agir ESTA SEMANA sobre este colaborador.
-Dados: Nome: ${p.nome} | Cargo: ${p.cargo || 'não informado'} | Humor: ${p.mediaHumor}/5 | Energia: ${p.mediaEnergia}/5 | Foco: ${p.mediaFoco}/5 | Estresse: ${p.mediaStresse}/5
+  perfilDisc: string | null
+}): Promise<{ recomendacao: string; comportamentoSobPressao: string }> {
+  const prompt = `Você é um consultor de saúde organizacional e psicologia comportamental (DISC). Analise este colaborador e responda em JSON.
+Dados: Nome: ${p.nome} | Cargo: ${p.cargo || 'não informado'} | Perfil DISC: ${p.perfilDisc || 'não avaliado ainda'} | Humor: ${p.mediaHumor}/5 | Energia: ${p.mediaEnergia}/5 | Foco: ${p.mediaFoco}/5 | Estresse: ${p.mediaStresse}/5
 Tendência humor: ${p.tendenciaHumor > 0 ? 'melhorando' : p.tendenciaHumor < -0.5 ? 'piorando' : 'estável'} | Check-ins: ${p.frequencia} | Risco burnout: ${p.riscoBurnout}% | Risco saída: ${p.riscoSaida}% | Nível: ${p.nivel}
-Responda apenas a recomendação, sem título, sem markdown.`
+
+Retorne APENAS JSON válido, sem markdown:
+{
+  "recomendacao": "UMA recomendação concreta (máx 2 frases) para o gestor agir ESTA SEMANA sobre este colaborador",
+  "comportamento_sob_pressao": "2-3 frases explicando como essa pessoa tende a agir e decidir sob pressão, cruzando o perfil DISC (se disponível) com o nível atual de estresse/energia real. Se nao tiver DISC, baseie-se so nos dados de estresse/energia e diga que a leitura fica mais precisa com o DISC completo."
+}`
 
   try {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], max_tokens: 150, temperature: 0.6 }),
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], max_tokens: 300, temperature: 0.6 }),
     })
     const data = await res.json()
-    return data.choices?.[0]?.message?.content?.trim() || recomendacaoFallback(p.nivel)
+    const raw = data.choices?.[0]?.message?.content?.trim() || ''
+    const match = raw.match(/\{[\s\S]*\}/)
+    if (match) {
+      const json = JSON.parse(match[0])
+      if (json.recomendacao && json.comportamento_sob_pressao) {
+        return { recomendacao: json.recomendacao, comportamentoSobPressao: json.comportamento_sob_pressao }
+      }
+    }
+    throw new Error('resposta invalida')
   } catch {
-    return recomendacaoFallback(p.nivel)
+    return { recomendacao: recomendacaoFallback(p.nivel), comportamentoSobPressao: comportamentoFallback(p.nivel) }
   }
 }
 
 function recomendacaoFallback(nivel: string): string {
   if (nivel === 'critico') return 'Agende uma conversa individual privada esta semana. Sinais indicam esgotamento próximo.'
-  if (nivel === 'atencao') return 'Verifique a carga de trabalho desta pessoa e ofereça suporte proativo.'
+  if (nivel === 'atenção') return 'Verifique a carga de trabalho desta pessoa e ofereça suporte proativo.'
   return 'Colaborador com boa saúde emocional. Reconheça publicamente o desempenho para manter o engajamento.'
+}
+
+function comportamentoFallback(nivel: string): string {
+  if (nivel === 'critico') return 'Sob pressão atual, tende a reagir de forma menos ponderada e pode adiar decisões importantes. Complete o DISC para uma leitura mais precisa.'
+  if (nivel === 'atenção') return 'Ainda mantém o julgamento sob pressão, mas o desgaste pode comprometer a qualidade das decisões em breve. Complete o DISC para uma leitura mais precisa.'
+  return 'Tende a lidar bem com pressão no momento atual. Complete o DISC para uma leitura mais precisa de como decide sob estresse.'
 }
 
 function media(arr: any[], campo: string): number {

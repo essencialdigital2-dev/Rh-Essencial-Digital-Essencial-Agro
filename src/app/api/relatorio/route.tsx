@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 
 const styles = StyleSheet.create({
@@ -243,7 +243,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
   const alertasCriticos = alertas.filter(a => a.severidade === 'critico').length
 
   return (
-    <Document title={`Relatório NR-1 — ${dados.empresa || 'Empresa'} — ${dataGeracao}`} author="Essencial Sense AI">
+    <Document title={`Relatório NR-1 - ${dados.empresa || 'Empresa'} - ${dataGeracao}`} author="Essencial Sense AI">
       <Page size="A4" style={styles.page}>
 
         {/* Header */}
@@ -267,7 +267,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={styles.periodoText}>Documento gerado por</Text>
-            <Text style={styles.periodoVal}>Essencial Sense AI — IA Preditiva de RH</Text>
+            <Text style={styles.periodoVal}>Essencial Sense AI - IA Preditiva de RH</Text>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={styles.periodoText}>Plano</Text>
@@ -276,13 +276,13 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         </View>
 
         {/* Conformidade NR-1 */}
-        <Text style={styles.sectionTitle}>Conformidade NR-1 — Riscos Psicossociais (MTE 2025)</Text>
+        <Text style={styles.sectionTitle}>Conformidade NR-1 - Riscos Psicossociais (MTE 2025)</Text>
 
         <View style={temAlertas && alertasCriticos > 0 ? styles.nr1BoxAlert : styles.nr1Box}>
           <Text style={temAlertas && alertasCriticos > 0 ? styles.nr1TitleAlert : styles.nr1Title}>
             {temAlertas && alertasCriticos > 0
-              ? `⚠ Atenção — ${alertasCriticos} risco(s) crítico(s) identificado(s)`
-              : '✓ Empresa monitorando riscos psicossociais — NR-1 Atualizada (vigência maio/2025)'}
+              ? `⚠ Atenção - ${alertasCriticos} risco(s) crítico(s) identificado(s)`
+              : '✓ Empresa monitorando riscos psicossociais - NR-1 Atualizada (vigência maio/2025)'}
           </Text>
           <Text style={styles.nr1Text}>
             A NR-1 (Norma Regulamentadora nº 1 do MTE), atualizada pela Portaria MTE nº 1.419/2024 com vigência a partir de 26/05/2025,
@@ -331,7 +331,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         {/* ISHO */}
         {dados.isho_score != null && (
           <>
-            <Text style={styles.sectionTitle}>ISHO — Índice de Saúde Humana Organizacional</Text>
+            <Text style={styles.sectionTitle}>ISHO - Índice de Saúde Humana Organizacional</Text>
             <View style={[styles.ishoBox, { borderColor: ishoNivelCor + '80' }]}>
               <View style={styles.row}>
                 <View style={{ width: 90, alignItems: 'center', justifyContent: 'center' }}>
@@ -359,7 +359,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         )}
 
         {/* IA Preditiva */}
-        <Text style={styles.sectionTitle}>IA Preditiva — Indicadores de Risco</Text>
+        <Text style={styles.sectionTitle}>IA Preditiva - Indicadores de Risco</Text>
         <View style={styles.row}>
           {[
             { title: 'Score de Risco de Saída', val: dados.score_saida ?? '—', label: 'Média da empresa (0–100)' },
@@ -378,7 +378,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         {/* Diagnóstico IA */}
         {dados.diagnostico_ia && (
           <>
-            <Text style={styles.sectionTitle}>Diagnóstico — Gemini AI</Text>
+            <Text style={styles.sectionTitle}>Diagnóstico - Gemini AI</Text>
             <View style={styles.iaBox}>
               <Text style={styles.iaTitle}>🤖 Análise gerada por Inteligência Artificial</Text>
               <Text style={styles.iaText}>{dados.diagnostico_ia}</Text>
@@ -387,7 +387,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         )}
 
         {/* Recomendações */}
-        <Text style={styles.sectionTitle}>Plano de Ação — Recomendações da IA</Text>
+        <Text style={styles.sectionTitle}>Plano de Ação - Recomendações da IA</Text>
         {recomendacoes.slice(0, 5).map((r, i) => (
           <View key={i} style={styles.recBox}>
             <Text style={styles.recNum}>{i + 1}.</Text>
@@ -398,7 +398,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         {/* Alertas NR-1 */}
         {alertas.length > 0 && (
           <>
-            <Text style={styles.sectionTitle}>Alertas NR-1 Ativos — Ação Obrigatória</Text>
+            <Text style={styles.sectionTitle}>Alertas NR-1 Ativos - Ação Obrigatória</Text>
             {alertas.slice(0, 8).map((a, i) => {
               const cor = a.severidade === 'critico' ? '#dc2626' : a.severidade === 'moderado' ? '#ca8a04' : '#16a34a'
               return (
@@ -414,7 +414,7 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         {/* Tabela colaboradores */}
         {colabs.length > 0 && (
           <>
-            <Text style={styles.sectionTitle}>Ranking de Risco — Colaboradores</Text>
+            <Text style={styles.sectionTitle}>Ranking de Risco - Colaboradores</Text>
             <View style={styles.table}>
               <View style={styles.tableHeader}>
                 <Text style={[styles.tableHeaderCell, { flex: 2 }]}>Colaborador</Text>
@@ -442,18 +442,18 @@ function RelatorioDoc({ dados, dataGeracao }: { dados: RelatorioDados; dataGerac
         {/* Declaração de conformidade */}
         <View style={{ marginTop: 16, backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, padding: '10 12' }}>
           <Text style={{ fontSize: 8, color: '#64748b', lineHeight: 1.6 }}>
-            DECLARAÇÃO DE CONFORMIDADE: Este relatório foi gerado automaticamente pelo sistema Essencial Sense AI com base nos dados
+            DECLARAÇÃO DE CONFORMIDADE: Este relatório foi gerado automáticamente pelo sistema Essencial Sense AI com base nos dados
             coletados no período indicado. As informações aqui contidas documentam as ações de identificação e monitoramento de riscos
             psicossociais realizadas pela empresa em cumprimento à NR-1 (Portaria MTE nº 1.419/2024, vigência 26/05/2025).
             Este documento pode ser apresentado em inspeções do Ministério do Trabalho e Emprego (MTE) como evidência de
-            conformidade com as obrigações de gerenciamento de riscos ocupacionais. Essencial Sense AI — essencialestudo.com.br
+            conformidade com as obrigações de gerenciamento de riscos ocupacionais. Essencial Sense AI - essencialestudo.com.br
           </Text>
         </View>
 
         {/* Footer */}
         <View style={styles.footer} fixed>
-          <Text style={styles.footerText}>Essencial Sense AI — rhessencialdigital.com.br · Confidencial</Text>
-          <Text style={styles.footerText}>Relatório gerado automaticamente em {dataGeracao} · NR-1 Portaria MTE 1.419/2024</Text>
+          <Text style={styles.footerText}>Essencial Sense AI - rhessencialdigital.com.br · Confidencial</Text>
+          <Text style={styles.footerText}>Relatório gerado automáticamente em {dataGeracao} · NR-1 Portaria MTE 1.419/2024</Text>
         </View>
 
       </Page>

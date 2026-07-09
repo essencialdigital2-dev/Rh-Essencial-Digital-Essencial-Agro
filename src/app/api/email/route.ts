@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 const FROM = 'Essencial Sense AI <noreply@rhessencialdigital.com.br>';
@@ -71,28 +71,28 @@ export async function POST(req: NextRequest) {
         </div>
         <div class="card">
           <h3>O que você pode fazer agora</h3>
-          <p>• <strong>Sense Health</strong> — Check-in emocional diário<br>
-             • <strong>Sense DISC</strong> — Mapeamento de perfil comportamental<br>
-             • <strong>Sense Neuro</strong> — Diagnóstico de saúde mental<br>
-             • <strong>Sense NR-1</strong> — Conformidade com riscos psicossociais<br>
-             • <strong>Sense Feedback 360°</strong> — Avaliação de competências<br>
-             • <strong>Sense Inspire™</strong> — Mensagens que fortalecem pessoas</p>
+          <p>• <strong>Sense Health</strong> - Check-in emocional diário<br>
+             • <strong>Sense DISC</strong> - Mapeamento de perfil comportamental<br>
+             • <strong>Sense Neuro</strong> - Diagnóstico de saúde mental<br>
+             • <strong>Sense NR-1</strong> - Conformidade com riscos psicossociais<br>
+             • <strong>Sense Feedback 360°</strong> - Avaliação de competências<br>
+             • <strong>Sense Inspire™</strong> - Mensagens que fortalecem pessoas</p>
         </div>
       `);
 
     } else if (tipo === 'disc') {
       const perfil = dados?.perfil || '—';
       const desc: Record<string, string> = {
-        D: 'Dominância — Direto, decisivo, orientado a resultados e desafios.',
-        I: 'Influência — Comunicativo, entusiasta, otimista e persuasivo.',
-        S: 'Estabilidade — Paciente, confiável, colaborativo e consistente.',
-        C: 'Conformidade — Analítico, preciso, sistemático e criterioso.',
+        D: 'Dominância - Direto, decisivo, orientado a resultados e desafios.',
+        I: 'Influência - Comunicativo, entusiasta, otimista e persuasivo.',
+        S: 'Estabilidade - Paciente, confiável, colaborativo e consistente.',
+        C: 'Conformidade - Analítico, preciso, sistemático e criterioso.',
       };
-      subject = `Seu perfil DISC: ${perfil} — ${nome || ''}`;
+      subject = `Seu perfil DISC: ${perfil} - ${nome || ''}`;
       html = htmlBase('Resultado do Sense DISC', `
         <div class="card">
           <h3>Perfil predominante</h3>
-          <p><span class="badge badge-${perfil}">${perfil} — ${perfil === 'D' ? 'Dominância' : perfil === 'I' ? 'Influência' : perfil === 'S' ? 'Estabilidade' : 'Conformidade'}</span></p>
+          <p><span class="badge badge-${perfil}">${perfil} - ${perfil === 'D' ? 'Dominância' : perfil === 'I' ? 'Influência' : perfil === 'S' ? 'Estabilidade' : 'Conformidade'}</span></p>
           <p style="margin-top:12px">${desc[perfil] || ''}</p>
         </div>
         <div class="card">
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
     } else if (tipo === 'nr1_alerta') {
       const severidade = dados?.severidade || 'medio';
       const badgeClass = severidade === 'critico' || severidade === 'alto' ? 'badge-alerta' : 'badge-ok';
-      subject = `⚠️ Alerta NR-1 — ${dados?.titulo || 'Risco psicossocial identificado'}`;
+      subject = `⚠️ Alerta NR-1 - ${dados?.titulo || 'Risco psicossocial identificado'}`;
       html = htmlBase('Alerta de Risco Psicossocial NR-1', `
         <div class="card">
           <h3>Alerta identificado</h3>
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
       `);
 
     } else if (tipo === 'checkin_resumo') {
-      subject = `Resumo do check-in — ${nome || 'Colaborador'}`;
+      subject = `Resumo do check-in - ${nome || 'Colaborador'}`;
       html = htmlBase('Resumo do Check-in Emocional', `
         <div class="card">
           <h3>Estado registrado</h3>
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
       `);
 
     } else if (tipo === 'relatorio_neuro') {
-      subject = `Relatório Sense Neuro — ${nome || 'Colaborador'}`;
+      subject = `Relatório Sense Neuro - ${nome || 'Colaborador'}`;
       html = htmlBase('Relatório Sense Neuro™', `
         <div class="card">
           <h3>Diagnóstico concluído</h3>

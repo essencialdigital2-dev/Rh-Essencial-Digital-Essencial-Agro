@@ -1,4 +1,4 @@
-import { ImageResponse } from '@vercel/og'
+﻿import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
@@ -9,10 +9,10 @@ export async function GET(req: NextRequest) {
   const title = isSense ? 'Essencial Sense AI' : 'RH Essencial Digital'
   const subtitle = isSense
     ? 'Psicologia + IA Preditiva para RH'
-    : 'Gestao de Pessoas e IA Preditiva'
+    : 'gestão de Pessoas e IA Preditiva'
   const tags = isSense
     ? ['DISC', 'Check-in', 'NR-1', 'Analytics', 'IA Preditiva']
-    : ['Gestao', 'Diagnostico', 'Analytics', 'IA']
+    : ['gestão', 'Diagnostico', 'Analytics', 'IA']
 
   // Neurônios: posicoes fixas ao redor do cerebro (compativel com satori)
   const neuronios = [

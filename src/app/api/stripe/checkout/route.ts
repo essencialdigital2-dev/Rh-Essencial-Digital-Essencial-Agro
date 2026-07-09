@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let stripe: any;
 
-// Planos Sense AI — IDs de preço serão criados no Stripe Dashboard
+// Planos Sense AI - IDs de preço serão criados no Stripe Dashboard
 // Substitua pelos Price IDs reais após criar os produtos no Stripe
 const PLANOS: Record<string, { priceId: string; nome: string }> = {
   starter:    { priceId: process.env.STRIPE_PRICE_STARTER    || 'price_starter',    nome: 'Sense Starter'    },

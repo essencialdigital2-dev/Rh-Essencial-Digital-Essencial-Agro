@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit } from '@/lib/rate-limit'
 
 const SYSTEM_PROMPT = `Você é a Sense AI, especialista em:
 - Gestão de Pessoas e RH estratégico
@@ -8,11 +9,15 @@ const SYSTEM_PROMPT = `Você é a Sense AI, especialista em:
 - DISC, feedback, liderança e desenvolvimento humano
 
 Responda sempre em português brasileiro, de forma clara, empática e prática.
-Seja objetivo — respostas entre 100 e 300 palavras.
+Seja objetivo - respostas entre 100 e 300 palavras.
 Use bullet points quando listar itens.
-Não invente dados ou estatísticas — quando incerto, diga "recomendo verificar com um especialista".`
+Não invente dados ou estatísticas - quando incerto, diga "recomendo verificar com um especialista".`
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  const { ok } = rateLimit(ip, 20, 60_000)
+  if (!ok) return NextResponse.json({ error: 'Muitas requisições. Aguarde 1 minuto.' }, { status: 429 })
+
   try {
     const { message, history } = await req.json()
     const key = process.env.GEMINI_API_KEY

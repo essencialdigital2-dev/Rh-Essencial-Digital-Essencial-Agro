@@ -1,10 +1,10 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  'https://uysmvziehlpugmgssibs.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5c212emllaGxwdWdtZ3NzaWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzU5MDUsImV4cCI6MjA5NTY1MTkwNX0.iuhDiTQCoIZSfSccURAITwnuejEmWABG8KW7RtGH9-8'
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
 function BrainSVG({ size = 180 }: { size?: number }) {
@@ -47,15 +47,10 @@ function BrainSVG({ size = 180 }: { size?: number }) {
 }
 
 export default function SenseLogin() {
-  const [aba, setAba] = useState<'login' | 'cadastro'>('login')
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState<{ texto: string; tipo: 'erro' | 'ok' } | null>(null)
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [empresa, setEmpresa] = useState('')
-  const [nome, setNome] = useState('')
-  const [emailC, setEmailC] = useState('')
-  const [senhaC, setSenhaC] = useState('')
 
   async function entrar() {
     if (!email || !senha) { setMsg({ texto: 'Preencha e-mail e senha.', tipo: 'erro' }); return }
@@ -65,26 +60,6 @@ export default function SenseLogin() {
     if (error) { setMsg({ texto: 'E-mail ou senha incorretos.', tipo: 'erro' }); return }
     const perfil = data.user?.user_metadata?.perfil
     window.location.href = perfil === 'colaborador' ? '/sense-colab' : '/sense-app'
-  }
-
-  async function cadastrar() {
-    if (!empresa || !nome || !emailC || !senhaC) { setMsg({ texto: 'Preencha todos os campos.', tipo: 'erro' }); return }
-    if (senhaC.length < 8) { setMsg({ texto: 'Senha minimo 8 caracteres.', tipo: 'erro' }); return }
-    setLoading(true); setMsg(null)
-    const { data, error } = await supabase.auth.signUp({
-      email: emailC, password: senhaC,
-      options: { data: { nome, empresa, perfil: 'gestor' } }
-    })
-    if (error) { setLoading(false); setMsg({ texto: error.message, tipo: 'erro' }); return }
-    if (data.user) {
-      await supabase.rpc('registrar_empresa', {
-        p_user_id: data.user.id, p_nome_empresa: empresa, p_cnpj: '',
-        p_plano: 'starter', p_nome_usuario: nome, p_email: emailC
-      })
-    }
-    setLoading(false)
-    setMsg({ texto: 'Conta criada! Entrando...', tipo: 'ok' })
-    setTimeout(() => { window.location.href = '/sense-app' }, 1500)
   }
 
   const inp: React.CSSProperties = {
@@ -103,9 +78,10 @@ export default function SenseLogin() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#08080f', display: 'flex', fontFamily: 'system-ui,sans-serif', overflow: 'hidden' }}>
+      <style>{`@media(max-width:768px){.sense-left{display:none!important}.sense-right{max-width:100%!important;width:100%!important}}`}</style>
 
-      {/* LADO ESQUERDO — cerebro */}
-      <div style={{
+      {/* LADO ESQUERDO - cerebro */}
+      <div className="sense-left" style={{
         flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
         justifyContent: 'center', position: 'relative', overflow: 'hidden',
         background: 'linear-gradient(135deg, #0d0d1a 0%, #1a0533 60%, #0a0a18 100%)',
@@ -150,7 +126,7 @@ export default function SenseLogin() {
             <span style={{ color: '#A78BFA' }}>Platform</span>
           </h1>
           <p style={{ fontSize: 14, color: 'rgba(248,248,255,0.5)', lineHeight: 1.7, margin: '0 0 32px' }}>
-            Psicologia Organizacional + IA Preditiva.<br />Do sinal humano a decisao estrategica.
+            Psicologia Organizacional + IA Preditiva.<br />Do sinal humano a decisão estratégica.
           </p>
 
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -165,24 +141,16 @@ export default function SenseLogin() {
         </div>
       </div>
 
-      {/* LADO DIREITO — formulario */}
-      <div style={{ width: '100%', maxWidth: 460, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 40px', background: '#0d0d1a', borderLeft: '1px solid rgba(139,92,246,0.15)' }}>
+      {/* LADO DIREITO - formulario */}
+      <div className="sense-right" style={{ width: '100%', maxWidth: 460, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 40px', background: '#0d0d1a', borderLeft: '1px solid rgba(139,92,246,0.15)' }}>
         <div style={{ width: '100%' }}>
           <div style={{ marginBottom: 32 }}>
             <h2 style={{ color: '#F8F8FF', fontSize: 22, fontWeight: 800, margin: '0 0 6px' }}>
-              {aba === 'login' ? 'Bem-vinda de volta' : 'Criar sua conta'}
+              Bem-vinda de volta
             </h2>
             <p style={{ color: 'rgba(248,248,255,0.4)', fontSize: 13, margin: 0 }}>
-              {aba === 'login' ? 'Acesse o painel Sense AI' : 'Comece gratuitamente hoje'}
+              Acesse o painel Sense AI
             </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: 4, background: 'rgba(139,92,246,.08)', borderRadius: 10, padding: 4, marginBottom: 28 }}>
-            {(['login', 'cadastro'] as const).map(t => (
-              <button key={t} onClick={() => { setAba(t); setMsg(null) }} style={{ flex: 1, padding: '9px', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, fontFamily: 'inherit', background: aba === t ? '#8b5cf6' : 'none', color: aba === t ? '#fff' : 'rgba(248,248,255,.45)', transition: 'all .2s' }}>
-                {t === 'login' ? 'Entrar' : 'Criar conta'}
-              </button>
-            ))}
           </div>
 
           {msg && (
@@ -191,52 +159,34 @@ export default function SenseLogin() {
             </div>
           )}
 
-          {aba === 'login' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>E-mail</label>
-                <input style={inp} type="email" placeholder="voce@empresa.com" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Senha</label>
-                <input style={inp} type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
-              </div>
-              <button style={btnStyle} onClick={entrar} disabled={loading}>
-                {loading ? 'Entrando...' : 'Entrar na plataforma →'}
-              </button>
-              <p style={{ textAlign: 'center', margin: 0 }}>
-                <button onClick={async () => {
-                  if (!email) { setMsg({ texto: 'Digite seu e-mail acima primeiro.', tipo: 'erro' }); return }
-                  await supabase.auth.resetPasswordForEmail(email, { redirectTo: 'https://rhessencialdigital.com.br/sense-login' })
-                  setMsg({ texto: 'E-mail de redefinicao enviado! Verifique sua caixa de entrada.', tipo: 'ok' })
-                }} style={{ background: 'none', border: 'none', color: 'rgba(139,92,246,.7)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
-                  Esqueci minha senha
-                </button>
-              </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>E-mail</label>
+              <input style={inp} type="email" placeholder="voce@empresa.com" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
             </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Nome da empresa</label>
-                <input style={inp} type="text" placeholder="Ex: Essencial Digital" value={empresa} onChange={e => setEmpresa(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Seu nome</label>
-                <input style={inp} type="text" placeholder="Nome do responsavel" value={nome} onChange={e => setNome(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>E-mail corporativo</label>
-                <input style={inp} type="email" placeholder="voce@empresa.com" value={emailC} onChange={e => setEmailC(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Senha (min. 8 caracteres)</label>
-                <input style={inp} type="password" placeholder="••••••••" value={senhaC} onChange={e => setSenhaC(e.target.value)} />
-              </div>
-              <button style={btnStyle} onClick={cadastrar} disabled={loading}>
-                {loading ? 'Criando conta...' : 'Comecar gratuitamente →'}
-              </button>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Senha</label>
+              <input style={inp} type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
             </div>
-          )}
+            <button style={btnStyle} onClick={entrar} disabled={loading}>
+              {loading ? 'Entrando...' : 'Entrar na plataforma →'}
+            </button>
+            <button onClick={async () => {
+                if (!email) { setMsg({ texto: 'Digite seu e-mail acima primeiro.', tipo: 'erro' }); return }
+                setLoading(true)
+                const res = await fetch('/api/magic-link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) })
+                const json = await res.json()
+                setLoading(false)
+                if (!res.ok) { setMsg({ texto: json.erro || 'Erro ao enviar link.', tipo: 'erro' }); return }
+                setMsg({ texto: '✅ Link enviado! Verifique seu e-mail e clique para entrar.', tipo: 'ok' })
+              }} style={{ background: 'none', border: '1px solid rgba(139,92,246,.3)', color: '#A78BFA', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', padding: '8px 16px', borderRadius: 8, width: '100%' }}>
+                ✨ Esqueci minha senha / Entrar sem senha
+              </button>
+              <a href="https://wa.me/5561985272681?text=Ol%C3%A1%2C%20quero%20uma%20demonstra%C3%A7%C3%A3o%20do%20Essencial%20Sense%20AI" target="_blank" rel="noopener noreferrer"
+                style={{ display: 'block', textAlign: 'center', background: 'none', border: '1px solid rgba(16,185,129,.3)', color: '#34D399', fontSize: 12, fontFamily: 'inherit', padding: '8px 16px', borderRadius: 8, width: '100%', textDecoration: 'none', boxSizing: 'border-box' }}>
+                📅 Quero uma demonstração
+              </a>
+          </div>
 
           <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(139,92,246,0.1)' }}>
             <a href="/sense-apresentacao" style={{ fontSize: 12, color: 'rgba(139,92,246,0.6)', textDecoration: 'none' }}>

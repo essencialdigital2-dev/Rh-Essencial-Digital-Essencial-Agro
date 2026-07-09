@@ -1,10 +1,13 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import './globals.css'
 import Monitor from '@/components/monitor'
+import SpotifyPlayer from '@/components/spotify-player'
+import SecurityBadge from '@/components/security-badge'
+import AcessibilidadeSurdos from '@/components/AcessibilidadeSurdos'
 
 export const metadata: Metadata = {
   title: 'Essencial Sense AI',
-  description: 'Saúde emocional, burnout, DISC comportamental e conformidade NR-1 com Inteligência Artificial. Por Alana Carvalho — Gestão de Pessoas e Psicologia Organizacional.',
+  description: 'Saúde emocional, burnout, DISC comportamental e conformidade NR-1 com Inteligência Artificial. Por Alana Carvalho - Gestão de Pessoas e Psicologia Organizacional.',
   metadataBase: new URL('https://rh-essencial-digital-essencial-agro.vercel.app'),
   manifest: '/manifest.json',
   themeColor: '#10B981',
@@ -14,7 +17,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_BR',
     siteName: 'Essencial Sense AI',
-    title: 'Essencial Sense AI — Saúde Organizacional com IA',
+    title: 'Essencial Sense AI - Saúde Organizacional com IA',
     description: 'Saúde emocional, burnout, DISC e conformidade NR-1 com IA. Por Alana Carvalho.',
     images: [{ url: '/api/og', width: 1200, height: 630, alt: 'Essencial Sense AI' }],
   },
@@ -32,6 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Monitor />
+        <SpotifyPlayer />
+        <SecurityBadge />
+        <AcessibilidadeSurdos />
       </body>
     </html>
   )

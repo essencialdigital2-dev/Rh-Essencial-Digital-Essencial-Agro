@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essencial Digital — Ecossistema Educacional e Organizacional</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#8B5CF6;
+  --purple-light:#A78BFA;
+  --purple-dim:rgba(139,92,246,0.12);
+  --cyan:#06B6D4;
+  --green:#10B981;
+  --amber:#F59E0B;
+  --red:#EF4444;
+  --text:#F8F8FF;
+  --muted:rgba(248,248,255,0.5);
+  --border:rgba(255,255,255,0.08);
+  --bg:#06060F;
+  --bg2:#0A0A14;
+  --card:rgba(255,255,255,0.03);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(139,92,246,0.15);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.nav-logo-text span{color:var(--purple)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;border:none;padding:10px 24px;border-radius:99px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity .2s;white-space:nowrap}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{padding:140px 5% 80px;text-align:center;max-width:960px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--purple-dim);color:var(--purple-light);font-size:12px;font-weight:700;padding:6px 18px;border-radius:99px;margin-bottom:32px;letter-spacing:.06em;text-transform:uppercase}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(36px,5.5vw,68px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px}
+h1 em{color:var(--purple);font-style:normal}
+h1 strong{background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--muted);line-height:1.7;max-width:640px;margin:0 auto 48px}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;border:none;padding:16px 36px;border-radius:99px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-primary:hover{opacity:.85;transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,.35)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid rgba(139,92,246,0.4);padding:16px 36px;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple)}
+
+/* URGÊNCIA NR-1 */
+.nr1-banner{margin:0 5% 0;max-width:1100px;margin-left:auto;margin-right:auto;padding:0 5%}
+.nr1-card{background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(245,158,11,0.06));border:1px solid rgba(239,68,68,0.3);border-radius:20px;padding:36px 40px;display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.nr1-icon{font-size:48px;flex-shrink:0}
+.nr1-body{flex:1;min-width:260px}
+.nr1-tag{font-size:11px;font-weight:800;color:#FCA5A5;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.nr1-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:12px;line-height:1.3}
+.nr1-title span{color:#FCA5A5}
+.nr1-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.nr1-items{display:flex;flex-wrap:wrap;gap:10px}
+.nr1-chip{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:600;color:#FCA5A5}
+
+/* DORES */
+.dores{padding:80px 5%;max-width:1100px;margin:0 auto}
+.section-tag{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.tag-purple{color:var(--purple-light)}
+.tag-cyan{color:var(--cyan)}
+.tag-green{color:var(--green)}
+.section-title{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:10px}
+.section-sub{font-size:16px;color:var(--muted);margin-bottom:48px;line-height:1.6}
+.dores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.dor-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .25s}
+.dor-card:hover{border-color:rgba(139,92,246,0.3)}
+.dor-icon{font-size:28px;margin-bottom:14px}
+.dor-title{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.dor-text{font-size:13px;color:var(--muted);line-height:1.65}
+.dor-solucao{margin-top:14px;padding:10px 14px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;font-size:12px;color:#6EE7B7;line-height:1.5}
+.dor-solucao strong{display:block;font-weight:700;margin-bottom:3px;color:#34D399}
+
+/* PRODUTOS */
+.produtos{padding:80px 5%;max-width:1100px;margin:0 auto}
+.produto-card{border-radius:24px;padding:48px;margin-bottom:28px;position:relative;overflow:hidden;display:flex;gap:48px;align-items:center;flex-wrap:wrap}
+.produto-card.teens{background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(16,185,129,0.05));border:1px solid rgba(6,182,212,0.25)}
+.produto-card.estudo{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(236,72,153,0.05));border:1px solid rgba(139,92,246,0.25)}
+.produto-card.sense{background:linear-gradient(135deg,rgba(245,158,11,0.06),rgba(139,92,246,0.08));border:1px solid rgba(245,158,11,0.2)}
+.produto-content{flex:1;min-width:260px}
+.produto-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:16px}
+.badge-cyan{background:rgba(6,182,212,0.12);color:var(--cyan)}
+.badge-purple{background:rgba(139,92,246,0.12);color:var(--purple-light)}
+.badge-amber{background:rgba(245,158,11,0.1);color:#FDE68A}
+.produto-titulo{font-size:28px;font-weight:900;margin-bottom:8px;letter-spacing:-0.5px}
+.produto-sub{font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.produto-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5}
+.feat-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px}
+.dot-cyan{background:rgba(6,182,212,0.15);color:var(--cyan)}
+.dot-purple{background:rgba(139,92,246,0.15);color:var(--purple-light)}
+.dot-amber{background:rgba(245,158,11,0.12);color:#FDE68A}
+.produto-visual{flex-shrink:0;width:220px;text-align:center}
+.produto-emoji{font-size:80px;display:block;margin-bottom:12px;filter:drop-shadow(0 0 24px rgba(139,92,246,.4))}
+.produto-tag-publico{font-size:12px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:8px 16px;display:inline-block}
+
+/* DIFERENCIAIS */
+.diffs{background:rgba(139,92,246,0.03);border-top:1px solid rgba(139,92,246,0.1);border-bottom:1px solid rgba(139,92,246,0.1);padding:80px 5%}
+.diffs-inner{max-width:1100px;margin:0 auto}
+.diffs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:48px}
+.diff-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+.diff-num{font-size:40px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px;margin-bottom:8px}
+.diff-label{font-size:15px;font-weight:700;margin-bottom:6px}
+.diff-text{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ALANA */
+.alana-section{padding:80px 5%;max-width:900px;margin:0 auto;text-align:center}
+.alana-quote{background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(6,182,212,0.04));border:1px solid rgba(139,92,246,0.2);border-radius:24px;padding:48px 40px;position:relative}
+.alana-quote::before{content:'"';position:absolute;top:20px;left:32px;font-size:80px;color:rgba(139,92,246,0.15);line-height:1;font-family:Georgia,serif}
+.alana-quote-text{font-size:clamp(16px,2vw,20px);color:var(--text);line-height:1.75;font-weight:300;margin-bottom:32px;position:relative;z-index:1}
+.alana-quote-text strong{color:var(--purple-light);font-weight:700}
+.alana-assinatura{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.alana-ac{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;font-family:Georgia,serif;letter-spacing:-1px;flex-shrink:0}
+.alana-info{text-align:left}
+.alana-nome{font-size:15px;font-weight:700;color:var(--text)}
+.alana-cargo{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+
+/* CTA FINAL */
+.cta-final{padding:100px 5%;text-align:center;max-width:760px;margin:0 auto}
+.cta-final h2{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;line-height:1.15}
+.cta-final p{font-size:16px;color:var(--muted);margin-bottom:40px;line-height:1.7}
+.cta-sub{font-size:13px;color:rgba(248,248,255,0.3);margin-top:16px}
+
+/* FOOTER */
+footer{background:rgba(8,8,15,0.8);border-top:1px solid var(--border);padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-logo{font-size:14px;font-weight:800;color:var(--text)}
+.foot-logo span{color:var(--purple-light)}
+.foot-links{display:flex;gap:24px;list-style:none}
+.foot-links a{font-size:12px;color:var(--muted);text-decoration:none}
+.foot-text{font-size:12px;color:rgba(248,248,255,0.3)}
+
+@media(max-width:700px){
+  .nav-links{display:none}
+  .produto-card{padding:28px;flex-direction:column;gap:24px}
+  .produto-visual{width:100%}
+  .nr1-card{padding:24px}
+  footer{flex-direction:column;text-align:center}
+  .foot-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-text">essencial<span>digital</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#nr1">NR-1</a></li>
+    <li><a href="#solucoes">Soluções</a></li>
+    <li><a href="#produtos">Produtos</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20gostaria%20de%20solicitar%20uma%20demonstra%C3%A7%C3%A3o%20gratuita%20do%20Ecossistema%20Essencial%20Digital." target="_blank" class="nav-cta">Demonstração gratuita</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="pulse"></span>Ecossistema Educacional e Organizacional</div>
+  <h1>Três soluções.<br><em>Uma missão:</em><br><strong>desenvolver pessoas.</strong></h1>
+  <p class="hero-sub">Do estudante ao colaborador, do gestor ao líder — o Ecossistema Essencial Digital une tecnologia, neurociência e psicologia para transformar instituições.</p>
+  <div class="hero-ctas">
+    <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20gostaria%20de%20solicitar%20uma%20demonstra%C3%A7%C3%A3o%20gratuita%20do%20Ecossistema%20Essencial%20Digital." target="_blank" class="btn-primary">Solicitar demonstração gratuita</a>
+    <a href="#produtos" class="btn-ghost">Conhecer os produtos</a>
+  </div>
+</section>
+
+<!-- URGÊNCIA NR-1 -->
+<div class="nr1-banner" id="nr1">
+  <div class="nr1-card">
+    <div class="nr1-icon">⚠️</div>
+    <div class="nr1-body">
+      <div class="nr1-tag">Obrigação legal em vigor — NR-1 / 2025</div>
+      <div class="nr1-title">Sua instituição já está em<br><span>conformidade com a NR-1?</span></div>
+      <div class="nr1-desc">Desde maio de 2025, a Norma Regulamentadora 1 obriga todas as empresas e instituições a identificar, avaliar e controlar os <strong style="color:#FCA5A5">riscos psicossociais</strong> no trabalho — incluindo sobrecarga, assédio, burnout e conflitos. O descumprimento gera multas, passivos trabalhistas e danos reputacionais.</div>
+      <div class="nr1-items">
+        <span class="nr1-chip">📋 Inventário psicossocial obrigatório</span>
+        <span class="nr1-chip">📄 Relatório técnico exigido</span>
+        <span class="nr1-chip">⚠️ Multas para quem não cumpre</span>
+        <span class="nr1-chip">🔒 Risco trabalhista elevado</span>
+      </div>
+    </div>
+    <div style="flex-shrink:0;display:flex;flex-direction:column;gap:10px;align-self:center">
+      <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20preciso%20de%20ajuda%20com%20a%20conformidade%20NR-1%20da%20minha%20institui%C3%A7%C3%A3o." target="_blank" class="btn-primary" style="font-size:14px;padding:12px 24px;white-space:nowrap">Verificar conformidade agora</a>
+      <div style="font-size:12px;color:rgba(248,248,255,0.35);text-align:center">Diagnóstico gratuito em 20 min</div>
+    </div>
+  </div>
+</div>
+
+<!-- DORES E SOLUÇÕES -->
+<section class="dores" id="solucoes">
+  <div class="section-tag tag-purple">Entendemos sua realidade</div>
+  <h2 class="section-title">As dores que toda<br>instituição enfrenta</h2>
+  <p class="section-sub">Identificamos os desafios mais críticos — e criamos soluções diretas para cada um deles.</p>
+
+  <div class="dores-grid">
+
+    <div class="dor-card">
+      <div class="dor-icon">😮‍💨</div>
+      <div class="dor-title">Burnout e afastamentos invisíveis</div>
+      <div class="dor-text">Colaboradores e educadores chegam no limite antes que alguém perceba. O estresse silencioso drena equipes inteiras sem aparecer nos relatórios.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Sense AI</strong>Monitoramento emocional diário com alertas preventivos antes do colapso.</div>
+    </div>
+
+    <div class="dor-card">
+      <div class="dor-icon">📉</div>
+      <div class="dor-title">Alunos sem estratégia de estudo</div>
+      <div class="dor-text">Estudantes se esforçam sem método, desperdiçam horas com técnicas ineficazes e chegam ao ENEM, PAS ou concurso sem preparo estratégico real.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Estudo</strong>Plano de estudo personalizado por IA com técnicas validadas pela neurociência.</div>
+    </div>
+
+    <div class="dor-card">
+      <div class="dor-icon">🧠</div>
+      <div class="dor-title">Adolescentes sem direção ou propósito</div>
+      <div class="dor-text">Jovens do ensino fundamental enfrentam pressão, ansiedade e falta de autoconhecimento — sem ferramentas para entender seus pontos fortes.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Teens</strong>Autoconhecimento, inteligência emocional e orientação vocacional para o 7º ao 9º ano.</div>
+    </div>
+
+    <div class="dor-card">
+      <div class="dor-icon">⚖️</div>
+      <div class="dor-title">Risco jurídico com a NR-1</div>
+      <div class="dor-text">A NR-1 exige documentação de riscos psicossociais. Sem um processo estruturado, a instituição fica exposta a autuações e ações trabalhistas.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Sense AI</strong>Inventário automático, GRO e laudo técnico NR-1 gerados pela plataforma.</div>
+    </div>
+
+    <div class="dor-card">
+      <div class="dor-icon">🔄</div>
+      <div class="dor-title">Alta rotatividade de profissionais</div>
+      <div class="dor-text">Perder bons profissionais custa entre 3 a 6 salários em reposição. O problema começa meses antes, em sinais que nunca foram monitorados.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Sense AI</strong>Predição de turnover com 82% de precisão e plano de retenção automático.</div>
+    </div>
+
+    <div class="dor-card">
+      <div class="dor-icon">👤</div>
+      <div class="dor-title">Gestores sem dados para liderar</div>
+      <div class="dor-text">Decisões sobre pessoas são tomadas com base em percepção subjetiva. Falta visibilidade real sobre clima, desempenho e potencial das equipes.</div>
+      <div class="dor-solucao"><strong>✓ Solução: Essencial Sense AI</strong>Dashboard com People Analytics preditivo e mapa completo de cada equipe.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section class="produtos" id="produtos">
+  <div style="text-align:center;margin-bottom:56px">
+    <div class="section-tag tag-cyan" style="text-align:center">Nossos produtos</div>
+    <h2 class="section-title">Um ecossistema completo<br>para cada fase da jornada</h2>
+    <p class="section-sub" style="max-width:560px;margin:0 auto">Cada produto foi criado para uma necessidade específica — juntos, formam o maior ecossistema de desenvolvimento humano do Brasil.</p>
+  </div>
+
+  <!-- ESSENCIAL TEENS -->
+  <div class="produto-card teens">
+    <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(6,182,212,.1),transparent);border-radius:50%;pointer-events:none"></div>
+    <div class="produto-content">
+      <div class="produto-badge badge-cyan">🌱 Para Instituições de Ensino</div>
+      <div class="produto-titulo" style="color:#67E8F9">Essencial Teens</div>
+      <div class="produto-sub">Plataforma de autoconhecimento, inteligência emocional e orientação vocacional para adolescentes do 7º ao 9º ano.</div>
+      <div class="produto-features">
+        <div class="feat"><div class="feat-dot dot-cyan">✓</div><span>Avaliação de perfil comportamental e inteligências múltiplas</span></div>
+        <div class="feat"><div class="feat-dot dot-cyan">✓</div><span>Gestão emocional e controle da ansiedade escolar</span></div>
+        <div class="feat"><div class="feat-dot dot-cyan">✓</div><span>Orientação vocacional com mapeamento de talentos</span></div>
+        <div class="feat"><div class="feat-dot dot-cyan">✓</div><span>Trilhas de desenvolvimento pessoal por perfil</span></div>
+        <div class="feat"><div class="feat-dot dot-cyan">✓</div><span>Relatórios para pais, orientadores e coordenadores</span></div>
+      </div>
+      <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20tenho%20interesse%20no%20Essencial%20Teens%20para%20minha%20institui%C3%A7%C3%A3o." target="_blank" class="btn-primary" style="font-size:14px;padding:12px 28px">Solicitar demonstração gratuita →</a>
+    </div>
+    <div class="produto-visual">
+      <span class="produto-emoji">🌱</span>
+      <div class="produto-tag-publico">7º ao 9º ano · Ensino Fundamental</div>
+    </div>
+  </div>
+
+  <!-- ESSENCIAL ESTUDO -->
+  <div class="produto-card estudo">
+    <div style="position:absolute;top:-40px;left:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.1),transparent);border-radius:50%;pointer-events:none"></div>
+    <div class="produto-content">
+      <div class="produto-badge badge-purple">📚 Para Instituições de Ensino</div>
+      <div class="produto-titulo" style="color:#C4B5FD">Essencial Estudo</div>
+      <div class="produto-sub">Plataforma de estratégia de estudo com IA para ENEM, PAS, vestibulares, concursos militares e TAF.</div>
+      <div class="produto-features">
+        <div class="feat"><div class="feat-dot dot-purple">✓</div><span>Plano de estudo personalizado por perfil e objetivo</span></div>
+        <div class="feat"><div class="feat-dot dot-purple">✓</div><span>Técnicas de memorização e aprendizado acelerado</span></div>
+        <div class="feat"><div class="feat-dot dot-purple">✓</div><span>Gerenciamento do tempo e controle de revisões</span></div>
+        <div class="feat"><div class="feat-dot dot-purple">✓</div><span>Simulados com feedback inteligente e metas adaptativas</span></div>
+        <div class="feat"><div class="feat-dot dot-purple">✓</div><span>Preparação específica para concursos militares e TAF</span></div>
+      </div>
+      <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20tenho%20interesse%20no%20Essencial%20Estudo%20para%20minha%20institui%C3%A7%C3%A3o." target="_blank" class="btn-primary" style="font-size:14px;padding:12px 28px">Solicitar demonstração gratuita →</a>
+    </div>
+    <div class="produto-visual">
+      <span class="produto-emoji">📚</span>
+      <div class="produto-tag-publico">ENEM · PAS · Vestibular · Militar · TAF</div>
+    </div>
+  </div>
+
+  <!-- ESSENCIAL SENSE AI -->
+  <div class="produto-card sense">
+    <div style="position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(245,158,11,.08),transparent);border-radius:50%;pointer-events:none"></div>
+    <div class="produto-content">
+      <div class="produto-badge badge-amber">🧠 Para RH e Gestão de Pessoas</div>
+      <div class="produto-titulo" style="color:#FDE68A">Essencial Sense AI</div>
+      <div class="produto-sub">Ecossistema de inteligência humana que transforma sinais emocionais em decisões estratégicas — com conformidade NR-1 automática.</div>
+      <div class="produto-features">
+        <div class="feat"><div class="feat-dot dot-amber">✓</div><span>Conformidade NR-1 automática com laudo técnico em PDF</span></div>
+        <div class="feat"><div class="feat-dot dot-amber">✓</div><span>Monitoramento emocional diário e alertas de burnout</span></div>
+        <div class="feat"><div class="feat-dot dot-amber">✓</div><span>Avaliação DISC + NexoPerform + Human Twin AI</span></div>
+        <div class="feat"><div class="feat-dot dot-amber">✓</div><span>Predição de turnover com 82% de precisão</span></div>
+        <div class="feat"><div class="feat-dot dot-amber">✓</div><span>28+ módulos integrados de People Analytics preditivo</span></div>
+      </div>
+      <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20tenho%20interesse%20no%20Essencial%20Sense%20AI%20para%20minha%20institui%C3%A7%C3%A3o." target="_blank" class="btn-primary" style="font-size:14px;padding:12px 28px">Solicitar demonstração gratuita →</a>
+    </div>
+    <div class="produto-visual">
+      <span class="produto-emoji" style="filter:drop-shadow(0 0 32px rgba(245,158,11,.4))">🧠</span>
+      <div class="produto-tag-publico">Colaboradores · Gestores · RH · Líderes</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="diffs" id="diferenciais">
+  <div class="diffs-inner">
+    <div class="section-tag tag-purple">Por que o Ecossistema Essencial Digital</div>
+    <h2 class="section-title">Não são ferramentas.<br>É transformação.</h2>
+    <div class="diffs-grid">
+      <div class="diff-card">
+        <div class="diff-num">3</div>
+        <div class="diff-label">Produtos integrados</div>
+        <div class="diff-text">Teens, Estudo e Sense AI — cobrindo toda a jornada humana, da escola à liderança.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">28+</div>
+        <div class="diff-label">Módulos no Sense AI</div>
+        <div class="diff-text">Do check-in emocional ao NexoPerform. Um ecossistema em evolução contínua.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">NR-1</div>
+        <div class="diff-label">Conformidade automática</div>
+        <div class="diff-text">Inventário psicossocial, GRO e laudo técnico gerados sem consultoria externa.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">82%</div>
+        <div class="diff-label">Precisão no turnover</div>
+        <div class="diff-text">Predição de desligamentos antes que aconteçam, com plano de retenção automático.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">LGPD</div>
+        <div class="diff-label">Segurança total</div>
+        <div class="diff-text">Dados tratados com conformidade total à LGPD e criptografia de ponta a ponta.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-num">IA</div>
+        <div class="diff-label">Psicologia + Tecnologia</div>
+        <div class="diff-text">Criado por especialista em Psicologia Organizacional. Não é tecnologia fria — é inteligência humana.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALANA -->
+<section class="alana-section" id="sobre">
+  <div class="alana-quote">
+    <p class="alana-quote-text">
+      Este ecossistema não nasceu de uma empresa de tecnologia.<br>
+      <strong>Nasceu da mesa de estudos dos meus filhos.</strong><br><br>
+      Foi vendo a dificuldade deles que surgiu o app de estratégia de estudo. Foi cuidando de equipes que percebi que os colaboradores também precisavam de escuta, direção e reconhecimento.<br><br>
+      Hoje unimos tudo isso em três ferramentas que <strong>respeitam a singularidade de cada ser humano</strong> — porque acreditamos que quando as pessoas florescem, as instituições transformam.
+    </p>
+    <div class="alana-assinatura">
+      <div class="alana-ac">AC</div>
+      <div class="alana-info">
+        <div class="alana-nome">Alana Carvalho</div>
+        <div class="alana-cargo">Formada em Magistério · Gestora de Pessoas<br>Especialista em Psicologia Organizacional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="contato">
+  <div class="section-tag tag-green" style="display:inline-block;margin-bottom:16px">Pronto para transformar sua instituição?</div>
+  <h2>Solicite uma demonstração <em style="color:var(--purple);font-style:normal">gratuita</em> agora</h2>
+  <p>Em 20 minutos mostramos como o Ecossistema Essencial Digital pode ser implementado na sua instituição — sem burocracia, sem contrato longo, sem custo inicial.</p>
+  <a href="https://wa.me/5561985272681?text=Ol%C3%A1%20Alana%2C%20gostaria%20de%20solicitar%20uma%20demonstra%C3%A7%C3%A3o%20gratuita%20do%20Ecossistema%20Essencial%20Digital%20para%20minha%20institui%C3%A7%C3%A3o." target="_blank" class="btn-primary" style="font-size:16px;padding:18px 48px">Solicitar demonstração gratuita →</a>
+  <div class="cta-sub">WhatsApp direto com Alana Carvalho · (61) 98527-2681</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">essencial<span>digital</span></div>
+  <ul class="foot-links">
+    <li><a href="/sense">Sense AI</a></li>
+    <li><a href="/escolas">Para Escolas</a></li>
+    <li><a href="/sense-empresas">Para Empresas</a></li>
+  </ul>
+  <div class="foot-text">© 2025 Essencial Digital · CNPJ 58.062.495/0001-63 · Alana Carvalho</div>
+</footer>
+
+</body>
+</html>

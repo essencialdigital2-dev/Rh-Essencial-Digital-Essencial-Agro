@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
@@ -8,7 +8,7 @@ const sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5c212emllaGxwdWdtZ3NzaWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzU5MDUsImV4cCI6MjA5NTY1MTkwNX0.iuhDiTQCoIZSfSccURAITwnuejEmWABG8KW7RtGH9-8'
 )
 
-type Tipo = 'bug' | 'sugestao' | 'elogio'
+type Tipo = 'bug' | 'sugestão' | 'elogio'
 
 export default function Monitor() {
   const [aberto, setAberto] = useState(false)
@@ -25,7 +25,7 @@ export default function Monitor() {
       if (errosEnviados.current.has(chave)) return
       errosEnviados.current.add(chave)
       sb.from('crm_contatos').insert([{
-        nome: '[Sense AI] Erro automatico',
+        nome: '[Sense AI] Erro automático',
         origem: 'Feedback',
         produto: 'Sense AI',
         etapa: 'lead',
@@ -61,7 +61,7 @@ export default function Monitor() {
 
   const TIPOS: { key: Tipo; label: string; emoji: string }[] = [
     { key: 'bug', label: 'Problema', emoji: '🐛' },
-    { key: 'sugestao', label: 'Sugestao', emoji: '💡' },
+    { key: 'sugestão', label: 'Sugestão', emoji: '💡' },
     { key: 'elogio', label: 'Elogio', emoji: '⭐' },
   ]
 
@@ -93,7 +93,7 @@ export default function Monitor() {
                   ))}
                 </div>
                 <input value={nome} onChange={e => setNome(e.target.value)} placeholder="Seu nome (opcional)" className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none mb-2" />
-                <textarea value={msg} onChange={e => setMsg(e.target.value)} placeholder={tipo === 'bug' ? 'Descreva o problema...' : tipo === 'sugestao' ? 'Qual melhoria voce sugere?' : 'O que voce gostou?'} rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none resize-none mb-3" />
+                <textarea value={msg} onChange={e => setMsg(e.target.value)} placeholder={tipo === 'bug' ? 'Descreva o problema...' : tipo === 'sugestão' ? 'Qual melhoria voce sugere?' : 'O que voce gostou?'} rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none resize-none mb-3" />
                 <button onClick={enviar} disabled={enviando || !msg.trim()} className="w-full bg-gradient-to-r from-violet-600 to-purple-500 text-white font-bold text-sm py-2.5 rounded-xl disabled:opacity-50 hover:opacity-90 transition-opacity">
                   {enviando ? 'Enviando...' : 'Enviar'}
                 </button>

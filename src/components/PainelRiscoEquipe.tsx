@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -6,25 +6,26 @@ type ScoreRisco = {
   colaborador_id: string
   risco_burnout: number
   risco_saida: number
-  nivel: 'saudavel' | 'atencao' | 'critico'
+  nivel: 'saudavel' | 'atenção' | 'critico'
   recomendacao: string
+  comportamento_sob_pressao?: string | null
   calculado_em: string
   profiles: { nome: string; cargo: string; setor: string } | null
 }
 
 const NIVEL_COR = {
   saudavel: { bg: 'bg-green-50', border: 'border-green-200', badge: 'bg-green-100 text-green-700', dot: 'bg-green-500' },
-  atencao:  { bg: 'bg-amber-50',  border: 'border-amber-200',  badge: 'bg-amber-100 text-amber-700',  dot: 'bg-amber-500' },
+  atenção:  { bg: 'bg-amber-50',  border: 'border-amber-200',  badge: 'bg-amber-100 text-amber-700',  dot: 'bg-amber-500' },
   critico:  { bg: 'bg-red-50',    border: 'border-red-200',    badge: 'bg-red-100 text-red-700',    dot: 'bg-red-500' },
 }
 
-const NIVEL_LABEL = { saudavel: 'Saudável', atencao: 'Atenção', critico: 'Crítico' }
+const NIVEL_LABEL = { saudavel: 'Saudável', atenção: 'Atenção', critico: 'Crítico' }
 
 export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) {
   const [scores, setScores] = useState<ScoreRisco[]>([])
   const [carregando, setCarregando] = useState(true)
   const [calculando, setCalculando] = useState(false)
-  const [filtro, setFiltro] = useState<'todos' | 'atencao' | 'critico'>('todos')
+  const [filtro, setFiltro] = useState<'todos' | 'atenção' | 'critico'>('todos')
   const [expandido, setExpandido] = useState<string | null>(null)
 
   useEffect(() => { if (empresaId) carregar() }, [empresaId])
@@ -55,7 +56,7 @@ export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) 
   )
 
   const criticos = scores.filter(s => s.nivel === 'critico').length
-  const atencao  = scores.filter(s => s.nivel === 'atencao').length
+  const atenção  = scores.filter(s => s.nivel === 'atenção').length
   const saudaveis = scores.filter(s => s.nivel === 'saudavel').length
 
   if (carregando) return (
@@ -83,7 +84,7 @@ export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) 
       <div className="grid grid-cols-3 gap-3">
         {[
           { label: 'Saudáveis', valor: saudaveis, cor: 'text-green-600', bg: 'bg-green-50' },
-          { label: 'Atenção',   valor: atencao,   cor: 'text-amber-600', bg: 'bg-amber-50' },
+          { label: 'Atenção',   valor: atenção,   cor: 'text-amber-600', bg: 'bg-amber-50' },
           { label: 'Críticos',  valor: criticos,  cor: 'text-red-600',   bg: 'bg-red-50' },
         ].map((m, i) => (
           <div key={i} className={`${m.bg} rounded-xl p-3 text-center`}>
@@ -95,7 +96,7 @@ export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) 
 
       {/* Filtro */}
       <div className="flex gap-2">
-        {(['todos', 'critico', 'atencao'] as const).map(f => (
+        {(['todos', 'critico', 'atenção'] as const).map(f => (
           <button key={f} onClick={() => setFiltro(f)}
             className={`text-xs font-bold px-3 py-1.5 rounded-lg transition ${filtro === f ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
             {f === 'todos' ? 'Todos' : f === 'critico' ? '🔴 Críticos' : '🟡 Atenção'}
@@ -107,7 +108,7 @@ export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) 
       {filtrados.length === 0 ? (
         <div className="text-center py-8 text-gray-400">
           {scores.length === 0
-            ? 'Nenhum score calculado ainda. Os scores são gerados automaticamente toda segunda-feira.'
+            ? 'Nenhum score calculado ainda. Os scores são gerados automáticamente toda segunda-feira.'
             : 'Nenhum colaborador neste filtro.'}
         </div>
       ) : (
@@ -158,13 +159,21 @@ export default function PainelRiscoEquipe({ empresaId }: { empresaId: string }) 
                   </div>
                 </button>
 
-                {/* Recomendação expandida */}
-                {aberto && s.recomendacao && (
-                  <div className="px-3 pb-3 pt-0">
-                    <div className="bg-white rounded-lg p-3 border border-gray-100">
-                      <div className="text-xs font-bold text-purple-600 mb-1">💡 Recomendação da IA para esta semana</div>
-                      <div className="text-sm text-gray-700 leading-relaxed">{s.recomendacao}</div>
-                    </div>
+                {/* Recomendação e comportamento sob pressão expandidos */}
+                {aberto && (s.recomendacao || s.comportamento_sob_pressao) && (
+                  <div className="px-3 pb-3 pt-0 space-y-2">
+                    {s.recomendacao && (
+                      <div className="bg-white rounded-lg p-3 border border-gray-100">
+                        <div className="text-xs font-bold text-purple-600 mb-1">💡 Recomendação da IA para esta semana</div>
+                        <div className="text-sm text-gray-700 leading-relaxed">{s.recomendacao}</div>
+                      </div>
+                    )}
+                    {s.comportamento_sob_pressao && (
+                      <div className="bg-white rounded-lg p-3 border border-gray-100">
+                        <div className="text-xs font-bold text-indigo-600 mb-1">🎯 Como age e decide sob pressão</div>
+                        <div className="text-sm text-gray-700 leading-relaxed">{s.comportamento_sob_pressao}</div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 
@@ -38,7 +38,7 @@ export default function SolicitarDemoPage() {
         <div style={{ background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 14, padding: 20, marginBottom: 24 }}>
           {[
             '🧠 Saúde emocional e burnout em tempo real',
-            '📊 ISHO — Índice de Saúde Organizacional',
+            '📊 ISHO - Índice de Saúde Organizacional',
             '🎯 DISC comportamental da equipe',
             '📋 Relatório de conformidade NR-1',
             '🤖 Diagnóstico semanal com Gemini AI',

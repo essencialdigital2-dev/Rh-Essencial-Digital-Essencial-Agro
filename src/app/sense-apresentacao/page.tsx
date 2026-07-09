@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 const WA = 'https://wa.me/5561985272681?text=Ol%C3%A1%2C+quero+conhecer+o+Essencial+Sense+AI.'
 
@@ -49,14 +49,14 @@ const MODULOS = [
   { ico: '🗺️', t: 'Culture Map', d: 'Mapa visual da saude organizacional por equipe, area e empresa.' },
   { ico: '🧠', t: 'Human Twin AI', d: 'Perfil digital de cada colaborador com historico comportamental e preditivo.' },
   { ico: '📊', t: 'Sense DNA', d: 'Score de cultura organizacional consolidado em tempo real.' },
-  { ico: '💬', t: 'Feedback 360°', d: 'Avaliacao de competencias com anonimato e resultados acionaveis.' },
+  { ico: '💬', t: 'Feedback 360°', d: 'avaliação de competencias com anonimato e resultados acionaveis.' },
 ]
 
 const DIFERENCIAIS = [
-  { n: '01', t: 'Nao e software de clima', d: 'Pesquisas de clima medem o passado. O Sense AI monitora o presente e preve o futuro.' },
-  { n: '02', t: 'Nao e saude mental', d: 'Saude mental reage. O Sense AI previne: identifica sinais de esgotamento antes do afastamento.' },
-  { n: '03', t: 'Nao e BI de RH', d: 'Dashboards mostram o que aconteceu. O Sense AI mostra o que vai acontecer e o que fazer.' },
-  { n: '04', t: 'E decisao estrategica', d: 'Transformamos o fator humano em dado confiavel para o board. Nao apenas para o RH.' },
+  { n: '01', t: 'não é software de clima', d: 'Pesquisas de clima medem o passado. O Sense AI monitora o presente e preve o futuro.' },
+  { n: '02', t: 'não é saude mental', d: 'Saude mental reage. O Sense AI previne: identifica sinais de esgotamento antes do afastamento.' },
+  { n: '03', t: 'não é BI de RH', d: 'Dashboards mostram o que aconteceu. O Sense AI mostra o que vai acontecer e o que fazer.' },
+  { n: '04', t: 'E decisão estratégica', d: 'Transformamos o fator humano em dado confiável para o board. não apenas para o RH.' },
 ]
 
 const COMO = [
@@ -99,7 +99,7 @@ export default function SenseApresentacao() {
             <h1 style={{ fontSize: 'clamp(32px,4.5vw,58px)', fontWeight: 900, margin: '0 0 24px', lineHeight: 1.1 }}>
               Transformamos sinais humanos em{' '}
               <span style={{ background: 'linear-gradient(135deg,#8b5cf6,#ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                decisoes estrategicas
+                decisoes estratégicas
               </span>
             </h1>
             <p style={{ fontSize: 18, color: 'rgba(248,248,255,.6)', maxWidth: 580, margin: '0 0 40px', lineHeight: 1.8 }}>
@@ -148,7 +148,7 @@ export default function SenseApresentacao() {
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <span style={{ background: 'rgba(139,92,246,.15)', color: '#a78bfa', fontWeight: 800, fontSize: 11, padding: '4px 14px', borderRadius: 50, letterSpacing: 1.5, textTransform: 'uppercase' as const }}>Modulos</span>
           <h2 style={{ fontSize: 30, fontWeight: 900, margin: '16px 0 8px' }}>Uma plataforma. Oito modulos integrados.</h2>
-          <p style={{ color: 'rgba(248,248,255,0.4)', fontSize: 15, margin: 0 }}>Do check-in diario ao relatorio executivo — tudo conectado.</p>
+          <p style={{ color: 'rgba(248,248,255,0.4)', fontSize: 15, margin: 0 }}>Do check-in diario ao relatorio executivo - tudo conectado.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16 }}>
           {MODULOS.map((m, i) => (
@@ -184,7 +184,7 @@ export default function SenseApresentacao() {
       <div style={{ maxWidth: 1100, margin: '80px auto 0', padding: '0 24px' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <span style={{ background: 'rgba(139,92,246,.15)', color: '#a78bfa', fontWeight: 800, fontSize: 11, padding: '4px 14px', borderRadius: 50, letterSpacing: 1.5, textTransform: 'uppercase' as const }}>Como funciona</span>
-          <h2 style={{ fontSize: 30, fontWeight: 900, margin: '16px 0 0' }}>Do sinal humano a decisao estrategica</h2>
+          <h2 style={{ fontSize: 30, fontWeight: 900, margin: '16px 0 0' }}>Do sinal humano a decisão estratégica</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 16 }}>
           {COMO.map((c, i) => (
@@ -232,7 +232,7 @@ export default function SenseApresentacao() {
             { p: 'Como os colaboradores fazem o check-in?', r: 'Pelo celular ou computador, em menos de 1 minuto por dia. Recebem um link ou notificacao e respondem perguntas rapidas.' },
             { p: 'Os dados dos colaboradores sao seguros?', r: 'Sim. A plataforma segue a LGPD. Dados individuais sensiveis sao tratados com anonimizacao. O gestor ve tendencias de equipe, nao exposicao individual.' },
             { p: 'Em quanto tempo a empresa comeca a usar?', r: 'O onboarding e feito em menos de uma semana com suporte direto da Alana. Sem burocracia.' },
-            { p: 'O Sense AI substitui o RH?', r: 'Nao. Ele potencializa o RH com dados que antes nao existiam. A decisao continua sendo humana, agora com mais evidencia.' },
+            { p: 'O Sense AI substitui o RH?', r: 'Nao. Ele potencializa o RH com dados que antes nao existiam. A decisão continua sendo humana, agora com mais evidência.' },
             { p: 'Funciona para empresas de qual tamanho?', r: 'De 10 a milhares de colaboradores. Os planos sao escalonaveis por numero de usuarios.' },
           ].map((faq, i) => (
             <div key={i} style={{ background: '#13131f', border: '1px solid rgba(139,92,246,.12)', borderRadius: 14, padding: '22px 26px' }}>
@@ -254,7 +254,7 @@ export default function SenseApresentacao() {
           </div>
           <h2 style={{ fontSize: 32, fontWeight: 900, margin: '0 0 16px' }}>Pronto para tomar decisoes baseadas em inteligencia humana?</h2>
           <p style={{ fontSize: 15, color: 'rgba(248,248,255,.5)', lineHeight: 1.8, margin: '0 0 40px' }}>
-            A Alana apresenta o Sense AI ao vivo para sua equipe. Sem compromisso e com toda a atencao que sua empresa merece.
+            A Alana apresenta o Sense AI ao vivo para sua equipe. Sem compromisso e com toda a atenção que sua empresa merece.
           </p>
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' as const }}>
             <a href={WA} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', background: 'linear-gradient(135deg,#8b5cf6,#ec4899)', color: '#fff', fontWeight: 900, fontSize: 16, padding: '18px 44px', borderRadius: 16, textDecoration: 'none' }}>

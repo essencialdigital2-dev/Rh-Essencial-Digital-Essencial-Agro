@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { calcularRiscoIndividual } from '@/lib/calcularRisco'
 
@@ -24,15 +24,15 @@ export async function GET(req: NextRequest) {
 
   if (!colaboradores?.length) return NextResponse.json({ ok: true, processados: 0 })
 
-  const unicos = new Map<string, string>()
+  const únicos = new Map<string, string>()
   for (const c of colaboradores) {
-    if (!unicos.has(c.colaborador_id)) unicos.set(c.colaborador_id, c.empresa_id)
+    if (!únicos.has(c.colaborador_id)) únicos.set(c.colaborador_id, c.empresa_id)
   }
 
   let processados = 0
   let erros = 0
 
-  for (const [colaboradorId, empresaId] of Array.from(unicos.entries())) {
+  for (const [colaboradorId, empresaId] of Array.from(únicos.entries())) {
     try {
       await calcularRiscoIndividual(colaboradorId, empresaId)
       processados++

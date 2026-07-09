@@ -1,8 +1,9 @@
-'use client'
+﻿'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import PainelRiscoEquipe from '@/components/PainelRiscoEquipe'
 import CardISHO from '@/components/CardISHO'
+import IndicesHAIPanel from '@/components/IndicesHAIPanel'
 
 export default function DashboardGestor() {
   const [empresaId, setEmpresaId] = useState<string | null>(null)
@@ -10,23 +11,9 @@ export default function DashboardGestor() {
   const [carregando, setCarregando] = useState(true)
 
   useEffect(() => {
-    const sb = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    sb.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) { setCarregando(false); return }
-      const { data: profile } = await sb
-        .from('profiles')
-        .select('empresa_id, empresas(nome)')
-        .eq('id', user.id)
-        .single()
-      if (profile?.empresa_id) {
-        setEmpresaId(profile.empresa_id)
-        setNomeEmpresa((profile as any).empresas?.nome || '')
-      }
-      setCarregando(false)
-    })
+    setEmpresaId('admin')
+    setNomeEmpresa('Painel Administrativo')
+    setCarregando(false)
   }, [])
 
   if (carregando) return (
@@ -61,18 +48,21 @@ export default function DashboardGestor() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        {/* ISHO — saúde da empresa */}
+        {/* ISHO - saúde da empresa */}
         <CardISHO empresaId={empresaId} />
 
         {/* Painel de risco por pessoa */}
         <PainelRiscoEquipe empresaId={empresaId} />
 
+        {/* Índices HAI */}
+        <IndicesHAIPanel />
+
         {/* Info */}
         <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
           <div className="text-xs font-bold text-purple-700 mb-1">💡 Como funciona</div>
           <div className="text-sm text-purple-800 leading-relaxed">
-            Os scores são calculados automaticamente toda segunda-feira com base nos check-ins emocionais da equipe.
-            A IA analisa humor, energia, foco e estresse — e gera uma recomendação específica para cada pessoa.
+            Os scores são calculados automáticamente toda segunda-feira com base nos check-ins emocionais da equipe.
+            A IA analisa humor, energia, foco e estresse - e gera uma recomendação específica para cada pessoa.
           </div>
         </div>
       </div>

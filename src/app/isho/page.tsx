@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -6,7 +6,7 @@ type ISHOSemana = {
   id: string
   semana: string
   score: number
-  nivel: 'saudavel' | 'atencao' | 'critico'
+  nivel: 'saudavel' | 'atenção' | 'critico'
   tendencia: 'subindo' | 'estavel' | 'caindo'
   engajamento: number
   diagnostico: string
@@ -22,7 +22,7 @@ type ISHOSemana = {
 
 const NIVEL = {
   saudavel: { cor: '#059669', bg: '#F0FDF4', borda: '#BBF7D0', label: 'Saudável', emoji: '🟢' },
-  atencao:  { cor: '#d97706', bg: '#FFFBEB', borda: '#FDE68A', label: 'Atenção',  emoji: '🟡' },
+  atenção:  { cor: '#d97706', bg: '#FFFBEB', borda: '#FDE68A', label: 'Atenção',  emoji: '🟡' },
   critico:  { cor: '#dc2626', bg: '#FEF2F2', borda: '#FECACA', label: 'Crítico',  emoji: '🔴' },
 }
 
@@ -99,7 +99,7 @@ export default function PaginaISHO() {
   )
 
   const atual = historico[0]
-  const cfgAtual = atual ? NIVEL[atual.nivel] : NIVEL.atencao
+  const cfgAtual = atual ? NIVEL[atual.nivel] : NIVEL.atenção
   const maxScore = Math.max(...historico.map(h => h.score), 1)
 
   return (
@@ -241,7 +241,7 @@ export default function PaginaISHO() {
                 <div className="px-5 py-3 flex items-center gap-2" style={{ background: cfgAtual.bg }}>
                   <span className="text-base">🤖</span>
                   <div className="text-xs font-black uppercase tracking-widest" style={{ color: cfgAtual.cor }}>
-                    Diagnóstico da IA — Gemini
+                    Diagnóstico da IA - Gemini
                   </div>
                 </div>
                 <div className="p-5">
@@ -253,7 +253,7 @@ export default function PaginaISHO() {
             {/* Histórico 8 semanas */}
             {historico.length > 1 && (
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                <div className="text-sm font-black text-gray-800 mb-4">Histórico — últimas {historico.length} semanas</div>
+                <div className="text-sm font-black text-gray-800 mb-4">Histórico - últimas {historico.length} semanas</div>
 
                 {/* Gráfico de barras */}
                 <div className="flex items-end gap-2 h-24 mb-3">
@@ -314,7 +314,7 @@ export default function PaginaISHO() {
                   { emoji: '😊', label: 'Humor',      peso: '25%', desc: 'Média do estado emocional da equipe (check-ins semanais)' },
                   { emoji: '⚡', label: 'Energia',    peso: '20%', desc: 'Disposição física e mental coletiva' },
                   { emoji: '🎯', label: 'Foco',       peso: '20%', desc: 'Capacidade de concentração relatada' },
-                  { emoji: '😰', label: 'Estresse',   peso: '20%', desc: 'Nível de pressão (invertido — menos estresse = mais saudável)' },
+                  { emoji: '😰', label: 'Estresse',   peso: '20%', desc: 'Nível de pressão (invertido - menos estresse = mais saudável)' },
                   { emoji: '📲', label: 'Engajamento',peso: '15%', desc: '% da equipe que fez check-in na semana' },
                 ].map(item => (
                   <div key={item.label} className="flex items-start gap-2">

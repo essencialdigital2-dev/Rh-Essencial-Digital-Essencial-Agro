@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import Groq from 'groq-sdk'
 
@@ -195,7 +195,7 @@ Dados da empresa "${p.empresa}" (setor: ${p.setor ?? 'nao informado'}, porte: ${
 - ISHO medio do setor: ${p.mediaBenchmark}
 - Posicao vs benchmark: ${p.ishoAtual > p.mediaBenchmark ? '+' : ''}${p.ishoAtual - p.mediaBenchmark} pts
 
-Gere um array JSON com exatamente 5 insights estrategicos. Cada insight deve ser profundo, especifico e acionavel — nada generico.
+Gere um array JSON com exatamente 5 insights estrategicos. Cada insight deve ser profundo, especifico e acionavel - nada generico.
 
 Formato obrigatorio (retorne APENAS o array JSON, sem markdown):
 [
@@ -241,7 +241,7 @@ function buildInsightsFallback(p: {
   insights.push({
     tipo: 'tendencia',
     prioridade: 2,
-    titulo: p.delta >= 0 ? 'ISHO em trajetoria positiva' : 'ISHO em queda: atencao necessaria',
+    titulo: p.delta >= 0 ? 'ISHO em trajetoria positiva' : 'ISHO em queda: atenção necessaria',
     contexto: `O Indice de Saude Humana Organizacional ${p.delta >= 0 ? 'subiu' : 'caiu'} ${Math.abs(p.delta)} pontos em relacao a semana anterior, chegando a ${p.ishoAtual}/100.`,
     destaque: `ISHO ${p.ishoAtual} · ${p.delta >= 0 ? '+' : ''}${p.delta} pts · vs semana anterior`,
     acao: p.delta >= 0 ? 'Identifique o que gerou a melhora e replique nas areas de menor indice.' : 'Mapeie os setores com maior queda e tome acao preventiva antes da proxima semana.'
@@ -287,6 +287,6 @@ async function enviarPushInsight(
     )
     await webpush.default.sendNotification(subscription as Parameters<typeof webpush.default.sendNotification>[0], payload)
   } catch {
-    // silencia — push e opcional, nao deve derrubar o cron
+    // silencia - push e opcional, nao deve derrubar o cron
   }
 }
