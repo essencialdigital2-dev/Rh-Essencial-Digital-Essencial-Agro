@@ -24,6 +24,8 @@ export default function LeadsPage() {
   const [gerando, setGerando] = useState(false)
   const [resultado, setResultado] = useState<any>(null)
   const [erro, setErro] = useState('')
+  const [gerandoAuto, setGerandoAuto] = useState(false)
+  const [msgAuto, setMsgAuto] = useState('')
 
   useEffect(() => { carregarLeads() }, [])
 
@@ -56,6 +58,25 @@ export default function LeadsPage() {
     }
   }
 
+  async function gerarAutomatico() {
+    setGerandoAuto(true); setMsgAuto('')
+    try {
+      const r = await ecoFetch('/api/eco-leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ produto, auto: true, quantidade: 5 }),
+      })
+      const d = await r.json()
+      if (!r.ok) { setMsgAuto('⚠️ ' + (d.error || 'Erro ao buscar leads automaticamente.')); return }
+      setMsgAuto(`✅ ${d.total} lead${d.total !== 1 ? 's' : ''} encontrado${d.total !== 1 ? 's' : ''} e gerado${d.total !== 1 ? 's' : ''} pela IA!`)
+      carregarLeads()
+    } catch {
+      setMsgAuto('❌ Erro de conexão')
+    } finally {
+      setGerandoAuto(false)
+    }
+  }
+
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 24px 60px', fontFamily: 'system-ui,sans-serif', color: '#F8F8FF' }}>
       <div style={{ marginBottom: 24 }}>
@@ -63,7 +84,25 @@ export default function LeadsPage() {
         <p style={{ fontSize: 13, color: 'rgba(248,248,255,0.4)', marginTop: 4 }}>A IA pesquisa o alvo na web, gera a abordagem personalizada e calcula um score preditivo de conversão.</p>
       </div>
 
-      {/* GERAR NOVO LEAD */}
+      {/* BUSCAR AUTOMATICAMENTE */}
+      <div style={{ background: 'rgba(139,92,246,.08)', border: '1px solid rgba(139,92,246,.25)', borderRadius: 18, padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#A78BFA' }}>🤖 Buscar leads automaticamente</div>
+          <div style={{ fontSize: 12, color: 'rgba(248,248,255,.5)', marginTop: 2 }}>A IA pesquisa 5 instituições/empresas reais para o produto selecionado, sem precisar digitar nome.</div>
+          {msgAuto && <div style={{ fontSize: 12, marginTop: 8, color: msgAuto.startsWith('✅') ? '#4ADE80' : '#F87171' }}>{msgAuto}</div>}
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <select value={produto} onChange={e => setProduto(e.target.value)} style={{ padding: '10px 14px', fontSize: 13, borderRadius: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', color: '#F8F8FF' }}>
+            {PRODUTOS.map(p => <option key={p.key} value={p.key} style={{ background: '#1a1a2e', color: '#F8F8FF' }}>{p.label}</option>)}
+          </select>
+          <button onClick={gerarAutomatico} disabled={gerandoAuto} style={{
+            background: 'linear-gradient(135deg,#7C3AED,#06b6d4)', color: '#fff', border: 'none', borderRadius: 12, padding: '11px 20px',
+            fontSize: 13, fontWeight: 800, cursor: gerandoAuto ? 'not-allowed' : 'pointer', opacity: gerandoAuto ? 0.5 : 1, whiteSpace: 'nowrap',
+          }}>{gerandoAuto ? '🔄 Buscando na web...' : '🔍 Buscar automaticamente'}</button>
+        </div>
+      </div>
+
+      {/* GERAR NOVO LEAD (manual) */}
       <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,.2)', borderRadius: 18, padding: 22, marginBottom: 28 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 200px', gap: 10, marginBottom: 14 }}>
           <input value={alvo} onChange={e => setAlvo(e.target.value)} placeholder="Instituição/empresa alvo" style={{ padding: '10px 14px', fontSize: 13, borderRadius: 10, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', color: '#F8F8FF' }} />

@@ -33,36 +33,26 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST: gera abordagem personalizada + score preditivo de conversao via IA, e salva o lead
-export async function POST(req: NextRequest) {
-  if (!ecoAutorizado(req)) return NextResponse.json({ error: 'nao autorizado' }, { status: 401 })
+async function pesquisarAlvo(alvo: string) {
   try {
-    const { alvo, produto, contato } = await req.json()
-    if (!alvo || !produto || !PRODUTOS[produto]) {
-      return NextResponse.json({ error: 'alvo e produto obrigatorios' }, { status: 400 })
-    }
-    const p = PRODUTOS[produto]
+    const g = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Pesquise sobre "${alvo}" no Brasil. Resuma em ate 250 palavras: o que e, porte, localizacao, proposta pedagogica ou de negocio, diferenciais que divulgam, noticias recentes relevantes, e liste contatos publicos (site, telefone, whatsapp, email, instagram) se encontrar.` }] }],
+          tools: [{ google_search: {} }],
+        }),
+      }
+    )
+    const gd = await g.json()
+    return gd.candidates?.[0]?.content?.parts?.map((pt: any) => pt.text).filter(Boolean).join('\n') ?? ''
+  } catch { return '' }
+}
 
-    // 1. Pesquisa real na web via Gemini com Google Search
-    let pesquisa = ''
-    try {
-      const g = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: `Pesquise sobre "${alvo}" no Brasil. Resuma em ate 250 palavras: o que e, porte, localizacao, proposta pedagogica ou de negocio, diferenciais que divulgam, noticias recentes relevantes, e liste contatos publicos (site, telefone, whatsapp, email, instagram) se encontrar.` }] }],
-            tools: [{ google_search: {} }],
-          }),
-        }
-      )
-      const gd = await g.json()
-      pesquisa = gd.candidates?.[0]?.content?.parts?.map((pt: any) => pt.text).filter(Boolean).join('\n') ?? ''
-    } catch { pesquisa = '' }
-
-    // 2. Abordagem personalizada + score preditivo de conversao
-    const prompt = `Voce e especialista em prospeccao consultiva E em analise preditiva de vendas B2B da Essencial Digital. Sem travessoes, acentuacao correta. PROIBIDO parecer template.
+async function gerarAbordagem(p: { nome: string; pitch: string; alvo: string }, alvo: string, contato: string | undefined, pesquisa: string) {
+  const prompt = `Voce e especialista em prospeccao consultiva E em analise preditiva de vendas B2B da Essencial Digital. Sem travessoes, acentuacao correta. PROIBIDO parecer template.
 
 PRODUTO: ${p.nome} (${p.pitch})
 PUBLICO TIPICO: ${p.alvo}
@@ -86,15 +76,86 @@ Retorne APENAS JSON valido:
   "objecao_provavel": { "objecao": "", "resposta": "" }
 }`
 
-    const g2 = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }
-    )
-    const gd2 = await g2.json()
-    const raw = gd2.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
-    const abordagem = JSON.parse(raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim())
+  const g2 = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }
+  )
+  const gd2 = await g2.json()
+  const raw = gd2.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+  return JSON.parse(raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim())
+}
 
+// Descobre N alvos reais na web para o produto, sem precisar digitar nome
+async function descobrirAlvos(p: { nome: string; pitch: string; alvo: string }, quantidade: number) {
+  const prompt = `Busque na web e liste ${quantidade} instituicoes/empresas REAIS e distintas no Brasil que se encaixam no publico "${p.alvo}", candidatas a contratar "${p.nome}" (${p.pitch}). Varie cidade/estado. Nao invente nomes, use apenas resultados reais da busca.
+
+Retorne APENAS um JSON array de strings com os nomes encontrados, ex: ["Nome 1", "Nome 2"]`
+  const g = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], tools: [{ google_search: {} }] }),
+    }
+  )
+  const gd = await g.json()
+  const raw = gd.candidates?.[0]?.content?.parts?.map((pt: any) => pt.text).filter(Boolean).join('\n') ?? '[]'
+  try {
+    const match = raw.match(/\[[\s\S]*\]/)
+    return match ? JSON.parse(match[0]) as string[] : []
+  } catch { return [] }
+}
+
+// POST: gera abordagem personalizada + score preditivo de conversao via IA, e salva o lead
+// Modo manual: { alvo, produto, contato } | Modo automatico: { produto, auto: true, quantidade? }
+export async function POST(req: NextRequest) {
+  if (!ecoAutorizado(req)) return NextResponse.json({ error: 'nao autorizado' }, { status: 401 })
+  try {
+    const body = await req.json()
+    const { produto } = body
+    if (!produto || !PRODUTOS[produto]) {
+      return NextResponse.json({ error: 'produto obrigatorio' }, { status: 400 })
+    }
+    const p = PRODUTOS[produto]
     const db = sb()
+
+    if (body.auto) {
+      const quantidade = Math.min(body.quantidade || 5, 10)
+      const alvos = await descobrirAlvos(p, quantidade)
+      if (!alvos.length) return NextResponse.json({ error: 'IA nao encontrou alvos reais agora. Tente de novo em instantes.' }, { status: 500 })
+
+      const gerados: any[] = []
+      for (const alvo of alvos) {
+        try {
+          const pesquisa = await pesquisarAlvo(alvo)
+          const abordagem = await gerarAbordagem(p, alvo, undefined, pesquisa)
+          const { data: lead, error } = await db.from('edu_leads_maquina').insert({
+            produto,
+            nome: alvo,
+            instituicao: alvo,
+            email: abordagem?.contatos_publicos?.email || null,
+            telefone: abordagem?.contatos_publicos?.telefone || null,
+            origem: 'ecossistema_auto',
+            score: abordagem?.score_preditivo ?? null,
+            temperatura: abordagem?.temperatura ?? null,
+            abordagem_ia: { ...abordagem, pesquisa },
+            analise_ia: { resumo: abordagem?.justificativa_score || `Prospeccao automatica: ${alvo}`, pesquisa_web: !!pesquisa },
+            status: 'novo',
+          }).select().single()
+          if (!error) gerados.push(lead)
+        } catch (e) {
+          console.error('Erro ao gerar lead automatico para', alvo, e)
+        }
+      }
+      return NextResponse.json({ ok: true, total: gerados.length, leads: gerados })
+    }
+
+    const { alvo, contato } = body
+    if (!alvo) return NextResponse.json({ error: 'alvo obrigatorio' }, { status: 400 })
+
+    const pesquisa = await pesquisarAlvo(alvo)
+    const abordagem = await gerarAbordagem(p, alvo, contato, pesquisa)
+
     const { data: lead, error } = await db.from('edu_leads_maquina').insert({
       produto,
       nome: contato || alvo,
