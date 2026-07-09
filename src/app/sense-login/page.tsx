@@ -51,6 +51,7 @@ export default function SenseLogin() {
   const [msg, setMsg] = useState<{ texto: string; tipo: 'erro' | 'ok' } | null>(null)
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
 
   async function entrar() {
     if (!email || !senha) { setMsg({ texto: 'Preencha e-mail e senha.', tipo: 'erro' }); return }
@@ -166,7 +167,14 @@ export default function SenseLogin() {
             </div>
             <div>
               <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Senha</label>
-              <input style={inp} type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
+              <div style={{ position: 'relative' }}>
+                <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
+                <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                  aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
+                  {mostrarSenha ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
             <button style={btnStyle} onClick={entrar} disabled={loading}>
               {loading ? 'Entrando...' : 'Entrar na plataforma →'}
