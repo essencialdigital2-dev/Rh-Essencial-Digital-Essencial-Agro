@@ -42,7 +42,7 @@ Tamanho: entre 300 e 500 palavras.`
     const key = process.env.GEMINI_API_KEY
     if (!key) return NextResponse.json({ diagnostico: 'Serviço de IA indisponível. Configure a chave GEMINI_API_KEY.' }, { status: 200 })
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`
     const body = {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
