@@ -27,16 +27,20 @@ export default function LeadsPage() {
   const [gerandoAuto, setGerandoAuto] = useState(false)
   const [msgAuto, setMsgAuto] = useState('')
 
-  useEffect(() => { carregarLeads() }, [])
+  useEffect(() => {
+    carregarLeads()
+    const intervalo = setInterval(() => carregarLeads(true), 15000)
+    return () => clearInterval(intervalo)
+  }, [])
 
-  async function carregarLeads() {
-    setCarregandoLista(true)
+  async function carregarLeads(silencioso = false) {
+    if (!silencioso) setCarregandoLista(true)
     try {
       const r = await ecoFetch('/api/eco-leads')
       const d = await r.json()
       setLeads(d.leads || [])
     } finally {
-      setCarregandoLista(false)
+      if (!silencioso) setCarregandoLista(false)
     }
   }
 
