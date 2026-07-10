@@ -21,8 +21,12 @@ type Cliente = {
 }
 
 const PACOTES = {
-  educacional: { label: '🎓 Educacional', modulos: ['edu', 'estudo', 'teens', 'sense', 'nexo'], tipo: 'instituicao' as const },
-  agro: { label: '🌾 Agro', modulos: ['agro', 'sense', 'nexo'], tipo: 'empresa' as const },
+  educacional:  { label: '🎓 Educacional', modulos: ['edu', 'estudo', 'teens', 'sense', 'nexo'], tipo: 'instituicao' as const },
+  agro:         { label: '🌾 Agro (+ Sense AI + NexoPerform)', modulos: ['agro', 'sense', 'nexo'], tipo: 'empresa' as const },
+  agro_solo:    { label: '🌾 Agro Tech (só)', modulos: ['agro'], tipo: 'empresa' as const },
+  juridico:     { label: '⚖️ Jurídico', modulos: ['estudo'], tipo: 'instituicao' as const },
+  med:          { label: '🩺 Medicina', modulos: ['estudo'], tipo: 'instituicao' as const },
+  juridico_med: { label: '⚖️🩺 Jurídico + Med', modulos: ['estudo'], tipo: 'instituicao' as const },
 }
 
 const CAMPOS_VINCULO = [
@@ -204,7 +208,11 @@ export default function ClientesEcossistema() {
           <input value={emailTrial} onChange={e => setEmailTrial(e.target.value)} placeholder="E-mail de acesso (opcional)" style={inputStyle} />
           <select value={pacoteTrial} onChange={e => setPacoteTrial(e.target.value as any)} style={inputStyle}>
             <option value="educacional">🎓 Pacote Educacional (Edu + Estudo + Teens + Sense AI + NexoPerform)</option>
+            <option value="juridico">⚖️ Jurídico (Essencial Estudo)</option>
+            <option value="med">🩺 Medicina (Essencial Estudo)</option>
+            <option value="juridico_med">⚖️🩺 Jurídico + Med (Essencial Estudo)</option>
             <option value="agro">🌾 Pacote Agro (Agro Tech + Sense AI + NexoPerform)</option>
+            <option value="agro_solo">🌾 Agro Tech (só)</option>
           </select>
           <button onClick={criarTrial} disabled={criandoTrial || !nomeTrial} style={{ padding: '8px 18px', borderRadius: 10, border: 'none', background: '#10b981', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity: criandoTrial || !nomeTrial ? 0.5 : 1, whiteSpace: 'nowrap' }}>
             {criandoTrial ? 'Criando...' : '🎁 Criar trial'}
