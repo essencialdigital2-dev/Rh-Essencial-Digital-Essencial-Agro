@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
-  'https://uysmvziehlpugmgssibs.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5c212emllaGxwdWdtZ3NzaWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzU5MDUsImV4cCI6MjA5NTY1MTkwNX0.iuhDiTQCoIZSfSccURAITwnuejEmWABG8KW7RtGH9-8'
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
 export default function NovaSenha() {
@@ -13,6 +13,7 @@ export default function NovaSenha() {
   const [msg, setMsg] = useState<{ texto: string; tipo: 'erro' | 'ok' } | null>(null)
   const [loading, setLoading] = useState(false)
   const [pronto, setPronto] = useState(false)
+  const [mostrarSenha, setMostrarSenha] = useState(false)
 
   useEffect(() => {
     const hash = window.location.hash
@@ -65,11 +66,25 @@ export default function NovaSenha() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Nova senha</label>
-            <input style={inp} type="password" placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} />
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} />
+              <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
+                {mostrarSenha ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
           <div>
             <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Confirmar senha</label>
-            <input style={inp} type="password" placeholder="••••••••" value={confirmar} onChange={e => setConfirmar(e.target.value)} onKeyDown={e => e.key === 'Enter' && salvar()} />
+            <div style={{ position: 'relative' }}>
+              <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={confirmar} onChange={e => setConfirmar(e.target.value)} onKeyDown={e => e.key === 'Enter' && salvar()} />
+              <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
+                {mostrarSenha ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
           <button
             onClick={salvar}
