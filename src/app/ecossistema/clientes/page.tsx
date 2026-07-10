@@ -55,6 +55,7 @@ export default function ClientesEcossistema() {
   const [nomeTrial, setNomeTrial] = useState('')
   const [pacoteTrial, setPacoteTrial] = useState<keyof typeof PACOTES>('educacional')
   const [criandoTrial, setCriandoTrial] = useState(false)
+  const [linkTrialCriado, setLinkTrialCriado] = useState('')
 
   async function copiarLinkPortal(id: string) {
     const link = `${window.location.origin}/portal/${id}`
@@ -80,12 +81,17 @@ export default function ClientesEcossistema() {
   async function criarTrial() {
     if (!nomeTrial) return
     setCriandoTrial(true)
+    setLinkTrialCriado('')
     try {
       const p = PACOTES[pacoteTrial]
-      await ecoFetch('/api/eco-clientes', {
+      const r = await ecoFetch('/api/eco-clientes', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: nomeTrial, tipo: p.tipo, modulos_liberados: p.modulos, trial: true, trial_dias: 7 }),
       })
+      const d = await r.json()
+      if (d.ok && d.cliente?.id) {
+        setLinkTrialCriado(`${window.location.origin}/portal/${d.cliente.id}`)
+      }
       setNomeTrial('')
       await carregar()
     } catch {}
@@ -154,6 +160,15 @@ export default function ClientesEcossistema() {
             {criandoTrial ? 'Criando...' : '🎁 Criar trial'}
           </button>
         </div>
+        {linkTrialCriado && (
+          <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(0,0,0,.2)', borderRadius: 10, padding: '8px 12px' }}>
+            <span style={{ fontSize: 12, color: '#34D399', fontWeight: 700 }}>✓ Trial criado!</span>
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,.6)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{linkTrialCriado}</span>
+            <button onClick={() => navigator.clipboard.writeText(linkTrialCriado)} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              📋 Copiar link
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Novo cliente */}

@@ -36,6 +36,7 @@ export default function LeadsPage() {
   const [msgAuto, setMsgAuto] = useState('')
   const [criandoTrialId, setCriandoTrialId] = useState<string | null>(null)
   const [trialCriadoId, setTrialCriadoId] = useState<string | null>(null)
+  const [linkTrialPorLead, setLinkTrialPorLead] = useState<Record<string, string>>({})
 
   useEffect(() => {
     carregarLeads()
@@ -76,13 +77,17 @@ export default function LeadsPage() {
     setCriandoTrialId(lead.id)
     try {
       const p = PACOTES_TRIAL[pacotePorProduto(lead.produto)]
-      await ecoFetch('/api/eco-clientes', {
+      const r = await ecoFetch('/api/eco-clientes', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nome: lead.instituicao || lead.nome, tipo: p.tipo,
           modulos_liberados: p.modulos, trial: true, trial_dias: 7,
         }),
       })
+      const d = await r.json()
+      if (d.ok && d.cliente?.id) {
+        setLinkTrialPorLead(prev => ({ ...prev, [lead.id]: `${window.location.origin}/portal/${d.cliente.id}` }))
+      }
       setTrialCriadoId(lead.id)
     } catch {}
     setCriandoTrialId(null)
@@ -192,7 +197,14 @@ export default function LeadsPage() {
               </div>
               <div style={{ fontSize: 11, color: 'rgba(248,248,255,.4)' }}>{new Date(l.criado_em).toLocaleDateString('pt-BR')}</div>
               {trialCriadoId === l.id ? (
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#34D399' }}>✓ Trial criado</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#34D399' }}>✓ Trial criado</span>
+                  {linkTrialPorLead[l.id] && (
+                    <button onClick={() => navigator.clipboard.writeText(linkTrialPorLead[l.id])} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      📋 Copiar link
+                    </button>
+                  )}
+                </div>
               ) : (
                 <button onClick={() => criarTrialDoLead(l)} disabled={criandoTrialId === l.id}
                   style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'rgba(52,211,153,.08)', border: '1px solid rgba(52,211,153,.25)', borderRadius: 8, padding: '5px 10px', cursor: criandoTrialId === l.id ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}>
