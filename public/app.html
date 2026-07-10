@@ -308,7 +308,7 @@ let SHEETS_URL = localStorage.getItem('sheets_url')||'';
 
 // ── SUPABASE ──
 const SB_URL='https://feivfptwfbcftyhaypov.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlaXZmcHR3ZmJjZnR5aGF5cG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NDIyMjMsImV4cCI6MjA5NTIxODIyM30.rx23t7QlrdIc411jxhVpnvg3fOV-Iy08vKopGUcFyQU';
+const SB_KEY='sb_publishable_YBPBcnUz55BIhHAncmQUVQ_XI_Kydms';
 let _sb=null;
 function getSB(){if(!_sb&&window.supabase)_sb=window.supabase.createClient(SB_URL,SB_KEY);return _sb;}
 let NETLIFY_URL=localStorage.getItem('netlify_url')||'https://black-meadow-73ac.essencialdigital2.workers.dev';
