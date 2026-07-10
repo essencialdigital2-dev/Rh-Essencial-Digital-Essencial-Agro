@@ -10,7 +10,7 @@ const CATALOGO: Record<string, { label: string; icone: string; cor: string; desc
   agro:   { label: 'Agro Tech', icone: '🌾', cor: '#00e676', desc: 'Gestão preditiva para o agronegócio', loginUrl: 'https://agrotech.rhessencialdigital.com.br/sign-in' },
 }
 
-const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens']
+const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens', 'edu']
 
 type Cliente = { nome: string; tipo: string; modulos_liberados: string[]; trial?: boolean; trial_fim?: string | null; email?: string | null; senha_temporaria?: string | null }
 

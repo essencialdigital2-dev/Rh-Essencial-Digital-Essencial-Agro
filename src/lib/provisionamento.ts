@@ -47,7 +47,21 @@ export async function provisionarAcessoEstudo(nome: string, email: string, senha
   }
 }
 
-export const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens']
+export async function provisionarAcessoEdu(nome: string, email: string, senha: string) {
+  try {
+    const res = await fetch('https://essencial-edu.vercel.app/api/eco-provisionar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-eco-internal-key': process.env.ECO_INTERNAL_KEY || '' },
+      body: JSON.stringify({ nome, email, senha }),
+    })
+    const json = await res.json()
+    return !!json.ok
+  } catch {
+    return false
+  }
+}
+
+export const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens', 'edu']
 
 export async function provisionarModulos(nome: string, email: string, senha: string, modulos: string[]) {
   let algumProvisionado = false
@@ -56,6 +70,9 @@ export async function provisionarModulos(nome: string, email: string, senha: str
   }
   if (modulos.includes('estudo') || modulos.includes('teens')) {
     algumProvisionado = (await provisionarAcessoEstudo(nome, email, senha)) || algumProvisionado
+  }
+  if (modulos.includes('edu')) {
+    algumProvisionado = (await provisionarAcessoEdu(nome, email, senha)) || algumProvisionado
   }
   return algumProvisionado
 }
