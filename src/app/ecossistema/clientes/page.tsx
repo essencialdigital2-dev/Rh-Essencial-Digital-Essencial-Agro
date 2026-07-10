@@ -56,6 +56,29 @@ export default function ClientesEcossistema() {
   const [pacoteTrial, setPacoteTrial] = useState<keyof typeof PACOTES>('educacional')
   const [criandoTrial, setCriandoTrial] = useState(false)
   const [linkTrialCriado, setLinkTrialCriado] = useState('')
+  const [linkTrialCopiado, setLinkTrialCopiado] = useState(false)
+
+  async function copiarLinkTrial() {
+    try {
+      await navigator.clipboard.writeText(linkTrialCriado)
+      setLinkTrialCopiado(true)
+      setTimeout(() => setLinkTrialCopiado(false), 2500)
+    } catch {
+      // Fallback pra navegadores/contextos que bloqueiam a Clipboard API
+      const area = document.createElement('textarea')
+      area.value = linkTrialCriado
+      area.style.position = 'fixed'
+      area.style.opacity = '0'
+      document.body.appendChild(area)
+      area.focus(); area.select()
+      try {
+        document.execCommand('copy')
+        setLinkTrialCopiado(true)
+        setTimeout(() => setLinkTrialCopiado(false), 2500)
+      } catch {}
+      document.body.removeChild(area)
+    }
+  }
 
   async function copiarLinkPortal(id: string) {
     const link = `${window.location.origin}/portal/${id}`
@@ -164,8 +187,8 @@ export default function ClientesEcossistema() {
           <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(0,0,0,.2)', borderRadius: 10, padding: '8px 12px' }}>
             <span style={{ fontSize: 12, color: '#34D399', fontWeight: 700 }}>✓ Trial criado!</span>
             <span style={{ fontSize: 12, color: 'rgba(255,255,255,.6)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{linkTrialCriado}</span>
-            <button onClick={() => navigator.clipboard.writeText(linkTrialCriado)} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              📋 Copiar link
+            <button onClick={copiarLinkTrial} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              {linkTrialCopiado ? '✓ Copiado!' : '📋 Copiar link'}
             </button>
           </div>
         )}

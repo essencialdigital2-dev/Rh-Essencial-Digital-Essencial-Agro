@@ -37,6 +37,28 @@ export default function LeadsPage() {
   const [criandoTrialId, setCriandoTrialId] = useState<string | null>(null)
   const [trialCriadoId, setTrialCriadoId] = useState<string | null>(null)
   const [linkTrialPorLead, setLinkTrialPorLead] = useState<Record<string, string>>({})
+  const [copiadoLeadId, setCopiadoLeadId] = useState<string | null>(null)
+
+  async function copiarLinkTrialLead(link: string, leadId: string) {
+    try {
+      await navigator.clipboard.writeText(link)
+      setCopiadoLeadId(leadId)
+      setTimeout(() => setCopiadoLeadId(null), 2500)
+    } catch {
+      const area = document.createElement('textarea')
+      area.value = link
+      area.style.position = 'fixed'
+      area.style.opacity = '0'
+      document.body.appendChild(area)
+      area.focus(); area.select()
+      try {
+        document.execCommand('copy')
+        setCopiadoLeadId(leadId)
+        setTimeout(() => setCopiadoLeadId(null), 2500)
+      } catch {}
+      document.body.removeChild(area)
+    }
+  }
 
   useEffect(() => {
     carregarLeads()
@@ -200,8 +222,8 @@ export default function LeadsPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: '#34D399' }}>✓ Trial criado</span>
                   {linkTrialPorLead[l.id] && (
-                    <button onClick={() => navigator.clipboard.writeText(linkTrialPorLead[l.id])} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                      📋 Copiar link
+                    <button onClick={() => copiarLinkTrialLead(linkTrialPorLead[l.id], l.id)} style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                      {copiadoLeadId === l.id ? '✓ Copiado!' : '📋 Copiar link'}
                     </button>
                   )}
                 </div>
