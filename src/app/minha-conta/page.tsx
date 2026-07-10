@@ -13,6 +13,7 @@ export default function MinhaConta() {
   const [cargo, setCargo] = useState('')
   const [novaSenha, setNovaSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
   const [avatar, setAvatar] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [msgSenha, setMsgSenha] = useState<{ texto: string; tipo: 'ok' | 'erro' } | null>(null)
@@ -157,11 +158,25 @@ export default function MinhaConta() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div>
               <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Nova senha</label>
-              <input style={inp} type="password" placeholder="••••••••" value={novaSenha} onChange={e => setNovaSenha(e.target.value)} />
+              <div style={{ position: 'relative' }}>
+                <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={novaSenha} onChange={e => setNovaSenha(e.target.value)} />
+                <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
+                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                  aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
+                  {mostrarSenha ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
             <div>
               <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Confirmar senha</label>
-              <input style={inp} type="password" placeholder="••••••••" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && trocarSenha()} />
+              <div style={{ position: 'relative' }}>
+                <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && trocarSenha()} />
+                <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
+                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                  aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
+                  {mostrarSenha ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
             <button style={btn()} onClick={trocarSenha} disabled={loading}>
               {loading ? 'Salvando...' : 'Atualizar senha'}
