@@ -41,6 +41,11 @@ export default function AcessibilidadeSurdos() {
 
   return (
     <>
+      <style>{`
+        div[vw] { position: fixed !important; z-index: 9997 !important; top: auto !important; left: auto !important; }
+        div[vw-access-button] { position: fixed !important; bottom: 20px !important; right: 20px !important; top: auto !important; left: auto !important; z-index: 9997 !important; }
+        div[vw-plugin-wrapper] { position: fixed !important; bottom: 76px !important; right: 20px !important; top: auto !important; left: auto !important; z-index: 9997 !important; }
+      `}</style>
       <div dangerouslySetInnerHTML={{ __html: '<div vw class="enabled"><div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div></div>' }} />
 
       <button onClick={simplificarPagina} title="Simplificar texto desta pagina com IA (para leitores de Libras)"
