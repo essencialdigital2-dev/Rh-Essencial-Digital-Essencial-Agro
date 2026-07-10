@@ -30,6 +30,9 @@ export async function GET(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!data) return NextResponse.json({ encontrado: false, modulos_liberados: [] })
 
+  // Registra que alguem dessa instituicao/empresa acessou agora (fire-and-forget)
+  sb().from('eco_clientes').update({ ultimo_acesso: new Date().toISOString() }).eq('id', data.id).then(() => {})
+
   // Trial expirado: bloqueia os modulos mesmo que ainda estejam na lista
   const trialExpirado = data.trial && data.trial_fim && new Date(data.trial_fim) < new Date()
   if (trialExpirado) {

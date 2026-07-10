@@ -17,6 +17,7 @@ type Cliente = {
   agro_empresa_id: string | null
   trial: boolean
   trial_fim: string | null
+  ultimo_acesso: string | null
 }
 
 const PACOTES = {
@@ -45,6 +46,15 @@ const CATALOGO = [
 ]
 const TODOS_MODULOS = CATALOGO.flatMap(g => g.modulos)
 
+function formatarTempoRelativo(iso: string) {
+  const diffMs = Date.now() - new Date(iso).getTime()
+  const horas = Math.floor(diffMs / 3600000)
+  if (horas < 1) return 'agora mesmo'
+  if (horas < 24) return `há ${horas}h`
+  const dias = Math.floor(horas / 24)
+  return `há ${dias} dia${dias !== 1 ? 's' : ''}`
+}
+
 export default function ClientesEcossistema() {
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [loading, setLoading] = useState(true)
@@ -57,6 +67,20 @@ export default function ClientesEcossistema() {
   const [criandoTrial, setCriandoTrial] = useState(false)
   const [linkTrialCriado, setLinkTrialCriado] = useState('')
   const [linkTrialCopiado, setLinkTrialCopiado] = useState(false)
+  const [analiseTrials, setAnaliseTrials] = useState<any>(null)
+  const [gerandoAnalise, setGerandoAnalise] = useState(false)
+  const [semTrials, setSemTrials] = useState(false)
+
+  async function gerarAnaliseTrials() {
+    setGerandoAnalise(true); setAnaliseTrials(null); setSemTrials(false)
+    try {
+      const r = await ecoFetch('/api/eco-clientes/analisar-trials', { method: 'POST' })
+      const d = await r.json()
+      if (d.sem_trials) setSemTrials(true)
+      else if (d.ok) setAnaliseTrials(d.analise)
+    } catch {}
+    setGerandoAnalise(false)
+  }
 
   async function copiarLinkTrial() {
     try {
@@ -194,6 +218,44 @@ export default function ClientesEcossistema() {
         )}
       </div>
 
+      {/* Leitura de IA sobre engajamento dos trials */}
+      <div style={{ background: 'rgba(167,139,250,0.06)', border: '1px solid rgba(167,139,250,0.2)', borderRadius: 14, padding: 16, marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: analiseTrials || semTrials ? 12 : 0, flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#A78BFA', textTransform: 'uppercase' }}>✦ Leitura da IA · Engajamento dos Trials</div>
+          <button onClick={gerarAnaliseTrials} disabled={gerandoAnalise}
+            style={{ fontSize: 12, fontWeight: 700, padding: '7px 14px', borderRadius: 10, border: '1px solid rgba(167,139,250,0.3)', background: 'transparent', color: '#A78BFA', cursor: 'pointer', opacity: gerandoAnalise ? 0.5 : 1 }}>
+            {gerandoAnalise ? 'Analisando...' : analiseTrials ? '↻ Atualizar' : '✨ Analisar trials'}
+          </button>
+        </div>
+
+        {semTrials && <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>Nenhum trial ativo no momento.</div>}
+
+        {analiseTrials && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <p style={{ fontSize: 13, color: '#fff', lineHeight: 1.6, margin: 0 }}>{analiseTrials.resumo}</p>
+
+            {analiseTrials.risco_alto?.length > 0 && (
+              <div style={{ background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#F87171', marginBottom: 6 }}>⚠️ Risco alto (trial acabando, sem uso)</div>
+                {analiseTrials.risco_alto.map((n: string, i: number) => <div key={i} style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.8)' }}>• {n}</div>)}
+              </div>
+            )}
+
+            {analiseTrials.indo_bem?.length > 0 && (
+              <div style={{ background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#34D399', marginBottom: 6 }}>✓ Engajando bem</div>
+                {analiseTrials.indo_bem.map((n: string, i: number) => <div key={i} style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.8)' }}>• {n}</div>)}
+              </div>
+            )}
+
+            <div style={{ background: 'linear-gradient(135deg,rgba(109,40,217,.15),rgba(6,182,212,.05))', border: '1px solid rgba(167,139,250,.3)', borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: '#A78BFA', textTransform: 'uppercase', marginBottom: 4 }}>⚡ Ação sugerida</div>
+              <div style={{ fontSize: 13, color: '#fff' }}>{analiseTrials.acao_sugerida}</div>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Novo cliente */}
       <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 16, marginBottom: 24 }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: '#A78BFA', marginBottom: 10, textTransform: 'uppercase' }}>+ Novo cliente</div>
@@ -241,6 +303,13 @@ export default function ClientesEcossistema() {
                   <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
                     {c.tipo === 'instituicao' ? 'Instituição' : 'Empresa'}{c.cidade ? ` · ${c.cidade}${c.estado ? '/' + c.estado : ''}` : ''}{c.cnpj ? ` · ${c.cnpj}` : ''}
                   </div>
+                  {c.trial && (
+                    <div style={{ fontSize: 11, marginTop: 4, color: c.ultimo_acesso ? '#60A5FA' : 'rgba(255,255,255,0.3)' }}>
+                      {c.ultimo_acesso
+                        ? `👤 Último acesso: ${formatarTempoRelativo(c.ultimo_acesso)}`
+                        : '👤 Ninguém acessou ainda'}
+                    </div>
+                  )}
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button onClick={() => copiarLinkPortal(c.id)} style={{ fontSize: 11, color: '#34D399', background: 'none', border: '1px solid rgba(52,211,153,0.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer' }}>
