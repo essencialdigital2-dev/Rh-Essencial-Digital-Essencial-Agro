@@ -1,46 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
-const ROTAS_PROTEGIDAS = ['/sense-app', '/sense-colab']
-const LOGIN_URL = '/sense-login'
-
-export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl
-
-  if (!ROTAS_PROTEGIDAS.some(r => pathname.startsWith(r))) {
-    return NextResponse.next()
-  }
-
-  const res = NextResponse.next()
-
-  const sb = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) { return req.cookies.get(name)?.value },
-        set(name: string, value: string, options: CookieOptions) {
-          res.cookies.set(name, value, options)
-        },
-        remove(name: string, options: CookieOptions) {
-          res.cookies.set(name, '', { ...options, maxAge: 0 })
-        },
-      },
-    }
-  )
-
-  const { data: { session } } = await sb.auth.getSession()
-
-  if (!session) {
-    const loginUrl = req.nextUrl.clone()
-    loginUrl.pathname = LOGIN_URL
-    loginUrl.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  return res
+// /sense-app e /sense-colab sao paginas client-side que guardam a sessao no
+// localStorage (nao em cookie), e a propria sense-app.html ja verifica a
+// sessao antes de carregar. Um middleware que checa sessao via cookie aqui
+// nunca encontra nada e derruba o usuario de volta pro login mesmo logado
+// corretamente — por isso essas rotas nao passam mais por gate aqui.
+export async function middleware(_req: NextRequest) {
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/sense-app', '/sense-app/:path*', '/sense-colab', '/sense-colab/:path*'],
+  matcher: [],
 }
