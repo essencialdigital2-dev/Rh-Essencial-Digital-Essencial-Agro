@@ -61,7 +61,21 @@ export async function provisionarAcessoEdu(nome: string, email: string, senha: s
   }
 }
 
+export async function provisionarAcessoNexo(nome: string, email: string) {
+  try {
+    const res = await fetch('https://nexoperform.vercel.app/api/empresa/criar', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, plano: 'trial' }),
+    })
+    const json = await res.json()
+    return json?.empresa?.codigo_convite || null
+  } catch {
+    return null
+  }
+}
+
 export const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens', 'edu']
+export const MODULOS_CODIGO_ACESSO = ['nexo']
 
 export async function provisionarModulos(nome: string, email: string, senha: string, modulos: string[]) {
   let algumProvisionado = false
@@ -74,5 +88,10 @@ export async function provisionarModulos(nome: string, email: string, senha: str
   if (modulos.includes('edu')) {
     algumProvisionado = (await provisionarAcessoEdu(nome, email, senha)) || algumProvisionado
   }
-  return algumProvisionado
+  let nexoCodigo: string | null = null
+  if (modulos.includes('nexo')) {
+    nexoCodigo = await provisionarAcessoNexo(nome, email)
+    if (nexoCodigo) algumProvisionado = true
+  }
+  return { algumProvisionado, nexoCodigo }
 }

@@ -26,21 +26,23 @@ export async function POST(req: NextRequest) {
   const trialFim = trial ? new Date(Date.now() + (trial_dias || 7) * 86400000).toISOString() : null
   const modulos: string[] = modulos_liberados || []
 
-  // Mesma senha em todos os produtos que ja suportam criacao automatica —
-  // Edu (precisa de escola ja cadastrada), NexoPerform e Agro Tech ainda
-  // nao tem essa automacao e continuam exigindo cadastro manual.
+  // Mesma senha em todos os produtos que ja suportam criacao automatica.
+  // NexoPerform usa codigo de convite em vez de senha. Agro Tech tem
+  // cadastro proprio via Clerk, linkado direto no portal.
   let senhaTemp: string | null = null
+  let nexoCodigo: string | null = null
   if (trial && email) {
     const senha = gerarSenhaTemp()
-    const algumProvisionado = await provisionarModulos(nome, email, senha, modulos)
-    if (algumProvisionado) senhaTemp = senha
+    const resultado = await provisionarModulos(nome, email, senha, modulos)
+    if (resultado.algumProvisionado) senhaTemp = senha
+    nexoCodigo = resultado.nexoCodigo
   }
 
   const { data, error } = await sb().from('eco_clientes').insert({
     nome, tipo, cnpj: cnpj || null, cidade: cidade || null, estado: estado || null,
     modulos_liberados: modulos,
     trial: !!trial, trial_fim: trialFim,
-    email: email || null, senha_temporaria: senhaTemp,
+    email: email || null, senha_temporaria: senhaTemp, nexo_codigo: nexoCodigo,
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

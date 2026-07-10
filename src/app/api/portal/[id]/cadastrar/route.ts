@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { provisionarModulos, MODULOS_AUTOCADASTRO } from '@/lib/provisionamento'
+import { provisionarModulos, MODULOS_AUTOCADASTRO, MODULOS_CODIGO_ACESSO } from '@/lib/provisionamento'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,15 +21,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (cliente.senha_temporaria) return NextResponse.json({ error: 'acesso ja foi criado para este link' }, { status: 400 })
 
   const modulos: string[] = cliente.modulos_liberados || []
-  const suportados = modulos.filter((m: string) => MODULOS_AUTOCADASTRO.includes(m))
+  const suportados = modulos.filter((m: string) => MODULOS_AUTOCADASTRO.includes(m) || MODULOS_CODIGO_ACESSO.includes(m))
   if (suportados.length === 0) {
     return NextResponse.json({ error: 'nenhum produto deste pacote suporta auto-cadastro ainda' }, { status: 400 })
   }
 
-  const ok = await provisionarModulos(cliente.nome, email, senha, suportados)
-  if (!ok) return NextResponse.json({ error: 'nao foi possivel criar o acesso. tente outro e-mail.' }, { status: 500 })
+  const resultado = await provisionarModulos(cliente.nome, email, senha, suportados)
+  if (!resultado.algumProvisionado) return NextResponse.json({ error: 'nao foi possivel criar o acesso. tente outro e-mail.' }, { status: 500 })
 
-  await sb().from('eco_clientes').update({ email, senha_temporaria: senha }).eq('id', id)
+  await sb().from('eco_clientes').update({ email, senha_temporaria: senha, nexo_codigo: resultado.nexoCodigo }).eq('id', id)
 
   return NextResponse.json({ ok: true, modulos: suportados })
 }

@@ -6,13 +6,15 @@ const CATALOGO: Record<string, { label: string; icone: string; cor: string; desc
   estudo: { label: 'Essencial Estudo', icone: '📖', cor: '#7C3AED', desc: 'Plataforma de estudo com IA', loginUrl: 'https://essencialestudo.com.br/login' },
   teens:  { label: 'Essencial Teens', icone: '🌟', cor: '#06b6d4', desc: 'Desenvolvimento socioemocional', loginUrl: 'https://essencialestudo.com.br/teens-entrar' },
   sense:  { label: 'Sense AI', icone: '🧠', cor: '#8b5cf6', desc: 'Saúde emocional e conformidade NR-1', loginUrl: 'https://rhessencialdigital.com.br/sense-login' },
-  nexo:   { label: 'NexoPerform', icone: '🧭', cor: '#10b981', desc: 'Assessment comportamental', loginUrl: 'https://nexoperform.vercel.app/auth/login' },
-  agro:   { label: 'Agro Tech', icone: '🌾', cor: '#00e676', desc: 'Gestão preditiva para o agronegócio', loginUrl: 'https://agrotech.rhessencialdigital.com.br/sign-in' },
+  nexo:   { label: 'NexoPerform', icone: '🧭', cor: '#10b981', desc: 'Assessment comportamental', loginUrl: 'https://nexoperform.vercel.app/empresa' },
+  agro:   { label: 'Agro Tech', icone: '🌾', cor: '#00e676', desc: 'Gestão preditiva para o agronegócio', loginUrl: 'https://agrotech.rhessencialdigital.com.br/sign-up' },
 }
 
 const MODULOS_AUTOCADASTRO = ['sense', 'estudo', 'teens', 'edu']
+const MODULOS_CODIGO_ACESSO = ['nexo']
+const MODULOS_NATIVO = ['agro']
 
-type Cliente = { nome: string; tipo: string; modulos_liberados: string[]; trial?: boolean; trial_fim?: string | null; email?: string | null; senha_temporaria?: string | null }
+type Cliente = { nome: string; tipo: string; modulos_liberados: string[]; trial?: boolean; trial_fim?: string | null; email?: string | null; senha_temporaria?: string | null; nexo_codigo?: string | null }
 
 export default function PortalCliente({ params }: { params: { id: string } }) {
   const { id } = params
@@ -56,8 +58,8 @@ export default function PortalCliente({ params }: { params: { id: string } }) {
     setCriando(false)
   }
 
-  const modulosComAutocadastro = cliente ? cliente.modulos_liberados.filter(m => MODULOS_AUTOCADASTRO.includes(m)) : []
-  const precisaCadastrar = !!cliente && !cliente.senha_temporaria && modulosComAutocadastro.length > 0
+  const modulosComAutocadastro = cliente ? cliente.modulos_liberados.filter(m => MODULOS_AUTOCADASTRO.includes(m) || MODULOS_CODIGO_ACESSO.includes(m)) : []
+  const precisaCadastrar = !!cliente && !cliente.senha_temporaria && !cliente.nexo_codigo && modulosComAutocadastro.length > 0
 
   return (
     <div style={{ minHeight: '100vh', background: '#07070F', color: '#F8F8FF', fontFamily: 'system-ui,sans-serif', padding: '48px 24px' }}>
@@ -121,6 +123,18 @@ export default function PortalCliente({ params }: { params: { id: string } }) {
           </div>
         )}
 
+        {cliente && cliente.nexo_codigo && (
+          <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 14, padding: 18, marginBottom: 24 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#10B981', marginBottom: 8, textTransform: 'uppercase' }}>🧭 Código do NexoPerform</div>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
+              <strong>Código de acesso:</strong> {cliente.nexo_codigo}
+            </p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 8 }}>
+              Não precisa de senha — cole esse código na tela do NexoPerform pra entrar direto no painel da empresa.
+            </p>
+          </div>
+        )}
+
         {cliente && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
             {cliente.modulos_liberados.length === 0 ? (
@@ -130,6 +144,41 @@ export default function PortalCliente({ params }: { params: { id: string } }) {
             ) : cliente.modulos_liberados.map(m => {
               const info = CATALOGO[m]
               if (!info) return null
+
+              // Agro Tech: cadastro proprio (Clerk), sempre disponivel
+              if (MODULOS_NATIVO.includes(m)) {
+                return (
+                  <a key={m} href={info.loginUrl} target="_blank" rel="noopener noreferrer" style={{
+                    display: 'block', padding: 22, borderRadius: 18, textDecoration: 'none', color: '#F8F8FF',
+                    background: `${info.cor}0D`, border: `1px solid ${info.cor}30`,
+                  }}>
+                    <div style={{ fontSize: 30, marginBottom: 10 }}>{info.icone}</div>
+                    <div style={{ fontSize: 16, fontWeight: 800 }}>{info.label}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>{info.desc}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: info.cor, marginTop: 14 }}>Criar minha conta →</div>
+                  </a>
+                )
+              }
+
+              // NexoPerform: acesso por codigo de convite, sem senha
+              if (MODULOS_CODIGO_ACESSO.includes(m)) {
+                const pronto = !!cliente.nexo_codigo
+                return (
+                  <a key={m} href={pronto ? info.loginUrl : undefined} target="_blank" rel="noopener noreferrer" style={{
+                    display: 'block', padding: 22, borderRadius: 18, textDecoration: 'none', color: '#F8F8FF',
+                    background: `${info.cor}0D`, border: `1px solid ${info.cor}30`,
+                    opacity: pronto ? 1 : 0.5, pointerEvents: pronto ? 'auto' : 'none',
+                  }}>
+                    <div style={{ fontSize: 30, marginBottom: 10 }}>{info.icone}</div>
+                    <div style={{ fontSize: 16, fontWeight: 800 }}>{info.label}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>{info.desc}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: info.cor, marginTop: 14 }}>
+                      {pronto ? 'Entrar com código →' : 'Crie seu acesso acima primeiro'}
+                    </div>
+                  </a>
+                )
+              }
+
               const autocadastro = MODULOS_AUTOCADASTRO.includes(m)
               const pronto = autocadastro && !!cliente.senha_temporaria
               const bloqueadoSemConta = autocadastro && !pronto

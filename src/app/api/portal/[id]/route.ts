@@ -12,9 +12,9 @@ const sb = () => createClient(
 // tipo e modulos liberados — nunca cnpj, observacoes ou qualquer dado interno.
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const { data, error } = await sb().from('eco_clientes').select('nome, tipo, modulos_liberados, trial, trial_fim, email, senha_temporaria').eq('id', id).maybeSingle()
+  const { data, error } = await sb().from('eco_clientes').select('nome, tipo, modulos_liberados, trial, trial_fim, email, senha_temporaria, nexo_codigo').eq('id', id).maybeSingle()
   if (error || !data) return NextResponse.json({ encontrado: false }, { status: 404 })
   const expirado = !!(data.trial_fim && new Date(data.trial_fim) < new Date())
-  if (expirado) { data.senha_temporaria = null }
+  if (expirado) { data.senha_temporaria = null; data.nexo_codigo = null }
   return NextResponse.json({ encontrado: true, ...data })
 }
