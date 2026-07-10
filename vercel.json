@@ -25,6 +25,10 @@
     {
       "path": "/api/cron/eco-radar",
       "schedule": "0 7 * * 1"
+    },
+    {
+      "path": "/api/cron/eco-leads",
+      "schedule": "0 7 * * *"
     }
   ],
   "headers": [
