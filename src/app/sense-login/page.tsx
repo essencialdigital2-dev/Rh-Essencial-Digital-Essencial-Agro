@@ -168,9 +168,9 @@ export default function SenseLogin() {
             <div>
               <label style={{ display: 'block', fontSize: 13, color: 'rgba(248,248,255,.5)', marginBottom: 8 }}>Senha</label>
               <div style={{ position: 'relative' }}>
-                <input style={{ ...inp, paddingRight: 44 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} />
+                <input style={{ ...inp, paddingRight: 52 }} type={mostrarSenha ? 'text' : 'password'} placeholder="••••••••" value={senha} onChange={e => setSenha(e.target.value)} onKeyDown={e => e.key === 'Enter' && entrar()} autoComplete="current-password" />
                 <button type="button" onClick={() => setMostrarSenha(v => !v)} tabIndex={-1}
-                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,248,255,.4)', fontSize: 16 }}
+                  style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(139,92,246,.15)', border: '1px solid rgba(139,92,246,.25)', borderRadius: 8, cursor: 'pointer', color: '#C4B5FD', fontSize: 15, zIndex: 5 }}
                   aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}>
                   {mostrarSenha ? '🙈' : '👁️'}
                 </button>
