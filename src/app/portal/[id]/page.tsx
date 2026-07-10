@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, use } from 'react'
+import { useEffect, useState } from 'react'
 
 const CATALOGO: Record<string, { label: string; icone: string; cor: string; desc: string; loginUrl: string }> = {
   edu:    { label: 'Essencial Edu', icone: '🎓', cor: '#A78BFA', desc: 'Inteligência educacional', loginUrl: 'https://essencial-edu.vercel.app/login' },
@@ -10,9 +10,9 @@ const CATALOGO: Record<string, { label: string; icone: string; cor: string; desc
   agro:   { label: 'Agro Tech', icone: '🌾', cor: '#00e676', desc: 'Gestão preditiva para o agronegócio', loginUrl: 'https://agrotech.rhessencialdigital.com.br/sign-in' },
 }
 
-export default function PortalCliente({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
-  const [cliente, setCliente] = useState<{ nome: string; tipo: string; modulos_liberados: string[] } | null>(null)
+export default function PortalCliente({ params }: { params: { id: string } }) {
+  const { id } = params
+  const [cliente, setCliente] = useState<{ nome: string; tipo: string; modulos_liberados: string[]; trial?: boolean; trial_fim?: string | null } | null>(null)
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState(false)
 
@@ -37,9 +37,20 @@ export default function PortalCliente({ params }: { params: Promise<{ id: string
             <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>Link não encontrado. Fale com a Essencial Digital.</div>
           ) : (
             <>
+              {cliente.trial && (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.35)', borderRadius: 99, padding: '6px 16px', marginBottom: 16, fontSize: 12, fontWeight: 800, color: '#F59E0B' }}>
+                  🎁 Link de Demonstração
+                  {cliente.trial_fim && (() => {
+                    const dias = Math.max(0, Math.ceil((new Date(cliente.trial_fim!).getTime() - Date.now()) / 86400000))
+                    return <span style={{ color: 'rgba(245,158,11,0.7)', fontWeight: 600 }}>· {dias > 0 ? `${dias} dia${dias !== 1 ? 's' : ''} restante${dias !== 1 ? 's' : ''}` : 'expirado'}</span>
+                  })()}
+                </div>
+              )}
               <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0 }}>Olá, {cliente.nome} 👋</h1>
               <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', marginTop: 8 }}>
-                Aqui estão os produtos Essencial Digital disponíveis para {cliente.tipo === 'instituicao' ? 'sua instituição' : 'sua empresa'}.
+                {cliente.trial
+                  ? `Este é o seu acesso de demonstração aos produtos Essencial Digital para ${cliente.tipo === 'instituicao' ? 'sua instituição' : 'sua empresa'} conhecer.`
+                  : `Aqui estão os produtos Essencial Digital disponíveis para ${cliente.tipo === 'instituicao' ? 'sua instituição' : 'sua empresa'}.`}
               </p>
             </>
           )}
