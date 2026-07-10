@@ -1470,6 +1470,9 @@
     <div class="nav-item" data-panel="chat" onclick="showPanel('chat', this)">
       <span class="nav-icon">💬</span><span>Sense AI</span>
     </div>
+    <div class="nav-item" data-panel="manual" onclick="showPanel('manual', this)">
+      <span class="nav-icon">📘</span><span>Manual de Uso</span>
+    </div>
 
     <!-- ── SAÚDE & CLIMA ── -->
     <div class="nav-section-label">Saúde & Clima</div>
@@ -2865,6 +2868,18 @@
         </div>
       </div>
     </div><!-- /risk -->
+
+    <!-- ===== PANEL: MANUAL DE USO ===== -->
+    <div class="panel" id="panel-manual">
+      <div style="max-width:760px;margin:0 auto;padding:8px 4px 40px;">
+        <div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:16px;padding:20px 22px;margin-bottom:24px;">
+          <div style="font-size:11px;font-weight:800;color:#A78BFA;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Manual de Uso</div>
+          <h1 style="font-size:20px;font-weight:900;color:#F8F8FF;margin:0 0 8px;">Como usar o Essencial Sense AI</h1>
+          <p style="font-size:13px;color:rgba(248,248,255,.5);line-height:1.6;margin:0;">Guia rápido de cada módulo. Clique em qualquer item pra abrir direto.</p>
+        </div>
+        <div id="manual-categorias"></div>
+      </div>
+    </div>
 
     <!-- ===== PANEL: CHAT ===== -->
     <div class="panel" id="panel-chat">
@@ -7221,6 +7236,7 @@
     'admin-alana': '👑 Painel Executivo · Alana Carvalho',
     'crm-panel': '📊 CRM · Pipeline de Vendas · Essencial Digital',
     'onboarding-estrategico': '🚀 Onboarding Estratégico · Implantação de Clientes',
+    manual: '📘 Manual de Uso · Essencial Sense AI',
   };
 
   var _panelHistory = [];
@@ -7277,9 +7293,79 @@
       insights: function() { setTimeout(insightsInit, 80); },
       'admin-alana': function() { carregarPainelAlana(); },
       'crm-panel': function() { /* iframe carrega sozinho */ },
-      'onboarding-estrategico': function() { obInicializar(); }
+      'onboarding-estrategico': function() { obInicializar(); },
+      manual: function() { renderManual(); }
     };
     if (loaders[panelId]) loaders[panelId]();
+  }
+
+  // ===== MANUAL DE USO =====
+  var MANUAL_CATEGORIAS = [
+    { cat: 'Início', ico: '🏠', itens: [
+      { panel: 'analytics', ico: '📊', nome: 'Dashboard', desc: 'Visão geral da empresa: ISHO, indicadores de clima, alertas recentes e resumo dos colaboradores.' },
+      { panel: 'colabs', ico: '👥', nome: 'Colaboradores', desc: 'Diretório de todos os colaboradores cadastrados, com perfil DISC e status de cada avaliação.' },
+      { panel: 'convite', ico: '✉️', nome: 'Convidar', desc: 'Envie convite por e-mail pra um colaborador criar a própria conta com senha temporária.' },
+      { panel: 'chat', ico: '💬', nome: 'Sense AI', desc: 'Assistente de IA pra tirar dúvidas sobre gestão de pessoas, clima e os dados da sua empresa.' },
+    ]},
+    { cat: 'Saúde & Clima', ico: '💚', itens: [
+      { panel: 'health', ico: '💚', nome: 'Sense Health', desc: 'Check-in emocional diário dos colaboradores — humor, energia e estresse.' },
+      { panel: 'voice', ico: '🎙️', nome: 'Sense Voice', desc: 'Canal de escuta anônimo pra colaboradores reportarem preocupações direto pro RH.' },
+      { panel: 'climate', ico: '🌡️', nome: 'Sense Climate', desc: 'Pesquisa de clima organizacional com relatórios automáticos por equipe.' },
+      { panel: 'diario', ico: '📖', nome: 'Diário Emocional', desc: 'Espaço pessoal de registro de pensamentos, gratidão e vitórias do dia.' },
+      { panel: 'reflexao', ico: '🕯️', nome: '5 Min de Reflexão', desc: 'Sessão guiada por IA de 5 minutos pra pausa e reflexão durante o expediente.' },
+      { panel: 'coach', ico: '🧡', nome: 'Coach AI', desc: 'Suporte emocional inteligente — conversa com IA especializada em bem-estar no trabalho.' },
+    ]},
+    { cat: 'Avaliação', ico: '🧩', itens: [
+      { panel: 'disc', ico: '🧩', nome: 'Sense DISC', desc: 'Avaliação de perfil comportamental (Dominância, Influência, Estabilidade, Conformidade).' },
+      { panel: 'neuro', ico: '🧠', nome: 'Sense Neuro', desc: 'Mapeamento de neurodiversidade e potenciais humanos da equipe.' },
+      { panel: 'feedback360', ico: '🔄', nome: 'Feedback 360°', desc: 'Avaliação de competências entre pares, líderes e liderados.' },
+      { panel: 'desempenho', ico: '📈', nome: 'Desempenho', desc: 'Acompanhamento de OKRs e metas individuais e por equipe.' },
+      { panel: 'leader', ico: '🏆', nome: 'Sense Leader', desc: 'Ranking e identificação de potencial de liderança na empresa.' },
+      { panel: 'pdi', ico: '🎯', nome: 'PDI', desc: 'Plano de Desenvolvimento Individual de cada colaborador.' },
+    ]},
+    { cat: 'Prevenção Legal', ico: '📋', itens: [
+      { panel: 'risk', ico: '📋', nome: 'Sense NR-1', desc: 'Diagnóstico de riscos psicossociais exigido pela NR-1, com laudo pra conformidade legal.' },
+      { panel: 'turnover', ico: '⚠️', nome: 'Sense Turnover', desc: 'Previsão de risco de desligamento por colaborador, com alertas antecipados.' },
+      { panel: 'prevent', ico: '🛡️', nome: 'Sense Prevent', desc: 'Prevenção ativa de crises — cruza sinais de várias ferramentas pra apontar riscos antes que aconteçam.' },
+    ]},
+    { cat: 'IA Estratégica', ico: '🔮', itens: [
+      { panel: 'insights', ico: '🔮', nome: 'Inteligência Proativa', desc: 'Briefing semanal automático com o que merece atenção na sua empresa.' },
+      { panel: 'leadershipai', ico: '🎯', nome: 'Leadership AI', desc: 'Coach de liderança por IA pra gestores desenvolverem o próprio estilo de liderança.' },
+      { panel: 'dna', ico: '🧬', nome: 'Sense DNA™', desc: 'Mapeamento do DNA organizacional — valores e cultura reais da empresa.' },
+      { panel: 'twin', ico: '🤖', nome: 'Human Twin AI', desc: 'Gêmeos digitais que simulam comportamento e decisões de perfis da equipe.' },
+    ]},
+    { cat: 'Crescimento', ico: '🌱', itens: [
+      { panel: 'inspire', ico: '💛', nome: 'Sense Inspire™', desc: 'Mensagens diárias que fortalecem e motivam os colaboradores.' },
+      { panel: 'trilhas', ico: '🌱', nome: 'Trilhas Humanas', desc: 'Trilhas de desenvolvimento pessoal e profissional pra equipe.' },
+      { panel: 'learning', ico: '📚', nome: 'Sense Learning', desc: 'Trilhas de capacitação e aprendizado contínuo.' },
+      { panel: 'nexo', ico: '🧬', nome: 'NexoPerform', desc: 'Assessment comportamental e mapa de arquétipos de equipe (produto integrado).' },
+    ]},
+    { cat: 'Talentos', ico: '🔍', itens: [
+      { panel: 'recrutamento', ico: '🔍', nome: 'Recrutamento DISC', desc: 'Contratação orientada por compatibilidade de perfil comportamental.' },
+      { panel: 'sucessao', ico: '🌟', nome: 'Plano de Sucessão', desc: 'Mapeamento de talentos prontos pra assumir posições-chave.' },
+      { panel: 'culturemap', ico: '🗺️', nome: 'Culture Map™', desc: 'Mapa cultural da empresa em tempo real.' },
+      { panel: 'benchmark', ico: '🏅', nome: 'Benchmark Setorial', desc: 'Compare seus indicadores com a média do seu setor.' },
+    ]},
+  ];
+
+  function renderManual() {
+    var container = document.getElementById('manual-categorias');
+    if (!container || container.dataset.rendered) return;
+    container.dataset.rendered = '1';
+    var html = '';
+    MANUAL_CATEGORIAS.forEach(function(cat) {
+      html += '<div style="background:#0d0d1a;border:1px solid rgba(139,92,246,.15);border-radius:14px;margin-bottom:14px;overflow:hidden;">';
+      html += '<div style="padding:12px 16px;font-size:12px;font-weight:800;color:#C4B5FD;background:rgba(139,92,246,.08);">' + cat.ico + ' ' + cat.cat + '</div>';
+      cat.itens.forEach(function(item) {
+        html += '<div onclick="showPanel(\'' + item.panel + '\', null)" style="display:flex;gap:12px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.05);cursor:pointer;" onmouseover="this.style.background=\'rgba(139,92,246,.06)\'" onmouseout="this.style.background=\'transparent\'">';
+        html += '<span style="font-size:18px;flex-shrink:0;">' + item.ico + '</span>';
+        html += '<div><div style="font-size:13px;font-weight:700;color:#F8F8FF;margin-bottom:2px;">' + item.nome + '</div>';
+        html += '<div style="font-size:12px;color:rgba(248,248,255,.45);line-height:1.5;">' + item.desc + '</div></div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
   }
 
   // ===== HEALTH =====
