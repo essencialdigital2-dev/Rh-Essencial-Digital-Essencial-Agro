@@ -25,10 +25,16 @@ export async function GET(req: NextRequest) {
   const campo = CAMPOS_PERMITIDOS.find(c => searchParams.get(c))
   if (!campo) return NextResponse.json({ error: 'nenhum campo de busca valido informado' }, { status: 400 })
 
-  const { data, error } = await sb().from('eco_clientes').select('id, nome, tipo, modulos_liberados').eq(campo, searchParams.get(campo)!).maybeSingle()
+  const { data, error } = await sb().from('eco_clientes').select('id, nome, tipo, modulos_liberados, trial, trial_fim').eq(campo, searchParams.get(campo)!).maybeSingle()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!data) return NextResponse.json({ encontrado: false, modulos_liberados: [] })
+
+  // Trial expirado: bloqueia os modulos mesmo que ainda estejam na lista
+  const trialExpirado = data.trial && data.trial_fim && new Date(data.trial_fim) < new Date()
+  if (trialExpirado) {
+    return NextResponse.json({ encontrado: true, ...data, modulos_liberados: [], trial_expirado: true })
+  }
 
   return NextResponse.json({ encontrado: true, ...data })
 }

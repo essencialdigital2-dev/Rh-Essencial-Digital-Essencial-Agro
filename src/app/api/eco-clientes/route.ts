@@ -18,13 +18,16 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   if (!ecoAutorizado(req)) return NextResponse.json({ error: 'nao autorizado' }, { status: 401 })
-  const { nome, tipo, cnpj, cidade, estado, modulos_liberados } = await req.json()
+  const { nome, tipo, cnpj, cidade, estado, modulos_liberados, trial, trial_dias } = await req.json()
   if (!nome || !tipo) return NextResponse.json({ error: 'nome e tipo obrigatorios' }, { status: 400 })
   if (!['instituicao', 'empresa'].includes(tipo)) return NextResponse.json({ error: 'tipo invalido' }, { status: 400 })
+
+  const trialFim = trial ? new Date(Date.now() + (trial_dias || 7) * 86400000).toISOString() : null
 
   const { data, error } = await sb().from('eco_clientes').insert({
     nome, tipo, cnpj: cnpj || null, cidade: cidade || null, estado: estado || null,
     modulos_liberados: modulos_liberados || [],
+    trial: !!trial, trial_fim: trialFim,
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

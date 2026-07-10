@@ -15,6 +15,13 @@ type Cliente = {
   sense_empresa_id: string | null
   teens_instituicao_id: string | null
   agro_empresa_id: string | null
+  trial: boolean
+  trial_fim: string | null
+}
+
+const PACOTES = {
+  educacional: { label: '🎓 Educacional', modulos: ['edu', 'estudo', 'teens', 'sense', 'nexo'], tipo: 'instituicao' as const },
+  agro: { label: '🌾 Agro', modulos: ['agro', 'sense', 'nexo'], tipo: 'empresa' as const },
 }
 
 const CAMPOS_VINCULO = [
@@ -45,6 +52,9 @@ export default function ClientesEcossistema() {
   const [form, setForm] = useState({ nome: '', tipo: 'instituicao' as 'instituicao' | 'empresa', cnpj: '', cidade: '', estado: '' })
   const [editandoId, setEditandoId] = useState<string | null>(null)
   const [copiadoId, setCopiadoId] = useState<string | null>(null)
+  const [nomeTrial, setNomeTrial] = useState('')
+  const [pacoteTrial, setPacoteTrial] = useState<keyof typeof PACOTES>('educacional')
+  const [criandoTrial, setCriandoTrial] = useState(false)
 
   async function copiarLinkPortal(id: string) {
     const link = `${window.location.origin}/portal/${id}`
@@ -65,6 +75,21 @@ export default function ClientesEcossistema() {
       if (d.ok) setClientes(d.clientes)
     } catch {}
     setLoading(false)
+  }
+
+  async function criarTrial() {
+    if (!nomeTrial) return
+    setCriandoTrial(true)
+    try {
+      const p = PACOTES[pacoteTrial]
+      await ecoFetch('/api/eco-clientes', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: nomeTrial, tipo: p.tipo, modulos_liberados: p.modulos, trial: true, trial_dias: 7 }),
+      })
+      setNomeTrial('')
+      await carregar()
+    } catch {}
+    setCriandoTrial(false)
   }
 
   async function criar() {
@@ -113,6 +138,24 @@ export default function ClientesEcossistema() {
         </p>
       </div>
 
+      {/* Trial de demonstração rápido */}
+      <div style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.25)', borderRadius: 14, padding: 16, marginBottom: 16 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#34D399', marginBottom: 4, textTransform: 'uppercase' }}>🎁 Criar trial de demonstração (7 dias)</div>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>
+          Para instituições que entraram em contato direto (sem passar pela máquina de leads). Libera o pacote todo por 7 dias, depois bloqueia sozinho.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px auto', gap: 8 }}>
+          <input value={nomeTrial} onChange={e => setNomeTrial(e.target.value)} placeholder="Nome da instituição/empresa" style={inputStyle} />
+          <select value={pacoteTrial} onChange={e => setPacoteTrial(e.target.value as any)} style={inputStyle}>
+            <option value="educacional">🎓 Pacote Educacional (Edu + Estudo + Teens + Sense AI + NexoPerform)</option>
+            <option value="agro">🌾 Pacote Agro (Agro Tech + Sense AI + NexoPerform)</option>
+          </select>
+          <button onClick={criarTrial} disabled={criandoTrial || !nomeTrial} style={{ padding: '8px 18px', borderRadius: 10, border: 'none', background: '#10b981', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity: criandoTrial || !nomeTrial ? 0.5 : 1, whiteSpace: 'nowrap' }}>
+            {criandoTrial ? 'Criando...' : '🎁 Criar trial'}
+          </button>
+        </div>
+      </div>
+
       {/* Novo cliente */}
       <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 16, marginBottom: 24 }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: '#A78BFA', marginBottom: 10, textTransform: 'uppercase' }}>+ Novo cliente</div>
@@ -141,8 +184,21 @@ export default function ClientesEcossistema() {
             <div key={c.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>
+                  <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: 8 }}>
                     {c.tipo === 'instituicao' ? '🏫' : '🏢'} {c.nome}
+                    {c.trial && (() => {
+                      const diasRestantes = c.trial_fim ? Math.ceil((new Date(c.trial_fim).getTime() - Date.now()) / 86400000) : 0
+                      const expirado = diasRestantes <= 0
+                      return (
+                        <span style={{
+                          fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 99,
+                          background: expirado ? 'rgba(248,113,113,.15)' : 'rgba(245,158,11,.15)',
+                          color: expirado ? '#F87171' : '#F59E0B', border: `1px solid ${expirado ? 'rgba(248,113,113,.3)' : 'rgba(245,158,11,.3)'}`,
+                        }}>
+                          {expirado ? '⏱ Trial expirado' : `🎁 Trial · ${diasRestantes}d restantes`}
+                        </span>
+                      )
+                    })()}
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
                     {c.tipo === 'instituicao' ? 'Instituição' : 'Empresa'}{c.cidade ? ` · ${c.cidade}${c.estado ? '/' + c.estado : ''}` : ''}{c.cnpj ? ` · ${c.cnpj}` : ''}

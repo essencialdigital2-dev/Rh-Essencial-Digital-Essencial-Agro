@@ -15,6 +15,14 @@ const PRODUTOS = [
 
 const COR_TEMP: Record<string, string> = { quente: '#F87171', morno: '#F0C36D', frio: '#60A5FA' }
 
+const PACOTES_TRIAL = {
+  educacional: { label: '🎓 Educacional', modulos: ['edu', 'estudo', 'teens', 'sense', 'nexo'], tipo: 'instituicao' as const },
+  agro: { label: '🌾 Agro', modulos: ['agro', 'sense', 'nexo'], tipo: 'empresa' as const },
+}
+function pacotePorProduto(produto: string): keyof typeof PACOTES_TRIAL {
+  return produto === 'agro' ? 'agro' : 'educacional'
+}
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<any[]>([])
   const [carregandoLista, setCarregandoLista] = useState(true)
@@ -26,6 +34,8 @@ export default function LeadsPage() {
   const [erro, setErro] = useState('')
   const [gerandoAuto, setGerandoAuto] = useState(false)
   const [msgAuto, setMsgAuto] = useState('')
+  const [criandoTrialId, setCriandoTrialId] = useState<string | null>(null)
+  const [trialCriadoId, setTrialCriadoId] = useState<string | null>(null)
 
   useEffect(() => {
     carregarLeads()
@@ -60,6 +70,22 @@ export default function LeadsPage() {
     } finally {
       setGerando(false)
     }
+  }
+
+  async function criarTrialDoLead(lead: any) {
+    setCriandoTrialId(lead.id)
+    try {
+      const p = PACOTES_TRIAL[pacotePorProduto(lead.produto)]
+      await ecoFetch('/api/eco-clientes', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: lead.instituicao || lead.nome, tipo: p.tipo,
+          modulos_liberados: p.modulos, trial: true, trial_dias: 7,
+        }),
+      })
+      setTrialCriadoId(lead.id)
+    } catch {}
+    setCriandoTrialId(null)
   }
 
   async function gerarAutomatico() {
@@ -165,6 +191,14 @@ export default function LeadsPage() {
                 <div style={{ fontSize: 11, color: 'rgba(248,248,255,.4)' }}>{l.produto} · {l.status}</div>
               </div>
               <div style={{ fontSize: 11, color: 'rgba(248,248,255,.4)' }}>{new Date(l.criado_em).toLocaleDateString('pt-BR')}</div>
+              {trialCriadoId === l.id ? (
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#34D399' }}>✓ Trial criado</span>
+              ) : (
+                <button onClick={() => criarTrialDoLead(l)} disabled={criandoTrialId === l.id}
+                  style={{ fontSize: 11, fontWeight: 700, color: '#34D399', background: 'rgba(52,211,153,.08)', border: '1px solid rgba(52,211,153,.25)', borderRadius: 8, padding: '5px 10px', cursor: criandoTrialId === l.id ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}>
+                  {criandoTrialId === l.id ? 'Criando...' : `🎁 Trial 7d (${PACOTES_TRIAL[pacotePorProduto(l.produto)].label})`}
+                </button>
+              )}
             </div>
           ))}
         </div>
