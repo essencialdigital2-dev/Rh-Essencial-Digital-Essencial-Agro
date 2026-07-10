@@ -58,13 +58,13 @@ export default function PortalCliente({ params }: { params: { id: string } }) {
 
         {cliente && cliente.senha_temporaria && (
           <div style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.3)', borderRadius: 14, padding: 18, marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: '#A78BFA', marginBottom: 8, textTransform: 'uppercase' }}>🧠 Acesso já pronto — Sense AI</div>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#A78BFA', marginBottom: 8, textTransform: 'uppercase' }}>🔑 Acesso já pronto</div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
               <strong>E-mail:</strong> {cliente.email}<br />
               <strong>Senha temporária:</strong> {cliente.senha_temporaria}
             </p>
             <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 8 }}>
-              Use esses dados no botão "Sense AI" abaixo para entrar. Recomendamos trocar a senha após o primeiro acesso.
+              Use esses dados nos produtos que já criam conta automaticamente ao entrar (veja os botões abaixo). Recomendamos trocar a senha após o primeiro acesso.
             </p>
           </div>
         )}

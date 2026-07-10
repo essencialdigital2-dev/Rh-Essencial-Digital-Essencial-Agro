@@ -211,7 +211,7 @@ export default function ClientesEcossistema() {
           </button>
         </div>
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>
-          Com e-mail preenchido, a conta do Sense AI já é criada automaticamente e a senha é enviada por e-mail. Os outros produtos do pacote ainda precisam de cadastro manual por enquanto.
+          Com e-mail preenchido, as contas do Sense AI e do Essencial Estudo/Teens já são criadas automaticamente (mesma senha nos dois) e enviadas por e-mail. Edu, NexoPerform e Agro Tech ainda precisam de cadastro manual por enquanto.
         </p>
         {linkTrialCriado && (
           <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(0,0,0,.2)', borderRadius: 10, padding: '8px 12px' }}>

@@ -50,6 +50,19 @@ async function provisionarAcessoSense(nome: string, email: string, senha: string
   return true
 }
 
+async function provisionarAcessoEstudo(nome: string, email: string, senha: string) {
+  try {
+    const res = await fetch('https://essencialestudo.com.br/api/auth/signup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, password: senha }),
+    })
+    const json = await res.json()
+    return !!json.ok
+  } catch {
+    return false
+  }
+}
+
 export async function POST(req: NextRequest) {
   if (!ecoAutorizado(req)) return NextResponse.json({ error: 'nao autorizado' }, { status: 401 })
   const { nome, tipo, cnpj, cidade, estado, modulos_liberados, trial, trial_dias, email } = await req.json()
@@ -59,11 +72,20 @@ export async function POST(req: NextRequest) {
   const trialFim = trial ? new Date(Date.now() + (trial_dias || 7) * 86400000).toISOString() : null
   const modulos: string[] = modulos_liberados || []
 
+  // Mesma senha em todos os produtos que ja suportam criacao automatica —
+  // Edu (precisa de escola ja cadastrada), NexoPerform e Agro Tech ainda
+  // nao tem essa automacao e continuam exigindo cadastro manual.
   let senhaTemp: string | null = null
-  if (trial && email && modulos.includes('sense')) {
-    senhaTemp = gerarSenhaTemp()
-    const ok = await provisionarAcessoSense(nome, email, senhaTemp)
-    if (!ok) senhaTemp = null
+  let algumProvisionado = false
+  if (trial && email) {
+    const senha = gerarSenhaTemp()
+    if (modulos.includes('sense')) {
+      algumProvisionado = (await provisionarAcessoSense(nome, email, senha)) || algumProvisionado
+    }
+    if (modulos.includes('estudo') || modulos.includes('teens')) {
+      algumProvisionado = (await provisionarAcessoEstudo(nome, email, senha)) || algumProvisionado
+    }
+    if (algumProvisionado) senhaTemp = senha
   }
 
   const { data, error } = await sb().from('eco_clientes').insert({
