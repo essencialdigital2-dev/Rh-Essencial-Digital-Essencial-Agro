@@ -63,6 +63,7 @@ export default function ClientesEcossistema() {
   const [editandoId, setEditandoId] = useState<string | null>(null)
   const [copiadoId, setCopiadoId] = useState<string | null>(null)
   const [nomeTrial, setNomeTrial] = useState('')
+  const [emailTrial, setEmailTrial] = useState('')
   const [pacoteTrial, setPacoteTrial] = useState<keyof typeof PACOTES>('educacional')
   const [criandoTrial, setCriandoTrial] = useState(false)
   const [linkTrialCriado, setLinkTrialCriado] = useState('')
@@ -133,13 +134,14 @@ export default function ClientesEcossistema() {
       const p = PACOTES[pacoteTrial]
       const r = await ecoFetch('/api/eco-clientes', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome: nomeTrial, tipo: p.tipo, modulos_liberados: p.modulos, trial: true, trial_dias: 7 }),
+        body: JSON.stringify({ nome: nomeTrial, tipo: p.tipo, modulos_liberados: p.modulos, trial: true, trial_dias: 7, email: emailTrial || undefined }),
       })
       const d = await r.json()
       if (d.ok && d.cliente?.id) {
         setLinkTrialCriado(`${window.location.origin}/portal/${d.cliente.id}`)
       }
       setNomeTrial('')
+      setEmailTrial('')
       await carregar()
     } catch {}
     setCriandoTrial(false)
@@ -197,8 +199,9 @@ export default function ClientesEcossistema() {
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>
           Para instituições que entraram em contato direto (sem passar pela máquina de leads). Libera o pacote todo por 7 dias, depois bloqueia sozinho.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px auto', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 200px auto', gap: 8 }}>
           <input value={nomeTrial} onChange={e => setNomeTrial(e.target.value)} placeholder="Nome da instituição/empresa" style={inputStyle} />
+          <input value={emailTrial} onChange={e => setEmailTrial(e.target.value)} placeholder="E-mail de acesso (opcional)" style={inputStyle} />
           <select value={pacoteTrial} onChange={e => setPacoteTrial(e.target.value as any)} style={inputStyle}>
             <option value="educacional">🎓 Pacote Educacional (Edu + Estudo + Teens + Sense AI + NexoPerform)</option>
             <option value="agro">🌾 Pacote Agro (Agro Tech + Sense AI + NexoPerform)</option>
@@ -207,6 +210,9 @@ export default function ClientesEcossistema() {
             {criandoTrial ? 'Criando...' : '🎁 Criar trial'}
           </button>
         </div>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>
+          Com e-mail preenchido, a conta do Sense AI já é criada automaticamente e a senha é enviada por e-mail. Os outros produtos do pacote ainda precisam de cadastro manual por enquanto.
+        </p>
         {linkTrialCriado && (
           <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(0,0,0,.2)', borderRadius: 10, padding: '8px 12px' }}>
             <span style={{ fontSize: 12, color: '#34D399', fontWeight: 700 }}>✓ Trial criado!</span>
