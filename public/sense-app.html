@@ -8817,7 +8817,7 @@ Responda sempre em português brasileiro. Seja prático, empático e direto. Use
       var res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) })
+        body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1), userId: senseUser ? senseUser.id : null })
       });
 
       var json = await res.json();
