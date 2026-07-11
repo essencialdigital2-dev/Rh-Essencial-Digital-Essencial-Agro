@@ -1,38 +1,59 @@
 import { NextResponse } from 'next/server'
-import { PRODUTOS, pesquisarAlvo, gerarAbordagem } from '@/lib/eco-leads-core'
+import { PRODUTOS, sbEcoLeads, descobrirAlvos, pesquisarAlvo, gerarAbordagem } from '@/lib/eco-leads-core'
 
 export async function GET() {
-  const alvo = 'Colegio Santo Agostinho Belo Horizonte'
-  const p = PRODUTOS.edu
+  const passos: any = {}
   try {
-    const pesquisa = await pesquisarAlvo(alvo)
-    let abordagemErro = null
-    let abordagem = null
-    let rawTexto = ''
-    try {
-      const g2 = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: `Voce e especialista em prospeccao consultiva E em analise preditiva de vendas B2B da Essencial Digital. Sem travessoes, acentuacao correta. PROIBIDO parecer template.
+    const alvos = await descobrirAlvos(PRODUTOS.edu, 3)
+    passos.alvos_encontrados = alvos
 
-PRODUTO: ${p.nome} (${p.pitch})
-PUBLICO TIPICO: ${p.alvo}
-ALVO DA PROSPECCAO: ${alvo}
-CONTATO (se conhecido): nao informado
-
-PESQUISA NA WEB SOBRE O ALVO:
-${pesquisa || 'Nada encontrado.'}
-
-Retorne APENAS JSON valido:
-{"score_preditivo": 0, "temperatura": "morno", "justificativa_score": "", "gancho": "", "email": {"assunto":"","corpo":""}, "whatsapp":"", "roteiro_ligacao":[], "melhor_horario":"", "contatos_publicos":{"site":"","telefone":"","email":"","instagram":""}, "objecao_provavel":{"objecao":"","resposta":""}}` }] }] }) }
-      )
-      const gd2 = await g2.json()
-      rawTexto = gd2.candidates?.[0]?.content?.parts?.[0]?.text ?? JSON.stringify(gd2)
-      abordagem = JSON.parse(rawTexto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim())
-    } catch (e: unknown) {
-      abordagemErro = e instanceof Error ? e.message : String(e)
+    if (!alvos.length) {
+      return NextResponse.json({ passos, conclusao: 'descobrirAlvos retornou vazio — falha na descoberta' })
     }
-    return NextResponse.json({ pesquisa_len: pesquisa.length, pesquisa_preview: pesquisa.slice(0, 200), raw_texto: rawTexto, abordagem, abordagemErro })
+
+    const alvo = alvos[0]
+    let pesquisa = ''
+    try {
+      pesquisa = await pesquisarAlvo(alvo)
+      passos.pesquisa_ok = true
+      passos.pesquisa_len = pesquisa.length
+    } catch (e: unknown) {
+      passos.pesquisa_erro = e instanceof Error ? e.message : String(e)
+    }
+
+    let abordagem = null
+    try {
+      abordagem = await gerarAbordagem(PRODUTOS.edu, alvo, undefined, pesquisa)
+      passos.abordagem_ok = true
+    } catch (e: unknown) {
+      passos.abordagem_erro = e instanceof Error ? e.message : String(e)
+      return NextResponse.json({ passos, conclusao: 'gerarAbordagem falhou' })
+    }
+
+    try {
+      const db = sbEcoLeads()
+      const { data: lead, error } = await db.from('edu_leads_maquina').insert({
+        produto: 'edu',
+        nome: alvo,
+        instituicao: alvo,
+        email: abordagem?.contatos_publicos?.email || null,
+        telefone: abordagem?.contatos_publicos?.telefone || null,
+        origem: 'debug_teste',
+        score: abordagem?.score_preditivo ?? null,
+        temperatura: abordagem?.temperatura ?? null,
+        abordagem_ia: { ...abordagem, pesquisa },
+        analise_ia: { resumo: abordagem?.justificativa_score || `teste debug: ${alvo}`, pesquisa_web: !!pesquisa },
+        status: 'novo',
+      }).select().single()
+      passos.insert_ok = !error
+      passos.insert_erro = error?.message || null
+      passos.lead_id = lead?.id || null
+    } catch (e: unknown) {
+      passos.insert_excecao = e instanceof Error ? e.message : String(e)
+    }
+
+    return NextResponse.json({ passos, conclusao: 'pipeline completo executado' })
   } catch (e: unknown) {
-    return NextResponse.json({ erro: e instanceof Error ? e.message : String(e) }, { status: 500 })
+    return NextResponse.json({ erro: e instanceof Error ? e.message : String(e), passos }, { status: 500 })
   }
 }
