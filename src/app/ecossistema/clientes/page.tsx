@@ -191,7 +191,7 @@ export default function ClientesEcossistema() {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>🗂 Central Administradora — Clientes do Ecossistema</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>🗂 Central Essencial Human Tech — Clientes do Ecossistema</h1>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>
           Um único registro pra instituições e empresas. Cada uma escolhe módulos de qualquer catálogo — uma escola pode ter Edu/Teens e também Sense AI pra própria equipe, por exemplo.
         </p>
@@ -213,7 +213,7 @@ export default function ClientesEcossistema() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
           <div>
             <div style={{ fontSize: 10, fontWeight: 800, color: '#c084fc', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Educação</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>Essencial Estudo<br/>Essencial Teens</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>Essencial Edu<br/>Essencial Estudo<br/>Essencial Teens</div>
           </div>
           <div>
             <div style={{ fontSize: 10, fontWeight: 800, color: '#6ee7b7', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Empresas</div>
