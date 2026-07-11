@@ -197,6 +197,35 @@ export default function ClientesEcossistema() {
         </p>
       </div>
 
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(236,72,153,0.06))',
+        border: '1px solid rgba(124,58,237,0.25)', borderRadius: 18, padding: '22px 26px', marginBottom: 24,
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#A78BFA', marginBottom: 8 }}>
+          Essencial Digital · Human Tech
+        </div>
+        <p style={{ fontSize: 15, fontWeight: 800, color: '#fff', lineHeight: 1.6, margin: '0 0 8px' }}>
+          Tecnologia que transforma vidas por meio da Inteligência Humana Adaptativa.
+        </p>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, margin: '0 0 16px' }}>
+          Educação, Empresas e Agronegócio — todos os produtos do ecossistema usam a mesma base tecnológica e a mesma metodologia: a IA aprende o contexto, o comportamento, os objetivos e o ritmo de cada pessoa, criando experiências personalizadas de aprendizagem e desenvolvimento.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: '#c084fc', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Educação</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>Essencial Estudo<br/>Essencial Teens</div>
+          </div>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: '#6ee7b7', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Empresas</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>Essencial Sense AI<br/>NexoPerform</div>
+          </div>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: '#86efac', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Agronegócio</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>Essencial Agro</div>
+          </div>
+        </div>
+      </div>
+
       {/* Trial de demonstração rápido */}
       <div style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.25)', borderRadius: 14, padding: 16, marginBottom: 16 }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: '#34D399', marginBottom: 4, textTransform: 'uppercase' }}>🎁 Criar trial de demonstração (7 dias)</div>
