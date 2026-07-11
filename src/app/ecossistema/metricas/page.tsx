@@ -15,11 +15,23 @@ export default function MetricasEcossistema() {
   const [funil, setFunil] = useState<any>(null)
   const [porProduto, setPorProduto] = useState<any[]>([])
   const [meses, setMeses] = useState<any[]>([])
+  const [auto, setAuto] = useState<any>(null)
+  const [carregandoAuto, setCarregandoAuto] = useState(true)
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState({ mes: new Date().toISOString().slice(0, 7) + '-01', investimento_marketing: '', mrr: '', clientes_ativos: '', novos_clientes: '', clientes_perdidos: '' })
   const [salvando, setSalvando] = useState(false)
 
-  useEffect(() => { carregar() }, [])
+  useEffect(() => { carregar(); carregarAuto() }, [])
+
+  async function carregarAuto() {
+    setCarregandoAuto(true)
+    try {
+      const r = await ecoFetch('/api/eco-metricas/automatico')
+      const d = await r.json()
+      if (d.ok) setAuto(d)
+    } catch {}
+    setCarregandoAuto(false)
+  }
 
   async function carregar() {
     setLoading(true)
@@ -69,6 +81,39 @@ export default function MetricasEcossistema() {
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>
           Funil calculado com dados reais de leads. CAC, LTV e crescimento de MRR dependem dos números mensais abaixo.
         </p>
+      </div>
+
+      {/* AUTOMATICO — calculado direto de eco_clientes */}
+      <div style={{ background: 'linear-gradient(135deg, rgba(52,211,153,0.08), rgba(6,182,212,0.05))', border: '1px solid rgba(52,211,153,0.25)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#34D399', marginBottom: 14, textTransform: 'uppercase' }}>✨ Automático — calculado agora dos clientes reais</div>
+        {carregandoAuto ? (
+          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>Calculando...</div>
+        ) : auto ? (
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 16 }}>
+              {[
+                ['MRR', `R$ ${auto.mrr.toLocaleString('pt-BR')}`, '#34D399'],
+                ['Clientes pagantes', auto.clientes_pagantes, '#60A5FA'],
+                ['Clientes ativos (+trial)', auto.clientes_ativos, '#A78BFA'],
+                ['Trials em andamento', auto.trials, '#F0C36D'],
+                ['Novos este mês', auto.novos_clientes, '#34D399'],
+                ['Perdidos este mês', auto.clientes_perdidos, '#F87171'],
+              ].map(([label, valor, cor]) => (
+                <div key={label as string} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, padding: 14 }}>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: cor as string }}>{valor}</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{label as string}</div>
+                </div>
+              ))}
+            </div>
+            {auto.narrativa && (
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, background: 'rgba(0,0,0,0.15)', borderRadius: 10, padding: 14 }}>
+                <b style={{ color: '#34D399' }}>Leitura da IA:</b> {auto.narrativa}
+              </div>
+            )}
+          </>
+        ) : (
+          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13 }}>Erro ao calcular. Verifique se os clientes têm valor mensal preenchido.</div>
+        )}
       </div>
 
       {loading ? (

@@ -14,8 +14,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params
   const body = await req.json()
   const updates: Record<string, unknown> = { atualizado_em: new Date().toISOString() }
-  for (const campo of ['nome', 'tipo', 'cnpj', 'cidade', 'estado', 'modulos_liberados', 'observacoes', 'edu_escola_id', 'sense_empresa_id', 'teens_instituicao_id', 'agro_empresa_id']) {
+  for (const campo of ['nome', 'tipo', 'cnpj', 'cidade', 'estado', 'modulos_liberados', 'observacoes', 'edu_escola_id', 'sense_empresa_id', 'teens_instituicao_id', 'agro_empresa_id', 'valor_mensal']) {
     if (campo in body) updates[campo] = body[campo]
+  }
+  if ('status' in body) {
+    updates.status = body.status
+    updates.cancelado_em = body.status === 'cancelado' ? new Date().toISOString() : null
   }
 
   const { data, error } = await sb().from('eco_clientes').update(updates).eq('id', id).select().single()

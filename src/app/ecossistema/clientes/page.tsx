@@ -18,6 +18,9 @@ type Cliente = {
   trial: boolean
   trial_fim: string | null
   ultimo_acesso: string | null
+  valor_mensal: number | null
+  status: 'ativo' | 'cancelado'
+  criado_em: string
 }
 
 const PACOTES = {
@@ -360,6 +363,18 @@ export default function ClientesEcossistema() {
                   </button>
                   <button onClick={() => remover(c.id)} style={{ fontSize: 11, color: '#F87171', background: 'none', border: '1px solid rgba(248,113,113,0.3)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer' }}>Remover</button>
                 </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+                <label style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>Valor mensal (R$)</label>
+                <input type="number" defaultValue={c.valor_mensal ?? 0} onBlur={e => salvarVinculo(c, 'valor_mensal', e.target.value)}
+                  style={{ ...inputStyle, width: 100, fontSize: 12, padding: '4px 8px' }} />
+                <button onClick={() => salvarVinculo(c, 'status', c.status === 'ativo' ? 'cancelado' : 'ativo')} style={{
+                  fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 8, cursor: 'pointer',
+                  background: c.status === 'cancelado' ? 'rgba(248,113,113,0.12)' : 'rgba(52,211,153,0.1)',
+                  border: `1px solid ${c.status === 'cancelado' ? 'rgba(248,113,113,0.3)' : 'rgba(52,211,153,0.3)'}`,
+                  color: c.status === 'cancelado' ? '#F87171' : '#34D399',
+                }}>{c.status === 'cancelado' ? '⛔ Cancelado' : '✓ Ativo'}</button>
               </div>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
