@@ -98,6 +98,7 @@ export default function MetricasEcossistema() {
                 ['Trials em andamento', auto.trials, '#F0C36D'],
                 ['Novos este mês', auto.novos_clientes, '#34D399'],
                 ['Perdidos este mês', auto.clientes_perdidos, '#F87171'],
+                ['NRR', auto.nrr ? `${auto.nrr.nrr}%` : '—', auto.nrr ? (auto.nrr.nrr >= 100 ? '#34D399' : '#F0C36D') : '#6B7280'],
               ].map(([label, valor, cor]) => (
                 <div key={label as string} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, padding: 14 }}>
                   <div style={{ fontSize: 18, fontWeight: 900, color: cor as string }}>{valor}</div>
@@ -105,6 +106,16 @@ export default function MetricasEcossistema() {
                 </div>
               ))}
             </div>
+            {!auto.nrr && (
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 16 }}>
+                NRR ainda sem dado suficiente — precisa de pelo menos 1 mês de histórico (snapshot automático roda todo dia 1º).
+              </div>
+            )}
+            {auto.nrr && (
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>
+                NRR calculado sobre {auto.nrr.clientes_na_base} clientes desde {auto.nrr.mes_base} · receita então R$ {auto.nrr.receita_inicio.toLocaleString('pt-BR')} → agora R$ {auto.nrr.receita_atual.toLocaleString('pt-BR')}
+              </div>
+            )}
             {auto.narrativa && (
               <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, background: 'rgba(0,0,0,0.15)', borderRadius: 10, padding: 14 }}>
                 <b style={{ color: '#34D399' }}>Leitura da IA:</b> {auto.narrativa}
