@@ -23,6 +23,7 @@ export interface Colaborador {
   email?: string
   telefone?: string
   observacoes?: string
+  tipo_pcd?: '' | 'Visual' | 'Auditiva' | 'Motora'
   token_formulario: string
   created_at: string
   empresa?: Empresa

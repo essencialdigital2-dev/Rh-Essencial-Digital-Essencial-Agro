@@ -1,9 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Colaborador, Empresa } from '@/types'
+import { PCD_INFO } from '@/lib/sense-neuro'
 
-const VAZIO = { nome:'', cargo:'', setor:'', empresa_id:'', email:'', telefone:'', observacoes:'' }
+const VAZIO = { nome:'', cargo:'', setor:'', empresa_id:'', email:'', telefone:'', observacoes:'', tipo_pcd:'' }
 
 export default function Colaboradores() {
   const [rows, setRows] = useState<Colaborador[]>([])
@@ -13,6 +14,24 @@ export default function Colaboradores() {
   const [form, setForm] = useState<any>(VAZIO)
   const [loading, setLoading] = useState(false)
   const [linkCopiado, setLinkCopiado] = useState('')
+  const [guias, setGuias] = useState<Record<string, string>>({})
+  const [gerandoGuia, setGerandoGuia] = useState<string | null>(null)
+
+  async function gerarGuiaPcd(c: Colaborador) {
+    if (!c.tipo_pcd) return
+    setGerandoGuia(c.id)
+    try {
+      const res = await fetch('/api/colaborador-guia-pcd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: c.nome, cargo: c.cargo, setor: c.setor, observacoes: c.observacoes, pcdInfo: PCD_INFO[c.tipo_pcd] }),
+      })
+      const d = await res.json()
+      setGuias(prev => ({ ...prev, [c.id]: d.texto }))
+    } finally {
+      setGerandoGuia(null)
+    }
+  }
 
   async function load() {
     const [{ data: cols }, { data: emps }] = await Promise.all([
@@ -29,7 +48,7 @@ export default function Colaboradores() {
   async function salvar() {
     if (!form.nome) return alert('Nome obrigatório')
     setLoading(true)
-    const payload = { nome:form.nome, cargo:form.cargo, setor:form.setor, empresa_id:form.empresa_id||null, email:form.email, telefone:form.telefone, observacoes:form.observacoes }
+    const payload = { nome:form.nome, cargo:form.cargo, setor:form.setor, empresa_id:form.empresa_id||null, email:form.email, telefone:form.telefone, observacoes:form.observacoes, tipo_pcd:form.tipo_pcd||'' }
     if (form.id) {
       await supabase.from('colaboradores').update(payload).eq('id', form.id)
     } else {
@@ -76,14 +95,23 @@ export default function Colaboradores() {
         <input className="input mb-4" placeholder="Buscar colaborador ou empresa..." value={busca} onChange={e => setBusca(e.target.value)} />
         <table className="w-full text-sm">
           <thead><tr className="text-left text-gray-500 border-b border-gray-100">
-            <th className="pb-2">Nome</th><th className="pb-2">Cargo</th><th className="pb-2">Empresa</th><th className="pb-2">Link Formulário</th><th className="pb-2"></th>
+            <th className="pb-2">Nome</th><th className="pb-2">Cargo</th><th className="pb-2">Empresa</th><th className="pb-2">PCD</th><th className="pb-2">Link Formulário</th><th className="pb-2"></th>
           </tr></thead>
           <tbody>
             {filtradas.map(r => (
-              <tr key={r.id} className="table-row">
+              <Fragment key={r.id}>
+              <tr className="table-row">
                 <td className="py-3 font-medium">{r.nome}</td>
                 <td className="py-3 text-gray-500">{r.cargo}</td>
                 <td className="py-3 text-gray-500">{(r.empresa as any)?.nome}</td>
+                <td className="py-3">
+                  {r.tipo_pcd ? (
+                    <button onClick={() => gerarGuiaPcd(r)} disabled={gerandoGuia === r.id}
+                      className="text-xs px-2 py-1 rounded-lg border border-purple-200 text-purple-600 hover:bg-purple-50">
+                      {PCD_INFO[r.tipo_pcd].icone} {gerandoGuia === r.id ? 'Gerando...' : guias[r.id] ? '🔄 Regerar guia' : 'Gerar guia'}
+                    </button>
+                  ) : <span className="text-gray-300 text-xs">—</span>}
+                </td>
                 <td className="py-3">
                   <button onClick={() => copiarLink(r.token_formulario)}
                     className={`text-xs px-2 py-1 rounded-lg border transition-all ${linkCopiado === r.token_formulario ? 'bg-green-100 text-green-700 border-green-200' : 'border-gray-200 text-gray-500 hover:border-oliva hover:text-oliva'}`}>
@@ -95,8 +123,18 @@ export default function Colaboradores() {
                   <button onClick={() => excluir(r.id)} className="text-red-500 hover:underline text-xs">Excluir</button>
                 </td>
               </tr>
+              {guias[r.id] && (
+                <tr>
+                  <td colSpan={6} className="pb-4">
+                    <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 text-sm text-gray-700 whitespace-pre-line">
+                      {guias[r.id]}
+                    </div>
+                  </td>
+                </tr>
+              )}
+              </Fragment>
             ))}
-            {filtradas.length === 0 && <tr><td colSpan={5} className="py-8 text-center text-gray-400">Nenhum colaborador encontrado</td></tr>}
+            {filtradas.length === 0 && <tr><td colSpan={6} className="py-8 text-center text-gray-400">Nenhum colaborador encontrado</td></tr>}
           </tbody>
         </table>
       </div>
@@ -117,6 +155,15 @@ export default function Colaboradores() {
                 <select className="input" value={form.empresa_id||''} onChange={e=>setForm((p:any)=>({...p,empresa_id:e.target.value}))}>
                   <option value="">Selecione</option>
                   {empresas.map(e=><option key={e.id} value={e.id}>{e.nome}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">PCD</label>
+                <select className="input" value={form.tipo_pcd||''} onChange={e=>setForm((p:any)=>({...p,tipo_pcd:e.target.value}))}>
+                  <option value="">Não é PCD</option>
+                  <option value="Visual">👁️ Deficiência Visual</option>
+                  <option value="Auditiva">👂 Deficiência Auditiva</option>
+                  <option value="Motora">🦽 Deficiência Motora</option>
                 </select>
               </div>
             </div>
