@@ -618,5 +618,48 @@ const countObs = new IntersectionObserver(entries=>{
 },{threshold:.5});
 document.querySelectorAll('.nums-grid').forEach(el=>countObs.observe(el));
 </script>
+
+<!-- ACESSIBILIDADE: VLibras + simplificar com IA -->
+<style>
+  div[vw] { position: fixed !important; z-index: 9997 !important; top: auto !important; left: auto !important; }
+  div[vw-access-button] { position: fixed !important; bottom: 20px !important; right: 20px !important; top: auto !important; left: auto !important; z-index: 9997 !important; }
+  div[vw-plugin-wrapper] { position: fixed !important; bottom: 76px !important; right: 20px !important; top: auto !important; left: auto !important; z-index: 9997 !important; }
+</style>
+<div vw class="enabled"><div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div></div>
+<button id="btn-libras-simplificar" title="Simplificar texto desta página com IA (para leitores de Libras)"
+  style="position:fixed;bottom:20px;right:84px;z-index:9998;width:46px;height:46px;border-radius:50%;background:#0EA5E9;border:none;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(14,165,233,.4)">🤟</button>
+<div id="painel-libras-simplificar" style="display:none;position:fixed;bottom:76px;right:84px;z-index:9998;width:320px;max-width:calc(100vw - 40px);max-height:400px;overflow-y:auto;background:#0D1526;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.5)">
+  <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+    <b style="color:#fff;font-size:13px">🤟 Texto simplificado</b>
+    <button onclick="document.getElementById('painel-libras-simplificar').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:16px">✕</button>
+  </div>
+  <div id="texto-libras-simplificado" style="color:rgba(255,255,255,.85);font-size:13px;line-height:1.6;white-space:pre-wrap"></div>
+</div>
+<script>
+  (function(){
+    var s = document.createElement('script');
+    s.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+    s.onload = function(){ if (window.VLibras) new window.VLibras.Widget('https://vlibras.gov.br/app'); };
+    document.body.appendChild(s);
+
+    document.getElementById('btn-libras-simplificar').addEventListener('click', async function(){
+      var painel = document.getElementById('painel-libras-simplificar');
+      var texto = document.getElementById('texto-libras-simplificado');
+      painel.style.display = 'block';
+      texto.textContent = 'Simplificando com IA...';
+      try {
+        var res = await fetch('/api/acessibilidade-simplificar', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto: document.body.innerText.slice(0, 6000) }),
+        });
+        var d = await res.json();
+        texto.textContent = d.texto || 'Não foi possível simplificar agora.';
+      } catch(e) {
+        texto.textContent = 'Erro ao simplificar. Tente novamente.';
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
