@@ -1204,4 +1204,66 @@ export const DISC_LABELS: Record<DiscTipo, string> = {
   C: 'Consciente - Analítico'
 }
 
+// ===== PCD (Pessoa com Deficiência) =====
+// Perfil separado da matriz perfil×DISC acima (que é só neurodivergência),
+// pois cruzar 3 novos perfis × 4 DISC exigiria 12 constelações emocionais
+// completas — optamos por um modelo mais enxuto, no mesmo espírito do Agro Tech.
+export type PcdPerfil = 'Visual' | 'Auditiva' | 'Motora'
+
+export interface PcdInfo {
+  perfil: PcdPerfil
+  label: string
+  icone: string
+  desc: string
+  pontosForca: string[]
+  desafiosNoTrabalho: string[]
+  comoComunicar: string[]
+  acomodacoesRazoaveis: string[]
+  sinaisDeAlerta: string[]
+}
+
+export const PCD_INFO: Record<PcdPerfil, PcdInfo> = {
+  Visual: {
+    perfil: 'Visual', label: 'Deficiência Visual', icone: '👁️',
+    desc: 'Baixa visão ou cegueira — parcial ou total',
+    pontosForca: ['Memória auditiva e organizacional acima da média', 'Alta produtividade com ferramentas de leitor de tela bem configuradas', 'Excelente em funções analíticas e de atendimento por voz'],
+    desafiosNoTrabalho: ['Sistemas e planilhas sem compatibilidade com leitor de tela', 'Reuniões com apresentações só visuais, sem descrição', 'Documentos em PDF escaneado (imagem, não texto selecionável)'],
+    comoComunicar: ['Descreva verbalmente o que está na tela durante reuniões', 'Envie documentos em formato acessível (texto, não imagem)', 'Avise verbalmente sobre mudanças no ambiente físico do escritório', 'Pergunte qual leitor de tela a pessoa usa e valide compatibilidade dos sistemas'],
+    acomodacoesRazoaveis: ['Leitor de tela (NVDA/JAWS/VoiceOver) licenciado e sistemas testados com ele', 'Documentos e e-mails em formato acessível por padrão', 'Trajeto físico do escritório sempre no mesmo layout', 'Treinamentos com áudio-descrição'],
+    sinaisDeAlerta: ['Queda de produtividade após mudança de sistema/software', 'Isolamento em reuniões por não conseguir seguir conteúdo visual', 'Retrabalho por depender de terceiros para ler documentos inacessíveis'],
+  },
+  Auditiva: {
+    perfil: 'Auditiva', label: 'Deficiência Auditiva', icone: '👂',
+    desc: 'Surdez ou baixa audição — parcial ou total',
+    pontosForca: ['Alta concentração em ambientes visualmente organizados', 'Comunicação escrita frequentemente muito clara e direta', 'Boa performance em trabalho assíncrono e documentado'],
+    desafiosNoTrabalho: ['Reuniões sem legenda ou intérprete de Libras', 'Chamadas de vídeo sem transcrição em tempo real', 'Avisos sonoros de sistema (alertas, notificações) sem alternativa visual'],
+    comoComunicar: ['Garanta contato visual antes de falar', 'Use legendas automáticas ou intérprete de Libras em reuniões', 'Prefira comunicação escrita (chat, e-mail) para assuntos importantes', 'Troque alertas sonoros de sistema por notificação visual'],
+    acomodacoesRazoaveis: ['Intérprete de Libras ou legenda em tempo real em reuniões e treinamentos', 'Cultura de registrar decisões por escrito, não só verbalmente', 'Alertas visuais em vez de sonoros em sistemas internos'],
+    sinaisDeAlerta: ['Ausência ou baixa participação em reuniões sem suporte adequado', 'Perda de informações importantes passadas só verbalmente', 'Isolamento social por dificuldade de comunicação informal'],
+  },
+  Motora: {
+    perfil: 'Motora', label: 'Deficiência Motora', icone: '🦽',
+    desc: 'Mobilidade reduzida — membros, cadeira de rodas, próteses',
+    pontosForca: ['Alta concentração em funções analíticas e de gestão', 'Forte comprometimento e baixa rotatividade quando o posto é bem adaptado', 'Frequentemente excelente em liderança e planejamento'],
+    desafiosNoTrabalho: ['Escritório/mobiliário não adaptado (mesa, acesso, banheiro)', 'Fadiga maior em jornadas longas sem pausas', 'Eventos e reuniões presenciais em locais sem acessibilidade'],
+    comoComunicar: ['Pergunte diretamente o que a pessoa precisa — não presuma', 'Trate com naturalidade, sem superproteção', 'Combine pausas extras sem constranger publicamente'],
+    acomodacoesRazoaveis: ['Mesa, cadeira e acesso físico adaptados desde o primeiro dia', 'Opção de trabalho remoto/híbrido quando o deslocamento é barreira', 'Verificação de acessibilidade antes de marcar eventos presenciais'],
+    sinaisDeAlerta: ['Fadiga crescente relatada em jornadas longas', 'Faltas recorrentes em eventos presenciais por barreira de acesso', 'Sinais de exclusão informal (não é convidado por "dar trabalho" de adaptar)'],
+  },
+}
+
+export function getCheckInPcd(perfil: PcdPerfil): string[] {
+  const extra: Record<PcdPerfil, string> = {
+    Visual: 'Algum documento ou sistema não estava acessível ao leitor de tela?',
+    Auditiva: 'Alguma reunião ou aviso ficou sem legenda/intérprete disponível?',
+    Motora: 'Encontrou alguma barreira física de acesso ou mobiliário hoje?',
+  }
+  return [
+    'Como está seu nível de energia hoje? (1–5)',
+    extra[perfil],
+    'Como está sua fadiga física/mental? (1–5)',
+    'Tem algo que a empresa poderia ajustar essa semana?',
+  ]
+}
+
 export { constelacoes }

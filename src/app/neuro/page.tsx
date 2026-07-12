@@ -1,13 +1,16 @@
 ﻿'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   constelacoes, getConstelacao, getCheckInAdaptado,
-  PERFIS_LABELS, DISC_LABELS,
-  type NeuroPerfil, type DiscTipo, type ConstelacaoEmocional
+  PERFIS_LABELS, DISC_LABELS, PCD_INFO, getCheckInPcd,
+  type NeuroPerfil, type DiscTipo, type ConstelacaoEmocional, type PcdPerfil
 } from '@/lib/sense-neuro'
 
 const PERFIS: NeuroPerfil[] = ['TDAH', 'TEA', 'Dislexia', 'AltasHabilidades', 'Descobrindo']
 const DISCS: DiscTipo[] = ['D', 'I', 'S', 'C']
+const PCD_PERFIS: PcdPerfil[] = ['Visual', 'Auditiva', 'Motora']
+
+interface PcdCheckin { data: string; energia: number; fadiga: number; barreira: string }
 
 const PERFIL_ICONS: Record<NeuroPerfil, string> = {
   TDAH: '⚡',
@@ -26,13 +29,48 @@ const DISC_COLORS: Record<DiscTipo, string> = {
 }
 
 export default function NeuroPage() {
-  const [etapa, setEtapa] = useState<'intro' | 'perfil' | 'disc' | 'resultado' | 'checkin'>('intro')
+  const [etapa, setEtapa] = useState<'intro' | 'perfil' | 'disc' | 'resultado' | 'checkin' | 'pcd-selecao' | 'pcd-resultado'>('intro')
   const [perfil, setPerfil] = useState<NeuroPerfil | null>(null)
   const [disc, setDisc] = useState<DiscTipo | null>(null)
   const [aba, setAba] = useState<'visao' | 'saude' | 'janela' | 'polivagal' | 'proposito' | 'gestor' | 'acomodacoes'>('visao')
   const [respostasCheckin, setRespostasCheckin] = useState<Record<number, string>>({})
   const [diagnosticoIA, setDiagnosticoIA] = useState<string | null>(null)
   const [loadingIA, setLoadingIA] = useState(false)
+  const [pcdPerfil, setPcdPerfil] = useState<PcdPerfil | null>(null)
+  const [pcdHistorico, setPcdHistorico] = useState<PcdCheckin[]>([])
+  const [pcdForm, setPcdForm] = useState({ energia: 3, fadiga: 3, barreira: '' })
+  const [pcdPredicao, setPcdPredicao] = useState<string | null>(null)
+  const [pcdAnalisando, setPcdAnalisando] = useState(false)
+
+  useEffect(() => {
+    const s = localStorage.getItem('sense_pcd_checkins')
+    if (s) setPcdHistorico(JSON.parse(s))
+  }, [])
+
+  function registrarPcdCheckin() {
+    const novo: PcdCheckin = { data: new Date().toISOString(), ...pcdForm }
+    const lista = [...pcdHistorico, novo]
+    setPcdHistorico(lista)
+    localStorage.setItem('sense_pcd_checkins', JSON.stringify(lista))
+    setPcdForm({ energia: 3, fadiga: 3, barreira: '' })
+  }
+
+  async function gerarPredicaoPcd() {
+    if (!pcdPerfil || pcdHistorico.length < 2) return
+    setPcdAnalisando(true)
+    try {
+      const res = await fetch('/api/neuro-pcd-preditivo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pcdInfo: PCD_INFO[pcdPerfil], historico: pcdHistorico.slice(-10) }),
+      })
+      const d = await res.json()
+      setPcdPredicao(d.texto)
+    } catch {
+      setPcdPredicao('Não foi possível gerar a análise agora. Tente novamente.')
+    }
+    setPcdAnalisando(false)
+  }
 
   const constelacao = perfil && disc ? getConstelacao(perfil, disc) : null
   const checkIns = perfil ? getCheckInAdaptado(perfil) : []
@@ -149,6 +187,109 @@ export default function NeuroPage() {
                 </button>
               ))}
             </div>
+
+            <div style={{ textAlign: 'center', margin: '24px 0 12px', fontSize: '12px', color: 'rgba(248,248,255,0.3)' }}>ou</div>
+            <button
+              onClick={() => setEtapa('pcd-selecao')}
+              style={{ width: '100%', background: 'rgba(14,165,233,0.08)', border: '2px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '16px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '14px', textAlign: 'left' }}
+            >
+              <span style={{ fontSize: '26px' }}>♿</span>
+              <div>
+                <div style={{ fontSize: '15px', fontWeight: 700, color: '#F8F8FF' }}>Sou PCD (deficiência visual, auditiva ou motora)</div>
+                <div style={{ fontSize: '12px', color: 'rgba(248,248,255,0.4)' }}>Acesse acomodações e acompanhamento preditivo específico</div>
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* SELEÇÃO DE PCD */}
+        {etapa === 'pcd-selecao' && (
+          <div>
+            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '8px' }}>Qual sua condição?</h2>
+              <p style={{ fontSize: '14px', color: 'rgba(248,248,255,0.5)' }}>A IA vai adaptar acomodações e acompanhamento preditivo pra você</p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {PCD_PERFIS.map(p => (
+                <button key={p} onClick={() => { setPcdPerfil(p); setEtapa('pcd-resultado') }}
+                  style={{ background: 'rgba(14,165,233,0.08)', border: `2px solid ${pcdPerfil === p ? '#0EA5E9' : 'rgba(14,165,233,0.2)'}`, borderRadius: '12px', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '16px', textAlign: 'left' }}>
+                  <span style={{ fontSize: '32px' }}>{PCD_INFO[p].icone}</span>
+                  <div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#F8F8FF', marginBottom: '4px' }}>{PCD_INFO[p].label}</div>
+                    <div style={{ fontSize: '12px', color: 'rgba(248,248,255,0.4)' }}>{PCD_INFO[p].desc}</div>
+                  </div>
+                  <span style={{ marginLeft: 'auto', color: 'rgba(248,248,255,0.3)', fontSize: '20px' }}>→</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* RESULTADO PCD */}
+        {etapa === 'pcd-resultado' && pcdPerfil && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+              <span style={{ fontSize: 36 }}>{PCD_INFO[pcdPerfil].icone}</span>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 800 }}>{PCD_INFO[pcdPerfil].label}</h2>
+                <p style={{ fontSize: 13, color: 'rgba(248,248,255,0.5)' }}>{PCD_INFO[pcdPerfil].desc}</p>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+              <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 12, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#10B981', textTransform: 'uppercase', marginBottom: 8 }}>Pontos de força</div>
+                {PCD_INFO[pcdPerfil].pontosForca.map((f, i) => <div key={i} style={{ fontSize: 12, marginBottom: 5, color: 'rgba(248,248,255,0.8)' }}>✓ {f}</div>)}
+              </div>
+              <div style={{ background: 'rgba(249,115,22,0.06)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: 12, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#F97316', textTransform: 'uppercase', marginBottom: 8 }}>Desafios no trabalho</div>
+                {PCD_INFO[pcdPerfil].desafiosNoTrabalho.map((d, i) => <div key={i} style={{ fontSize: 12, marginBottom: 5, color: 'rgba(248,248,255,0.7)' }}>· {d}</div>)}
+              </div>
+              <div style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: 12, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#8B5CF6', textTransform: 'uppercase', marginBottom: 8 }}>Como comunicar com você</div>
+                {PCD_INFO[pcdPerfil].comoComunicar.map((c, i) => <div key={i} style={{ fontSize: 12, marginBottom: 5, color: 'rgba(248,248,255,0.7)' }}>{i + 1}. {c}</div>)}
+              </div>
+              <div style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: 12, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#0EA5E9', textTransform: 'uppercase', marginBottom: 8 }}>Acomodações razoáveis</div>
+                {PCD_INFO[pcdPerfil].acomodacoesRazoaveis.map((a, i) => <div key={i} style={{ fontSize: 12, marginBottom: 5, color: 'rgba(248,248,255,0.7)' }}>▸ {a}</div>)}
+              </div>
+            </div>
+
+            {/* Check-in preditivo */}
+            <div style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: 14, padding: 20, marginBottom: 20 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#A78BFA', marginBottom: 14 }}>✍️ Check-in de hoje</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+                <div>
+                  <label style={{ fontSize: 11, color: 'rgba(248,248,255,0.5)', display: 'block', marginBottom: 4 }}>Energia hoje: {pcdForm.energia}/5</label>
+                  <input type="range" min={1} max={5} value={pcdForm.energia} onChange={e => setPcdForm(p => ({ ...p, energia: Number(e.target.value) }))} style={{ width: '100%' }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, color: 'rgba(248,248,255,0.5)', display: 'block', marginBottom: 4 }}>Fadiga: {pcdForm.fadiga}/5</label>
+                  <input type="range" min={1} max={5} value={pcdForm.fadiga} onChange={e => setPcdForm(p => ({ ...p, fadiga: Number(e.target.value) }))} style={{ width: '100%' }} />
+                </div>
+              </div>
+              <input
+                value={pcdForm.barreira}
+                onChange={e => setPcdForm(p => ({ ...p, barreira: e.target.value }))}
+                placeholder={getCheckInPcd(pcdPerfil)[1]}
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.2)', color: '#F8F8FF', fontSize: 13, marginBottom: 14, boxSizing: 'border-box' }}
+              />
+              <button onClick={registrarPcdCheckin} style={{ width: '100%', background: 'linear-gradient(135deg,#8B5CF6,#EC4899)', color: '#fff', border: 'none', borderRadius: 10, padding: '10px', fontWeight: 700, cursor: 'pointer' }}>
+                Registrar check-in ({pcdHistorico.length} registrado{pcdHistorico.length === 1 ? '' : 's'})
+              </button>
+            </div>
+
+            {pcdHistorico.length >= 2 && (
+              <div style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: 14, padding: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: pcdPredicao ? 14 : 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#A78BFA' }}>🔮 Análise preditiva da IA</div>
+                  <button onClick={gerarPredicaoPcd} disabled={pcdAnalisando} style={{ background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#A78BFA', borderRadius: 8, padding: '6px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                    {pcdAnalisando ? 'Analisando...' : pcdPredicao ? '🔄 Regerar' : 'Gerar análise'}
+                  </button>
+                </div>
+                {pcdPredicao && <div style={{ fontSize: 13, color: 'rgba(248,248,255,0.85)', whiteSpace: 'pre-line', lineHeight: 1.7 }}>{pcdPredicao}</div>}
+              </div>
+            )}
           </div>
         )}
 
