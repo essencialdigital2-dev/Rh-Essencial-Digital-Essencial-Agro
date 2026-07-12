@@ -11,6 +11,8 @@
   status: string
   observacoes?: string
   senha_cliente?: string
+  token_cultura?: string
+  valores_cultura?: { nome: string; descricao?: string }[]
   created_at: string
 }
 

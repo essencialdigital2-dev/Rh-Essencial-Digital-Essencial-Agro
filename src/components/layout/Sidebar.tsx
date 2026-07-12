@@ -11,6 +11,7 @@ const menu = [
   { href: '/dashboard/metodologia-hai', icon: '🌟', label: 'Método HAI' },
   { href: '/empresas', icon: '🏢', label: 'Empresas' },
   { href: '/colaboradores', icon: '👥', label: 'Colaboradores' },
+  { href: '/cultura', icon: '🧭', label: 'Cultura Organizacional' },
   { href: '/formularios', icon: '📋', label: 'Diagnósticos' },
   { href: '/relatorios', icon: '📄', label: 'Relatórios' },
   { href: '/leads', icon: '🎯', label: 'Leads' },
