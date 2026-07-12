@@ -16,6 +16,12 @@ const PACOTES: Record<string, { modulos: string[]; tipo: 'instituicao' | 'empres
   educacional: { modulos: ['estudo', 'teens', 'sense', 'nexo'], tipo: 'instituicao' },
   agro: { modulos: ['agro', 'sense', 'nexo'], tipo: 'empresa' },
   agro_solo: { modulos: ['agro'], tipo: 'empresa' },
+  agro_sense: { modulos: ['agro', 'sense'], tipo: 'empresa' },
+  sense_solo: { modulos: ['sense'], tipo: 'empresa' },
+  sense_nexo: { modulos: ['sense', 'nexo'], tipo: 'empresa' },
+  edu: { modulos: ['edu'], tipo: 'instituicao' },
+  med: { modulos: ['estudo'], tipo: 'instituicao' },
+  juridico: { modulos: ['estudo'], tipo: 'instituicao' },
 }
 
 // Rota PÚBLICA (sem ecoAutorizado) — usada pelo formulário /quero-conhecer

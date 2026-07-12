@@ -2,9 +2,51 @@
 import { useState } from 'react'
 
 const PACOTES = [
-  { id: 'educacional', label: '🎓 Educacional', desc: 'Essencial Estudo + Teens + Sense AI + NexoPerform' },
-  { id: 'agro', label: '🌾 Agro Tech + gestão', desc: 'Agro Tech + Sense AI + NexoPerform' },
-  { id: 'agro_solo', label: '🌾 Só o Agro Tech', desc: 'Foco só na gestão de pessoas do campo' },
+  {
+    id: 'educacional', label: '🎓 Educacional completo',
+    desc: 'Essencial Estudo + Teens + Sense AI + NexoPerform',
+    detalhe: 'Pacote completo pra escolas: estudo adaptativo pra Fundamental/Médio/ENEM, área para adolescentes e gestão de pessoas da equipe escolar.',
+  },
+  {
+    id: 'edu', label: '🏫 Essencial Edu',
+    desc: 'Plataforma completa da escola',
+    detalhe: 'Sistema de gestão escolar com perfis de admin, coordenação, professor, psicologia, aluno e família, com IA acompanhando o desenvolvimento de cada aluno.',
+  },
+  {
+    id: 'med', label: '🩺 Essencial Med',
+    desc: 'Residência Médica com método',
+    detalhe: 'Diagnóstico por especialidade, rotina de estudo e calendário de provas pra quem estuda pra residência médica.',
+  },
+  {
+    id: 'juridico', label: '⚖️ Essencial Jurídico',
+    desc: 'Aprovação na OAB com método',
+    detalhe: 'Diagnóstico por disciplina pra 1ª fase da OAB, checklist de peças pra 2ª fase e ferramentas de revisão.',
+  },
+  {
+    id: 'sense_solo', label: '🧠 Sense AI',
+    desc: 'Gestão de pessoas com IA',
+    detalhe: 'Diagnóstico e desenvolvimento da equipe: perfil comportamental, clima, engajamento e alertas preditivos, tudo com IA.',
+  },
+  {
+    id: 'sense_nexo', label: '🧠 Sense AI + NexoPerform',
+    desc: 'Gestão de pessoas + desempenho',
+    detalhe: 'Sense AI pra diagnóstico comportamental somado ao NexoPerform pra acompanhar metas e desempenho da equipe.',
+  },
+  {
+    id: 'agro', label: '🌾 Agro Tech + gestão',
+    desc: 'Agro Tech + Sense AI + NexoPerform',
+    detalhe: 'Gestão completa da equipe do campo: DISC, NR-31, ESG, sazonalidade e saúde mental, com IA e acompanhamento de desempenho.',
+  },
+  {
+    id: 'agro_sense', label: '🌾 Agro Tech + Sense AI',
+    desc: 'Sem o NexoPerform',
+    detalhe: 'Gestão da equipe rural com diagnóstico comportamental (Sense AI), sem o módulo de metas/desempenho.',
+  },
+  {
+    id: 'agro_solo', label: '🌾 Só o Agro Tech',
+    desc: 'Foco só na gestão de pessoas do campo',
+    detalhe: 'DISC, NR-31, ESG, sazonalidade e saúde mental pra equipes rurais, sem os outros módulos.',
+  },
 ]
 
 export default function QueroConhecerPage() {
@@ -68,6 +110,7 @@ export default function QueroConhecerPage() {
             }}>
               <div style={{ fontSize: 14, fontWeight: 800, color: pacote === p.id ? '#A78BFA' : '#fff' }}>{p.label}</div>
               <div style={{ fontSize: 12, color: 'rgba(248,248,255,.45)', marginTop: 2 }}>{p.desc}</div>
+              <div style={{ fontSize: 12, color: 'rgba(248,248,255,.6)', marginTop: 6, lineHeight: 1.4 }}>{p.detalhe}</div>
             </button>
           ))}
         </div>
