@@ -7243,10 +7243,9 @@
   var _panelAtual = 'analytics';
 
   function voltarPanel() {
-    if (_panelHistory.length === 0) return;
-    var anterior = _panelHistory.pop();
-    var navEl = document.querySelector('.nav-item[data-panel="' + anterior + '"]');
-    showPanel(anterior, navEl, true);
+    // Sempre volta pro painel principal (Dashboard/Analytics), nao pro historico
+    var navEl = document.querySelector('.nav-item[data-panel="analytics"]');
+    showPanel('analytics', navEl, true);
   }
 
   function showPanel(panelId, navEl, isBack) {
@@ -7257,9 +7256,9 @@
     }
     _panelAtual = panelId;
 
-    // Mostra/esconde botao voltar
+    // Mostra/esconde botao voltar — sempre visivel, exceto no proprio painel principal
     var btnVoltar = document.getElementById('btn-voltar');
-    if (btnVoltar) btnVoltar.style.display = (_panelHistory.length > 0) ? 'flex' : 'none';
+    if (btnVoltar) btnVoltar.style.display = (panelId !== 'analytics') ? 'flex' : 'none';
 
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
