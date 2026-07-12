@@ -23,6 +23,7 @@ const APPS_MONITORADOS = [
 const APPS_PREDITIVOS = [
   { key: 'estudo', nome: 'Essencial Estudo', url: 'https://essencialestudo.com.br/api/predicao-resumo' },
   { key: 'agro', nome: 'Essencial Agro Tech', url: 'https://agrotech.rhessencialdigital.com.br/api/predicao-resumo' },
+  { key: 'nexo', nome: 'NexoPerform', url: 'https://nexoperform.vercel.app/api/predicao-resumo' },
 ]
 
 async function buscarResumoPreditivo(app: typeof APPS_PREDITIVOS[0]) {
@@ -84,11 +85,43 @@ export async function GET(req: NextRequest) {
     .limit(20)
   const alertasCriticosEdu = alertasEdu || []
 
-  // 5. Resumo preditivo do Estudo e Agro Tech (Edu ja vem dos alertas acima; Sense AI e local)
-  const [predEstudo, predAgro] = await Promise.all([
+  // 5. Resumo preditivo do Estudo, Agro Tech e NexoPerform (Edu ja vem dos alertas acima; Sense AI e local)
+  const [predEstudo, predAgro, predNexo] = await Promise.all([
     buscarResumoPreditivo(APPS_PREDITIVOS[0]),
     buscarResumoPreditivo(APPS_PREDITIVOS[1]),
+    buscarResumoPreditivo(APPS_PREDITIVOS[2]),
   ])
+
+  // 6. Queda de resultados: MRR atual vs NRR real (mesma logica de eco-metricas/automatico)
+  const { data: clientes } = await db.from('eco_clientes').select('id, valor_mensal, status, criado_em, cancelado_em')
+  const ativosPagantes = (clientes || []).filter(c => c.status !== 'cancelado' && Number(c.valor_mensal) > 0)
+  const mrrAtual = ativosPagantes.reduce((s, c) => s + Number(c.valor_mensal || 0), 0)
+  const hoje = new Date()
+  const mesAnterior = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1)
+  const mesAnteriorStr = `${mesAnterior.getFullYear()}-${String(mesAnterior.getMonth() + 1).padStart(2, '0')}-01`
+  const { data: snapshotAnterior } = await db.from('eco_mrr_snapshot').select('cliente_id, valor_mensal').eq('mes', mesAnteriorStr)
+  let nrrAtual: number | null = null
+  if (snapshotAnterior && snapshotAnterior.length > 0) {
+    const mapaClientes = new Map((clientes || []).map(c => [c.id, c]))
+    let receitaInicio = 0, receitaAtualBase = 0
+    for (const s of snapshotAnterior) {
+      receitaInicio += Number(s.valor_mensal || 0)
+      const c = mapaClientes.get(s.cliente_id)
+      receitaAtualBase += (!c || c.status === 'cancelado') ? 0 : Number(c.valor_mensal || 0)
+    }
+    if (receitaInicio > 0) nrrAtual = Math.round((receitaAtualBase / receitaInicio) * 1000) / 10
+  }
+
+  // 7. Queda de cultura organizacional: media das notas mais recentes dos pulsos vs media geral, por empresa
+  const { data: pulsos } = await db.from('pulsos_cultura').select('empresa_id, nota, criado_em').order('criado_em', { ascending: true }).limit(500)
+  let culturaResumo = 'nenhum pulso de cultura coletado ainda'
+  if (pulsos && pulsos.length >= 5) {
+    const mediaGeral = pulsos.reduce((s, p) => s + p.nota, 0) / pulsos.length
+    const recentes = pulsos.slice(-15)
+    const mediaRecente = recentes.reduce((s, p) => s + p.nota, 0) / recentes.length
+    const variacao = Math.round((mediaRecente - mediaGeral) * 10) / 10
+    culturaResumo = `media geral ${mediaGeral.toFixed(1)}/5, media dos pulsos recentes ${mediaRecente.toFixed(1)}/5 (variacao ${variacao >= 0 ? '+' : ''}${variacao}) — ${pulsos.length} pulsos no total`
+  }
   const { data: esgRecente } = await db.from('esg_social_historico').select('score_esg_social').order('semana', { ascending: false }).limit(50)
   const esgMedio = esgRecente?.length ? Math.round(esgRecente.reduce((s, r) => s + r.score_esg_social, 0) / esgRecente.length) : null
 
@@ -99,11 +132,13 @@ export async function GET(req: NextRequest) {
   const resumoAlertasEdu = alertasCriticosEdu.length
     ? `${alertasCriticosEdu.length} alertas criticos de alunos sem desfecho no Essencial Edu (tipos: ${Array.from(new Set(alertasCriticosEdu.map(a => a.tipo))).join(', ')})`
     : 'nenhum alerta critico pendente de alunos no Essencial Edu'
-  const resumoPreditivo = `Essencial Estudo: ${predEstudo.ok ? `${predEstudo.taxa_engajamento_recomendacoes ?? 'sem dado'}% engajamento com recomendacoes da IA, ${predEstudo.alunos_tendencia_caindo} alunos em queda` : 'indisponivel'}\nEssencial Agro Tech: ${predAgro.ok ? `taxa de acerto do modelo ${predAgro.taxa_acerto ?? 'sem historico'}%, ${predAgro.alertas_criticos_abertos} alertas criticos abertos` : 'indisponivel'}\nEssencial Sense AI: ESG Social medio ${esgMedio ?? 'sem dado'}/100`
+  const resumoPreditivo = `Essencial Estudo: ${predEstudo.ok ? `${predEstudo.taxa_engajamento_recomendacoes ?? 'sem dado'}% engajamento com recomendacoes da IA, ${predEstudo.alunos_tendencia_caindo} alunos em queda` : 'indisponivel'}\nEssencial Agro Tech: ${predAgro.ok ? `taxa de acerto do modelo ${predAgro.taxa_acerto ?? 'sem historico'}%, ${predAgro.alertas_criticos_abertos} alertas criticos abertos` : 'indisponivel'}\nEssencial Sense AI: ESG Social medio ${esgMedio ?? 'sem dado'}/100\nNexoPerform: ${predNexo.ok ? `${predNexo.assessments_semana_atual} assessments essa semana vs ${predNexo.assessments_semana_anterior} semana passada (variacao ${predNexo.variacao_percentual !== null ? predNexo.variacao_percentual + '%' : 'sem dado'}), ${predNexo.empresas_pagantes} empresas pagantes` : 'indisponivel'}`
+
+  const resumoResultados = `MRR atual: R$ ${mrrAtual.toLocaleString('pt-BR')} (${ativosPagantes.length} clientes pagantes). NRR: ${nrrAtual !== null ? nrrAtual + '%' : 'sem dado suficiente ainda (precisa de 1 mes de historico)'}`
 
   const prompt = `Voce e a assessora executiva da fundadora da Essencial Digital. Gere o briefing diario do ecossistema completo (8 produtos). Sem travessoes, acentuacao correta, direto ao ponto, tom de quem cuida de tudo pra ela nao precisar se preocupar.
 
-SAUDE DOS APPS:
+SAUDE DOS APPS (erros e indisponibilidade):
 ${resumoStatus}
 
 LEADS QUENTES (top 10):
@@ -115,8 +150,14 @@ ${resumoRadares}
 ALERTAS CRITICOS DE ALUNOS (Essencial Edu):
 ${resumoAlertasEdu}
 
-RADAR PREDITIVO CONSOLIDADO (Estudo, Agro Tech, Sense AI):
+RADAR PREDITIVO CONSOLIDADO (Estudo, Agro Tech, Sense AI, NexoPerform):
 ${resumoPreditivo}
+
+QUEDA DE RESULTADOS (receita real):
+${resumoResultados}
+
+QUEDA DE CULTURA ORGANIZACIONAL (pulsos dos colaboradores das empresas clientes):
+${culturaResumo}
 
 Retorne APENAS JSON valido:
 {
