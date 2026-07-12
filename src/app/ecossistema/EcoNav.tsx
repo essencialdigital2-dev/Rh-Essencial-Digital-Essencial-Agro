@@ -8,6 +8,7 @@ const ITENS = [
   { href: '/ecossistema/preditivo', label: '🔮 Radar Preditivo' },
   { href: '/ecossistema/radar', label: '📡 Radar de Inovação' },
   { href: '/ecossistema/leads', label: '🎯 Leads Qualificados' },
+  { href: '/ecossistema/prospeccao', label: '✨ Prospecção IA' },
   { href: '/ecossistema/erros', label: '🚨 Radar de Erros' },
   { href: '/ecossistema/financeiro', label: '💰 Financeiro' },
 ]
