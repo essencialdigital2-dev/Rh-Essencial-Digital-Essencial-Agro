@@ -5,6 +5,7 @@ const CANAIS = [
   { id: 'instagram', label: '📸 Instagram' },
   { id: 'whatsapp', label: '💬 WhatsApp' },
   { id: 'email', label: '✉️ E-mail' },
+  { id: 'linkedin', label: '💼 LinkedIn' },
 ]
 
 export default function ProspeccaoPage() {

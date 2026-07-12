@@ -5,6 +5,7 @@ const CANAL_ESTILO: Record<string, string> = {
   instagram: 'Mensagem de Instagram Direct: curta (no máximo 4 frases), tom leve e humano, pode usar 1 emoji, termina com uma pergunta que gera resposta fácil (sim/não ou curiosidade).',
   whatsapp: 'Mensagem de WhatsApp: curta, direta, tom próximo e consultivo, sem parecer robô ou copy de vendas agressiva, termina com uma pergunta simples.',
   email: 'E-mail de prospecção: com assunto e corpo, tom profissional mas caloroso, estrutura de 3 parágrafos curtos, call-to-action claro no final.',
+  linkedin: 'Mensagem de LinkedIn (conexão ou InMail): tom profissional e consultivo, sem jargão de vendas, menciona um ponto de valor concreto para o cargo/setor do lead, no máximo 5 frases, termina com um convite claro para uma breve conversa.',
 }
 
 export async function POST(req: NextRequest) {
